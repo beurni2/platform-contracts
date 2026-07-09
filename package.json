@@ -1,0 +1,21 @@
+{
+  "name": "platform-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Boutik+ × Shop+ × Séra — canonical contracts, kernel types, i18n catalog + French Voice copy-lint, ui design tokens. Consumed by app repos as a pinned versioned package.",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "gates": "bash scripts/run-gates.sh",
+    "docs:manifest": "node scripts/generate-docs-manifest.mjs"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0"
+  }
+}

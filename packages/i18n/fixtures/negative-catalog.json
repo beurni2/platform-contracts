@@ -1,0 +1,45 @@
+[
+  {
+    "key": "bad.banned.veuillez",
+    "fr": "Veuillez patienter",
+    "register": "money",
+    "screenClass": "status"
+  },
+  {
+    "key": "bad.banned.sequestre",
+    "fr": "Votre argent est placé sous séquestre jusqu'à validation.",
+    "register": "money",
+    "screenClass": "checkout"
+  },
+  {
+    "key": "bad.register_mismatch.money_with_urgency",
+    "fr": "Payez vite — offre limitée !",
+    "register": "money",
+    "screenClass": "checkout"
+  },
+  {
+    "key": "bad.register_mismatch.selling_with_jargon",
+    "fr": "Chaque créance est suivie dans le grand livre de votre boutique",
+    "register": "selling",
+    "screenClass": "selling_surface"
+  },
+  {
+    "key": "bad.reading_level.administrative_wall",
+    "fr": "La confirmation de la transaction actuellement en cours de traitement sera communiquée à l'utilisateur concerné dès que les vérifications nécessaires auront été effectuées par les services compétents de la plateforme conformément aux procédures applicables en la matière.",
+    "register": "neutral",
+    "screenClass": "instruction"
+  },
+  {
+    "key": "bad.local_language.moore_in_money",
+    "fr": "Barka ! Votre paiement est arrivé.",
+    "register": "money",
+    "screenClass": "status"
+  },
+  {
+    "key": "bad.local_language.dioula_variant_on_instruction",
+    "fr": "Entrez le code de livraison.",
+    "register": "neutral",
+    "screenClass": "instruction",
+    "dioula": "I ni ce, don code la"
+  }
+]
