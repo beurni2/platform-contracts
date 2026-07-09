@@ -1,0 +1,52 @@
+[
+  {
+    "key": "checkout.pay_now_line",
+    "fr": "À payer maintenant : {X} F",
+    "register": "money",
+    "screenClass": "checkout"
+  },
+  {
+    "key": "checkout.pay_at_delivery_line",
+    "fr": "À payer à la livraison : {Y} F",
+    "register": "money",
+    "screenClass": "checkout"
+  },
+  {
+    "key": "checkout.option_a.label",
+    "fr": "Tout payer maintenant — recommandé",
+    "register": "money",
+    "screenClass": "checkout"
+  },
+  {
+    "key": "checkout.option_a.body",
+    "fr": "Votre paiement est protégé auprès de notre partenaire de paiement jusqu'à la confirmation de votre livraison. Le vendeur n'est payé qu'après validation.",
+    "register": "money",
+    "screenClass": "checkout",
+    "audioScriptRef": "audio/checkout/option-a.fr"
+  },
+  {
+    "key": "checkout.option_b.label",
+    "fr": "Payer le produit à la livraison",
+    "register": "money",
+    "screenClass": "checkout"
+  },
+  {
+    "key": "checkout.option_b.body",
+    "fr": "Payez seulement les frais de livraison ({D} F) maintenant. À l'arrivée du livreur, vérifiez votre article, puis payez le montant du produit de manière sécurisée avant de le recevoir.",
+    "register": "money",
+    "screenClass": "checkout",
+    "audioScriptRef": "audio/checkout/option-b.fr"
+  },
+  {
+    "key": "checkout.option_b.fee_warning",
+    "fr": "Frais de livraison non remboursables si vous annulez ou êtes absent(e).",
+    "register": "money",
+    "screenClass": "checkout"
+  },
+  {
+    "key": "checkout.replay_line",
+    "fr": "Vous payez {X} F maintenant et {Y} F à la livraison — d'accord ?",
+    "register": "money",
+    "screenClass": "checkout"
+  }
+]

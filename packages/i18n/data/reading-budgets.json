@@ -1,0 +1,10 @@
+{
+  "description": "§10.5 condition (c): reading-level budget per screen class — max sentence length (words) + average-syllables-per-word heuristic, calibrated to the 6th-grade rule and seeded to accept the canonical Shop+ §6.1 checkout copy. Maintained pilot parameters.",
+  "budgets": {
+    "checkout": { "maxWordsPerSentence": 26, "maxAvgSyllablesPerWord": 2.6 },
+    "instruction": { "maxWordsPerSentence": 16, "maxAvgSyllablesPerWord": 2.3 },
+    "status": { "maxWordsPerSentence": 18, "maxAvgSyllablesPerWord": 2.4 },
+    "selling_surface": { "maxWordsPerSentence": 22, "maxAvgSyllablesPerWord": 2.6 },
+    "general": { "maxWordsPerSentence": 22, "maxAvgSyllablesPerWord": 2.5 }
+  }
+}
