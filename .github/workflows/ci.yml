@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+    branches: [main, 'e0/**']
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Docs manifest is current (regenerate must be a no-op)
+        run: |
+          node scripts/generate-docs-manifest.mjs
+          git diff --exit-code docs.manifest.json packages/contracts/docs.manifest.json
+
+      # WO-0 §B7 gates: typecheck (incl. secret-separation type tests) ·
+      # unit + reconciliation property tests (incl. worked baseline) ·
+      # shape-freeze · copy-lint positive + negative fixture ·
+      # no-gated-shapes · drift-check positive + tampered-fail.
+      - name: Gates (positive suites pass, every negative fixture fails)
+        run: bash scripts/run-gates.sh

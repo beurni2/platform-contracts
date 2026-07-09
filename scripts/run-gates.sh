@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# WO-0 §B7 CI gates, run end-to-end with evidence. Every gate has a negative
+# fixture and this script SHOWS each one failing once (output captured under
+# _evidence/ when EVIDENCE_DIR is set, otherwise printed).
+set -uo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+EVIDENCE_DIR="${EVIDENCE_DIR:-}"
+FAILED=0
+
+log() { printf '\n=== %s ===\n' "$1"; }
+capture() {
+  # capture <name> <expected: pass|fail> <command...>
+  local name="$1" expected="$2"; shift 2
+  local out rc
+  out="$("$@" 2>&1)"; rc=$?
+  if [ -n "$EVIDENCE_DIR" ]; then
+    mkdir -p "$EVIDENCE_DIR"
+    printf '$ %s\n%s\n(exit code: %d)\n' "$*" "$out" "$rc" > "$EVIDENCE_DIR/$name.txt"
+  fi
+  printf '%s\n(exit code: %d)\n' "$out" "$rc"
+  if [ "$expected" = pass ] && [ $rc -ne 0 ]; then echo "GATE FAILED (expected pass): $name"; FAILED=1; fi
+  if [ "$expected" = fail ] && [ $rc -eq 0 ]; then echo "GATE FAILED (expected the negative fixture to fail): $name"; FAILED=1; fi
+}
+
+cd "$ROOT"
+
+log "gate: typecheck (incl. secret-separation type tests)"
+capture typecheck pass pnpm typecheck
+
+log "gate: unit + property + shape tests (reconciliation, shape-freeze, secrets, no-gated-shapes)"
+capture tests pass pnpm test
+
+log "gate: copy-lint — seed catalog (must pass)"
+capture copy-lint-positive pass node packages/i18n/dist/cli.js packages/i18n/catalog/catalog.json
+
+log "gate: copy-lint — NEGATIVE FIXTURE (must fail: « Veuillez patienter », « séquestre », all four conditions)"
+capture copy-lint-negative fail node packages/i18n/dist/cli.js packages/i18n/fixtures/negative-catalog.json
+
+log "gate: drift-check — pristine consumer /docs copy (must pass)"
+rm -rf /tmp/drift-consumer && mkdir -p /tmp/drift-consumer/docs
+cp docs/*.md /tmp/drift-consumer/docs/
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js /tmp/drift-consumer/docs --manifest docs.manifest.json --pinned-version 0.1.0
+
+log "gate: drift-check — TAMPERED consumer doc (must fail)"
+printf '\nrogue edit — a consumer repo drifted from canon\n' >> /tmp/drift-consumer/docs/Shop-Plus-Build-Spec.md
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js /tmp/drift-consumer/docs --manifest docs.manifest.json --pinned-version 0.1.0
+
+log "gate: reconciliation — NEGATIVE FIXTURE (independent-multiplication quote must not reconcile)"
+capture reconciliation-negative fail node scripts/show-reconciliation-negative.mjs
+
+log "gate: shape-freeze — NEGATIVE FIXTURE (tampered snapshot with kittingSealId on the Quote must fail)"
+capture shape-freeze-negative fail node scripts/show-shape-freeze-negative.mjs
+
+log "gate: secret-separation — NEGATIVE FIXTURE (substitution must not compile)"
+capture secret-separation-negative fail npx tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext packages/contracts/fixtures/secret-substitution.negative.ts
+
+if [ $FAILED -ne 0 ]; then
+  echo ""
+  echo "ONE OR MORE GATES DID NOT BEHAVE AS REQUIRED"
+  exit 1
+fi
+echo ""
+echo "ALL GATES GREEN (positive suites pass; every negative fixture demonstrably fails)"
