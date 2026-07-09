@@ -1,6 +1,6 @@
 {
   "name": "@platform/contracts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Canonical shared contracts (shapes + events), the money waterfall (RoundingLaw v1), the four branded secrets, canonical JSON, and the docs drift-check CLI. Shapes live ONLY here; no app redefines them.",
   "license": "UNLICENSED",
   "type": "module",
@@ -10,7 +10,17 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./drift-check": {
+      "types": "./dist/drift-check.d.ts",
+      "import": "./dist/drift-check.js"
+    },
+    "./drift-cli": {
+      "types": "./dist/drift-check-cli.d.ts",
+      "import": "./dist/drift-check-cli.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   },
   "bin": {
     "drift-check": "./dist/drift-check-cli.js"
@@ -26,7 +36,7 @@
     "prepare": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@platform/kernel-types": "0.1.0",
+    "@platform/kernel-types": "0.2.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {
