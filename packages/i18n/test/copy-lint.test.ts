@@ -82,6 +82,26 @@ describe('copy-lint internals', () => {
     expect(estimateSyllables('F')).toBe(1);
   });
 
+  it('condition (b) also scans moore/dioula variant texts, not only fr', async () => {
+    const data = await loadLintData();
+    const report = lintCatalog(
+      [
+        {
+          key: 'selling.with_jargon_in_variant',
+          fr: 'Regardez ces nouveaux pagnes',
+          register: 'selling',
+          screenClass: 'selling_surface',
+          dioula: 'texte avec solde débiteur dedans',
+        },
+      ],
+      data,
+    );
+    expect(report.ok).toBe(false);
+    expect(report.violations.some((v) => v.condition === 'register_mismatch' && v.message.includes('(dioula)'))).toBe(
+      true,
+    );
+  });
+
   it('catalog schema rejects an entry with an unknown register', () => {
     const bad = [{ key: 'x', fr: 'Texte', register: 'shouty', screenClass: 'general' }];
     expect(CatalogSchema.safeParse(bad).success).toBe(false);

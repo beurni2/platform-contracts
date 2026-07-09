@@ -38,13 +38,14 @@ log "gate: copy-lint — NEGATIVE FIXTURE (must fail: « Veuillez patienter », 
 capture copy-lint-negative fail node packages/i18n/dist/cli.js packages/i18n/fixtures/negative-catalog.json
 
 log "gate: drift-check — pristine consumer /docs copy (must pass)"
-rm -rf /tmp/drift-consumer && mkdir -p /tmp/drift-consumer/docs
-cp docs/*.md /tmp/drift-consumer/docs/
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js /tmp/drift-consumer/docs --manifest docs.manifest.json --pinned-version 0.1.0
+DRIFT_CONSUMER="$(mktemp -d)/docs"
+mkdir -p "$DRIFT_CONSUMER"
+cp docs/*.md "$DRIFT_CONSUMER/"
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.1.0
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
-printf '\nrogue edit — a consumer repo drifted from canon\n' >> /tmp/drift-consumer/docs/Shop-Plus-Build-Spec.md
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js /tmp/drift-consumer/docs --manifest docs.manifest.json --pinned-version 0.1.0
+printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.1.0
 
 log "gate: reconciliation — NEGATIVE FIXTURE (independent-multiplication quote must not reconcile)"
 capture reconciliation-negative fail node scripts/show-reconciliation-negative.mjs

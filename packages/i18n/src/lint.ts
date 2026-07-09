@@ -95,25 +95,29 @@ export function lintCatalog(catalog: Catalog, data: LintData): LintReport {
       }
     }
 
-    // (b) register mismatch.
+    // (b) register mismatch — every text variant of the entry is the string.
     if (entry.register === 'money') {
-      const hit = findToken(entry.fr, data.marketingUrgencyTokens);
-      if (hit !== undefined) {
-        violations.push({
-          key: entry.key,
-          condition: 'register_mismatch',
-          message: `marketing/urgency token « ${hit} » in a register:money string: "${entry.fr}"`,
-        });
+      for (const { field, text } of textFields(entry)) {
+        const hit = findToken(text, data.marketingUrgencyTokens);
+        if (hit !== undefined) {
+          violations.push({
+            key: entry.key,
+            condition: 'register_mismatch',
+            message: `marketing/urgency token « ${hit} » in a register:money string (${field}): "${text}"`,
+          });
+        }
       }
     }
     if (entry.register === 'selling') {
-      const hit = findToken(entry.fr, data.financeJargonTokens);
-      if (hit !== undefined) {
-        violations.push({
-          key: entry.key,
-          condition: 'register_mismatch',
-          message: `ledger/finance jargon « ${hit} » in a register:selling string: "${entry.fr}"`,
-        });
+      for (const { field, text } of textFields(entry)) {
+        const hit = findToken(text, data.financeJargonTokens);
+        if (hit !== undefined) {
+          violations.push({
+            key: entry.key,
+            condition: 'register_mismatch',
+            message: `ledger/finance jargon « ${hit} » in a register:selling string (${field}): "${text}"`,
+          });
+        }
       }
     }
 

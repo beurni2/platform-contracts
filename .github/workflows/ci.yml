@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -28,6 +30,9 @@ jobs:
         run: |
           node scripts/generate-docs-manifest.mjs
           git diff --exit-code docs.manifest.json packages/contracts/docs.manifest.json
+
+      - name: Shape-freeze companion — snapshot change requires a version bump
+        run: bash scripts/check-snapshot-version-bump.sh
 
       # WO-0 §B7 gates: typecheck (incl. secret-separation type tests) ·
       # unit + reconciliation property tests (incl. worked baseline) ·
