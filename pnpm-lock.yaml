@@ -15,7 +15,7 @@ importers:
   packages/contracts:
     dependencies:
       '@platform/kernel-types':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../kernel-types
       zod:
         specifier: ^4.1.5

@@ -26,7 +26,7 @@
     "prepare": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@platform/kernel-types": "workspace:*",
+    "@platform/kernel-types": "0.1.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {

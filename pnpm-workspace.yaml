@@ -1,5 +1,10 @@
 packages:
   - packages/*
 
+# Inter-package deps are pinned to real versions (never workspace:*) so the
+# packages stay installable from a git ref by outside consumers; this flag
+# keeps local resolution pointing at the sibling workspace package.
+linkWorkspacePackages: true
+
 onlyBuiltDependencies:
   - esbuild
