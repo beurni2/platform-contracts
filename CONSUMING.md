@@ -54,6 +54,17 @@ pnpm add "git+https://github.com/beurni2/platform-contracts.git#v0.1.0&path:pack
 
 (after adding the two `pnpm-workspace.yaml` blocks above).
 
+## Interim note (until `v0.1.0` is visible on origin)
+
+The annotated tag `v0.1.0` exists in the repo history (object `5a6813f`,
+commit `b10f482`) but the sandbox git proxy rejects tag pushes (HTTP 403), so
+`git ls-remote --tags origin` is empty until someone with direct GitHub access
+pushes it. Until then, pin the commit sha with identical syntax:
+
+```
+git+https://github.com/beurni2/platform-contracts.git#b10f4822b173c9cd4b162f416ad213bf580ab652&path:packages/contracts
+```
+
 ## Version bumps
 
 Consumers move by changing the pinned ref (`#v0.1.0` → `#v0.2.0`) everywhere
