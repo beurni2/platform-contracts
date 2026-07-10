@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   CustodyLiabilityCauseSchema,
+  EscrowTxnStatusSchema,
   FaultClassSchema,
   FundSolvencyStateSchema,
   PaymentLegStatusSchema,
@@ -40,7 +41,9 @@ export const EscrowTxnSchema = z
     orderId: IdSchema,
     provider: z.string().min(1),
     paymentLegs: z.array(PaymentLegSchema),
-    status: z.string().min(1),
+    // v0.5.0: promoted from a bare string — the aggregator's flow stages
+    // "collect→hold→split→payout" + refunded (E2-taxonomy.md §2).
+    status: EscrowTxnStatusSchema,
     splitBreakdown: z.record(z.string(), FcfaSchema),
     payoutRefs: z.array(IdSchema),
   })

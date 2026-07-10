@@ -2,6 +2,9 @@ import { z } from 'zod';
 import { LocationSchema, MediaRefSchema } from '@platform/kernel-types';
 import {
   AuthorizationSourceSchema,
+  DeliveryFailureReasonSchema,
+  DeliveryOutcomeFamilySchema,
+  FaultClassSchema,
   HandoffAuthorizationStateSchema,
   PickupVerificationResultSchema,
   ValidationResultSchema,
@@ -96,7 +99,11 @@ export const RouteManifestSchema = z
   .strict();
 export type RouteManifest = z.infer<typeof RouteManifestSchema>;
 
-/** §5.6 PickupVerification — bounded, objective conformity only (SE-I12). */
+/**
+ * §5.6 PickupVerification — bounded, objective conformity only (SE-I12).
+ * D20 (founder ruling, 2026-07-10): dwell is RECORDED and console-surfaced
+ * only — no enforcement fields exist on this shape or anywhere in canon.
+ */
 export const PickupVerificationSchema = z
   .object({
     orderId: IdSchema,
@@ -124,10 +131,43 @@ export const InspectionPolicySchema = z
     inspectionCategory: z.string().min(1),
     allowedActions: z.array(z.string().min(1)),
     sealRule: z.string().min(1),
+    // D20 (founder ruling, 2026-07-10): a TARGET for recording and
+    // console-surfacing dwell — never an enforcement threshold. No
+    // enforcement fields exist by ruling.
     dwellTargetSec: z.number().int().min(0),
   })
   .strict();
 export type InspectionPolicy = z.infer<typeof InspectionPolicySchema>;
+
+/**
+ * SE6.1 DeliveryOutcome (canon at v0.5.0) — "Structured reasons;
+ * retry/reschedule/return/incident; no generic failed terminal;
+ * fault-attributed." A bare 'failed' outcome is UNREPRESENTABLE: no such
+ * family member exists and the strict parse refuses it (gate-proven).
+ * Attempt metadata per SE5.x: "One retry window (~15 min…)". Human-readable
+ * reason text lives in the i18n catalog (register-tagged), referenced by
+ * key — never inline (Law 6 / §10.5). Derivations: E2-taxonomy.md §3.
+ */
+export const DeliveryOutcomeSchema = z
+  .object({
+    taskId: IdSchema,
+    orderId: IdSchema,
+    family: DeliveryOutcomeFamilySchema,
+    reasonCode: DeliveryFailureReasonSchema,
+    /** i18n catalog key for the human reason (register-tagged there). */
+    humanReasonRef: z.string().min(1),
+    faultClass: FaultClassSchema,
+    attempt: z
+      .object({
+        number: z.number().int().min(1),
+        at: IsoTimestampSchema,
+        /** the one retry window (SE5.x), when the family grants one. */
+        windowExpiresAt: IsoTimestampSchema.optional(),
+      })
+      .strict(),
+  })
+  .strict();
+export type DeliveryOutcome = z.infer<typeof DeliveryOutcomeSchema>;
 
 /** §5.6 InspectionSession. */
 export const InspectionSessionSchema = z
