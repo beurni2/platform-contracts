@@ -43,6 +43,19 @@ function realPkgDir(name) {
   return realpathSync(linked);
 }
 
+// The file:-linked @platform/certification packs only its dist/ (its
+// `files` filter) — the repo root must be built BEFORE `pnpm install` here.
+const certEntry = join(ROOT, 'node_modules', '@platform', 'certification', 'dist', 'index.js');
+if (!existsSync(certEntry)) {
+  console.error(
+    'build-consumed: @platform/certification has no dist in this install.\n' +
+    'Bootstrap order (see assembly/README.md): at the REPO ROOT run\n' +
+    '  pnpm install && pnpm build\n' +
+    'then re-run `pnpm install` in assembly/.',
+  );
+  process.exit(1);
+}
+
 let built = 0;
 for (const name of CONSUMED) {
   const dir = realPkgDir(name);
