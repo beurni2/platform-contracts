@@ -219,27 +219,39 @@ export function makeLiveReadinessProducer(): MockAdapter {
   };
 }
 
-/** Drive one REAL custody spine end-to-end; extra evidence resubmissions
- * (a real at-least-once behavior) advance the aggregate version. */
-function driveRealSpine(seed: string, n: number, resubmissions: number) {
+/** Drive one REAL custody spine end-to-end. WO-2.8 adaptation to the
+ * post-2.7 sera pin: evidence resubmission now refuses
+ * `evidence_already_submitted` (the E2 hardening, probed live), so version
+ * variance comes from the REAL corrective verification round-trip instead
+ * (WO-2.7 item 3): a refused pickup attempt (failed qty check → verification
+ * event + fault claim), then `openNewVerificationCycle` with a fresh
+ * cycle-2 code, then the accepted attempt — validated lands at version 8
+ * where a clean order lands at 6. */
+function driveRealSpine(seed: string, n: number, correctiveCycle: boolean) {
   const orderId = `order_${seed}_${n}`;
   const spine = new CustodySpine(
     { order_id: orderId, task_id: `task_${seed}_${n}`, package_id: `pkg_${seed}_${n}`, correlation_id: `corr_${seed}` },
     `sup_${seed}`,
   );
   const at = `2026-07-10T0${n}:00:00.000Z`;
+  const verificationInput = (over: Record<string, boolean> = {}) => ({
+    orderId, riderId: `rider_${seed}`,
+    checkResults: { order_ref: true, identity: true, variant: true, colour: true, size_label: true, qty: true, damage: true, pieces: true, manufacturer_seal: true, ...over },
+    dwellSec: 150, evidenceBundleId: `veb_${orderId}`, custodySealId: `seal_${orderId}`,
+  });
   spine.secrets.register('pickup_verification_code', orderId, `pvc_${orderId}`);
   spine.secrets.register('custody_seal', orderId, `seal_${orderId}`);
   spine.secrets.register('buyer_drop_code', orderId, `bdc_${orderId}`);
   spine.establishSellerCustody(at);
-  const verified = spine.verifyPickup(
-    {
-      orderId, riderId: `rider_${seed}`,
-      checkResults: { order_ref: true, identity: true, variant: true, colour: true, size_label: true, qty: true, damage: true, pieces: true, manufacturer_seal: true },
-      dwellSec: 150, evidenceBundleId: `veb_${orderId}`, custodySealId: `seal_${orderId}`,
-    },
-    `pvc_${orderId}`, at,
-  );
+  let cycleCode = `pvc_${orderId}`;
+  if (correctiveCycle) {
+    const refused = spine.verifyPickup(verificationInput({ qty: false }), cycleCode, at);
+    if (refused.kind !== 'refused') throw new Error(`expected a refused first attempt: ${JSON.stringify(refused)}`);
+    cycleCode = `pvc_${orderId}_c2`;
+    const cycle = spine.openNewVerificationCycle(cycleCode, at);
+    if (!cycle.ok) throw new Error(`new verification cycle refused: ${JSON.stringify(cycle)}`);
+  }
+  const verified = spine.verifyPickup(verificationInput(), cycleCode, at);
   if (verified.kind !== 'accepted') throw new Error(`verify failed: ${JSON.stringify(verified)}`);
   const custody = spine.beginCustody({ riderId: `rider_${seed}`, verificationOrderId: orderId, custodySealId: `seal_${orderId}`, sealPhotoRefs: [`seal/${orderId}.jpg`], at });
   if (!custody.ok) throw new Error(`custody failed: ${custody.reason}`);
@@ -247,10 +259,8 @@ function driveRealSpine(seed: string, n: number, resubmissions: number) {
     taskId: `task_${seed}_${n}`, packageId: `pkg_${seed}_${n}`, custodySealId: `seal_${orderId}`,
     artifacts: [{ ref: `evidence/${orderId}.jpg`, sha256: SHA, mimeType: 'image/jpeg' }], capturedAt: at,
   };
-  for (let i = 0; i <= resubmissions; i += 1) {
-    const submitted = spine.submitDeliveryEvidence(bundle, 'server_confirmed', at);
-    if (!submitted.ok) throw new Error('evidence failed');
-  }
+  const submitted = spine.submitDeliveryEvidence(bundle, 'server_confirmed', at);
+  if (!submitted.ok) throw new Error(`evidence failed: ${JSON.stringify(submitted)}`);
   const decided = spine.decideValidation(at);
   if (!decided.ok) throw new Error('decide failed');
   const dropped = spine.confirmDropAndEmitEligibility(`bdc_${orderId}`, at);
@@ -264,9 +274,10 @@ export function makeLiveEligibilityProducer(): MockAdapter {
     domain: 'eligibility',
     producerSchema: DOMAIN_PAYLOAD_SCHEMAS.eligibility,
     async emit(seed, controls): Promise<EmissionResult> {
-      // Three real orders; resubmitted evidence (at-least-once reality)
-      // gives the three signals genuinely distinct aggregate versions.
-      const events = [0, 1, 2].map((extra, i) => driveRealSpine(seed, i + 1, extra).validated);
+      // Three real orders; the LAST goes through the corrective
+      // verification round-trip (WO-2.7 cycles), so the version tail is
+      // strictly increasing — enough for the ordered/out-of-order checks.
+      const events = [false, false, true].map((corrective, i) => driveRealSpine(seed, i + 1, corrective).validated);
       return deliverUnderControls(this.domain, seed, events, controls);
     },
     async readProjection(seed, options): Promise<ProjectionRead> {
@@ -280,7 +291,7 @@ export function makeLiveEligibilityProducer(): MockAdapter {
         );
         return { version: 1, asOf: '2026-07-10T01:00:00.000Z', value: { orderId, eligibilityEmitted: spine.allEvents().some((e) => e.name === 'delivery.validated.v1') } };
       }
-      const { spine } = driveRealSpine(seed, 4, 0);
+      const { spine } = driveRealSpine(seed, 4, false);
       return {
         version: 2,
         asOf: '2026-07-10T02:00:00.000Z',
