@@ -1,0 +1,48 @@
+{
+  "name": "@platform/e1-assembly",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "E1 assembly harness \u2014 the fifteen steps live, over the three app repos' real service code at pinned mains. Not an app; the Contract E1 exit artifact.",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "postinstall": "node scripts/build-consumed.mjs",
+    "build": "tsc -p tsconfig.json && node scripts/bundle-flag-worker.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "e1": "node scripts/run-e1.mjs --out chain-report.html",
+    "e1:negative": "node scripts/run-e1-negative.mjs",
+    "conformance": "node scripts/run-conformance.mjs"
+  },
+  "dependencies": {
+    "@platform/contracts": "git+https://github.com/beurni2/platform-contracts.git#be1df7ad79a09d43182a638cc8acdd0a9081302e&path:packages/contracts",
+    "@platform/certification": "file:../packages/certification",
+    "@boutik/supplier-service": "git+https://github.com/beurni2/boutik-plus.git#76ef6aae3b2d2aeca6906eb7db3f03886a0c906f&path:services/supplier-service",
+    "@boutik/catalog-service": "git+https://github.com/beurni2/boutik-plus.git#76ef6aae3b2d2aeca6906eb7db3f03886a0c906f&path:services/catalog-service",
+    "@boutik/media-service": "git+https://github.com/beurni2/boutik-plus.git#76ef6aae3b2d2aeca6906eb7db3f03886a0c906f&path:services/media-service",
+    "@boutik/offer-service": "git+https://github.com/beurni2/boutik-plus.git#76ef6aae3b2d2aeca6906eb7db3f03886a0c906f&path:services/offer-service",
+    "@boutik/fulfillment-service": "git+https://github.com/beurni2/boutik-plus.git#76ef6aae3b2d2aeca6906eb7db3f03886a0c906f&path:services/fulfillment-service",
+    "@boutik/inventory-service": "git+https://github.com/beurni2/boutik-plus.git#76ef6aae3b2d2aeca6906eb7db3f03886a0c906f&path:services/inventory-service",
+    "@shop-plus/commerce-core": "git+https://github.com/beurni2/shop-plus.git#0a8068fcb2bb3c7565aa734968886b80b6d0fa96&path:packages/commerce-core",
+    "@shop-plus/attribution-service": "git+https://github.com/beurni2/shop-plus.git#0a8068fcb2bb3c7565aa734968886b80b6d0fa96&path:services/attribution-service",
+    "@shop-plus/flags-client": "git+https://github.com/beurni2/shop-plus.git#0a8068fcb2bb3c7565aa734968886b80b6d0fa96&path:packages/flags-client",
+    "@sera/logistics-service": "git+https://github.com/beurni2/sera.git#77f12bc01b25a5a8597edc685c5f4868fed6e04b&path:services/logistics-service",
+    "@sera/custody-service": "git+https://github.com/beurni2/sera.git#77f12bc01b25a5a8597edc685c5f4868fed6e04b&path:services/custody-service",
+    "@sera/evidence-service": "git+https://github.com/beurni2/sera.git#77f12bc01b25a5a8597edc685c5f4868fed6e04b&path:services/evidence-service",
+    "zod": "^4.1.5",
+    "@sera/observability": "git+https://github.com/beurni2/sera.git#77f12bc01b25a5a8597edc685c5f4868fed6e04b&path:packages/observability",
+    "@boutik/observability": "git+https://github.com/beurni2/boutik-plus.git#76ef6aae3b2d2aeca6906eb7db3f03886a0c906f&path:packages/observability",
+    "@shop-plus/observability": "git+https://github.com/beurni2/shop-plus.git#0a8068fcb2bb3c7565aa734968886b80b6d0fa96&path:packages/observability"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "miniflare": "^4.20250705.0",
+    "esbuild": "^0.25.5",
+    "@cloudflare/workers-types": "^4.20250705.0",
+    "@types/node": "^22.20.1"
+  }
+}

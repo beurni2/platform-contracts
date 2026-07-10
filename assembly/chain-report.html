@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chaîne E1 — corr_e1live</title>
+<style>
+  body { margin:0; padding:24px; background:#FAF7F2; color:#26221C; font:15px/1.5 system-ui, sans-serif; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .verdict { display:inline-block; padding:6px 14px; border-radius:10px; color:#fff; font-weight:700;
+             background:#1F6B44; margin:8px 0 16px; }
+  .meta { color:#5C564C; margin-bottom:20px; }
+  .chain { display:flex; flex-wrap:wrap; align-items:center; gap:6px; background:#FFFFFF;
+           border:1px solid #E3DDD2; border-radius:16px; padding:16px; margin-bottom:24px; }
+  .link { border-radius:10px; padding:8px 10px; border:1px solid #E3DDD2; }
+  .link.ok { border-color:#1F6B44; }
+  .link.ko { border-color:#B3402F; background:#FBEDEA; }
+  .link .name { font-size:11px; color:#5C564C; }
+  .link .val { font-family:ui-monospace,monospace; font-size:12px; }
+  .arrow { color:#5C564C; }
+  table { width:100%; border-collapse:collapse; background:#FFFFFF; border:1px solid #E3DDD2;
+          border-radius:16px; overflow:hidden; }
+  th, td { text-align:left; padding:10px 12px; border-top:1px solid #E3DDD2; vertical-align:top; }
+  th { background:#FAF7F2; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:#5C564C; border-top:none; }
+  .status { font-weight:700; width:24px; }
+  .status.ok { color:#1F6B44; } .status.ko { color:#B3402F; }
+  .idx { color:#5C564C; width:32px; }
+  .mono { font-family:ui-monospace,monospace; font-size:12px; }
+  .problem { color:#B3402F; font-size:13px; margin-top:4px; }
+</style>
+</head>
+<body>
+  <h1>Chaîne E1 — les quinze étapes</h1>
+  <div class="verdict">CHAÎNE COMPLÈTE</div>
+  <div class="meta">corrélation <code>corr_e1live</code> · 31 événements · 15/15 étapes vertes</div>
+  <div class="chain"><div class="link ok"><div class="name">quote_id</div><div class="val">quote_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">reservation_id</div><div class="val">rsv_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">payment_attempt_id</div><div class="val">payatt_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">order_id</div><div class="val">order_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">package_id</div><div class="val">pkg_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">delivery_task_id</div><div class="val">dtask_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">validation_id</div><div class="val">val-order_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">settlement_obligation_id</div><div class="val">sob_supplier_e1live</div></div><div class="arrow">→</div><div class="link ok"><div class="name">provider_payout_id</div><div class="val">payout_e1live</div></div></div>
+  <table>
+    <thead><tr><th></th><th>#</th><th>Étape (Contrat §2.3)</th><th>Événements</th><th>Identifiants</th></tr></thead>
+    <tbody><tr>
+        <td class="status ok">✓</td>
+        <td class="idx">1</td>
+        <td>Create one supplier (manual)</td>
+        <td class="mono">supplier.verification_approved.v1</td>
+        <td class="mono"><code>supplier_id=supplier-1</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">2</td>
+        <td>Create one basic product, one image (premium-frame only — no cleanup), one variant</td>
+        <td class="mono">media.derivative_approved.v1<br>catalog.version_activated.v1</td>
+        <td class="mono"><code>product_version_id=pv-1</code><br><code>variant_id=var-1</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">3</td>
+        <td>Publish one supply projection</td>
+        <td class="mono">offer.published.v1<br>inventory.availability.changed.v1</td>
+        <td class="mono"><code>offer_version=1</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">4</td>
+        <td>Create one reseller listing</td>
+        <td class="mono">listing.published.v1</td>
+        <td class="mono"><code>listing_id=lst_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">5</td>
+        <td>Open one signed buyer link</td>
+        <td class="mono">attribution.issued.v1<br>attribution.qualified.v1</td>
+        <td class="mono"><code>attribution_token_id=att_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">6</td>
+        <td>Create one immutable sandbox Quote</td>
+        <td class="mono">checkout.quote_created.v1</td>
+        <td class="mono"><code>quote_id=quote_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">7</td>
+        <td>Reserve one unit (atomic)</td>
+        <td class="mono">order.status_projection_updated.v1<br>inventory.availability.changed.v1</td>
+        <td class="mono"><code>reservation_id=rsv_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">8</td>
+        <td>Complete one sandbox payment (hold)</td>
+        <td class="mono">payment.checkout_leg_confirmed.v1<br>order.status_projection_updated.v1<br>order.status_projection_updated.v1<br>order.confirmed.v1</td>
+        <td class="mono"><code>payment_attempt_id=payatt_e1live</code><br><code>order_id=order_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">9</td>
+        <td>Mark the supplier package ready (package/seal)</td>
+        <td class="mono">fulfillment.accepted.v1<br>seller.readiness_challenge_issued.v1<br>fulfillment.ready.v1</td>
+        <td class="mono"><code>package_id=pkg_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">10</td>
+        <td>Assign one courier manually</td>
+        <td class="mono">logistics.task_ready.v1<br>pickup.assigned.v1</td>
+        <td class="mono"><code>delivery_task_id=dtask_e1live</code><br><code>rider_id=rider_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">11</td>
+        <td>Transfer one package into courier custody (two-party, single-use code + seal)</td>
+        <td class="mono">pickup.verification_recorded.v1<br>pickup.custody_seal_registered.v1<br>custody.transferred_to_courier.v1</td>
+        <td class="mono"><code>custody_seal_id=seal_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">12</td>
+        <td>Record one delivery confirmation (buyer drop code)</td>
+        <td class="mono">delivery.evidence_submitted.v1</td>
+        <td class="mono">—</td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">13</td>
+        <td>Produce one validated settlement-eligibility event</td>
+        <td class="mono">custody.transferred_to_customer.v1<br>delivery.validated.v1</td>
+        <td class="mono"><code>validation_id=val-order_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">14</td>
+        <td>Create one supplier + reseller SettlementObligation</td>
+        <td class="mono">commission.earned.v1</td>
+        <td class="mono"><code>settlement_obligation_id=sob_supplier_e1live</code><br><code>reseller_settlement_obligation_id=sob_reseller_e1live</code></td>
+      </tr>
+<tr>
+        <td class="status ok">✓</td>
+        <td class="idx">15</td>
+        <td>Reconcile the sandbox provider response</td>
+        <td class="mono">payout.submitted.v1<br>payout.paid.v1<br>payout.submitted.v1<br>payout.paid.v1</td>
+        <td class="mono"><code>provider_payout_id=payout_e1live</code></td>
+      </tr></tbody>
+  </table>
+</body>
+</html>

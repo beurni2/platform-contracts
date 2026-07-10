@@ -1,10 +1,9 @@
 import { z } from 'zod';
 import {
+  FcfaSchema,
   IdSchema,
-  PaymentLegSchema,
-  SettlementObligationSchema,
+  PaymentLegStatusSchema,
   SupplyProjectionSchema,
-  ValidationDecisionSchema,
 } from '@platform/contracts';
 import type { CertifiableDomain } from './adapter.js';
 
@@ -16,19 +15,43 @@ import type { CertifiableDomain } from './adapter.js';
  * declared producerSchema against this registry: the mock and the live
  * producer must declare the SAME schema.
  */
+/**
+ * E1-ASSEMBLY ALIGNMENT (flagged in JOURNAL.md, founder-reviewable):
+ * the deployed payment consumer (shop-plus OrderSpine, founder-reviewed
+ * WO-1.1) parses top-level `amount`/`status` — the shape the sandbox
+ * provider mock actually emits. The prior nested `{orderId, paymentAttemptId,
+ * leg}` shape was a WO-1.0 scaffold no deployed producer or consumer uses; a
+ * mock certified against it would hide the real contract (§3: "a green run
+ * against an obedient mock is not evidence").
+ */
 export const PaymentProviderEventPayloadSchema = z
   .object({
-    orderId: IdSchema,
-    paymentAttemptId: IdSchema,
-    leg: PaymentLegSchema,
+    provider: z.string().min(1),
+    payment_attempt_id: IdSchema,
+    collectRef: z.string().min(1),
+    amount: FcfaSchema,
+    fee: FcfaSchema,
+    status: PaymentLegStatusSchema,
+    order_id: IdSchema,
+    redelivery: z.number().int().min(0),
   })
   .strict();
 
+/**
+ * E1-ASSEMBLY ALIGNMENT (flagged in JOURNAL.md, founder-reviewable):
+ * the live settlement-eligibility producer (sera CustodySpine,
+ * founder-reviewed WO-1.3) emits an amount-free signal — SE-I09: Séra never
+ * computes proceeds; commerce-core copies amounts from the Quote on its
+ * side. The prior payload carried a SettlementObligation WITH an amount in a
+ * Séra-produced event, which the live producer must never emit (Ten Laws #2).
+ */
 export const EligibilityEventPayloadSchema = z
   .object({
-    orderId: IdSchema,
-    validation: ValidationDecisionSchema,
-    obligation: SettlementObligationSchema,
+    order_id: IdSchema,
+    task_id: IdSchema,
+    validation_id: IdSchema,
+    result: z.literal('validated'),
+    settlement_eligibility: z.literal(true),
   })
   .strict();
 

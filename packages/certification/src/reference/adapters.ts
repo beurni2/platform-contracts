@@ -4,26 +4,30 @@ import {
 import { makeReferenceAdapter } from './base.js';
 import type { MockAdapter } from '../adapter.js';
 
-/** Reference mock — payment provider (checkout leg confirm → payout submitted → paid). */
+/**
+ * Reference mock — payment provider (checkout leg confirm → payout submitted
+ * → paid). Payloads carry the DEPLOYED provider-webhook shape (top-level
+ * amount/status — what shop-plus OrderSpine parses; E1-assembly alignment,
+ * see domain-schemas.ts).
+ */
 export const referencePaymentProviderMock: MockAdapter = makeReferenceAdapter({
   domain: 'payment-provider',
   producerSchema: DOMAIN_PAYLOAD_SCHEMAS['payment-provider'],
   sequence: (seed) => {
-    const payload = (status: 'held' | 'captured') => ({
-      orderId: `order_${seed}`,
-      paymentAttemptId: `payatt_${seed}`,
-      leg: {
-        legType: 'checkout' as const,
-        collectRef: `collect_${seed}`,
-        amount: 12_500,
-        fee: 150,
-        status,
-      },
+    const payload = (collectRef: string, amount: number, status: 'held' | 'captured') => ({
+      provider: 'sandbox-provider',
+      payment_attempt_id: `payatt_${seed}`,
+      collectRef,
+      amount,
+      fee: 0,
+      status,
+      order_id: `order_${seed}`,
+      redelivery: 0,
     });
     return [
-      { name: 'payment.checkout_leg_confirmed.v1', payload: payload('held') },
-      { name: 'payout.submitted.v1', payload: payload('held') },
-      { name: 'payout.paid.v1', payload: payload('captured') },
+      { name: 'payment.checkout_leg_confirmed.v1', payload: payload(`collect_${seed}`, 12_500, 'held') },
+      { name: 'payout.submitted.v1', payload: payload(`payout_${seed}`, 12_500, 'held') },
+      { name: 'payout.paid.v1', payload: payload(`payout_${seed}`, 12_500, 'captured') },
     ];
   },
   projectionValue: (seed) => ({ orderId: `order_${seed}`, escrowStatus: 'held', legs: 1 }),
@@ -34,30 +38,27 @@ export const referencePaymentProviderMock: MockAdapter = makeReferenceAdapter({
   },
 });
 
-/** Reference mock — eligibility (evidence → validated → supplier payable). */
+/**
+ * Reference mock — eligibility. Payloads carry the LIVE producer's shape
+ * (sera CustodySpine: amount-free SE-I09 signal; E1-assembly alignment, see
+ * domain-schemas.ts). The sequence is the at-least-once world: the signal
+ * for three seeded orders.
+ */
 export const referenceEligibilityMock: MockAdapter = makeReferenceAdapter({
   domain: 'eligibility',
   producerSchema: DOMAIN_PAYLOAD_SCHEMAS.eligibility,
   sequence: (seed) => {
-    const payload = (state: 'Eligible' | 'Pending') => ({
-      orderId: `order_${seed}`,
-      validation: {
-        taskId: `task_${seed}`,
-        result: 'validated' as const,
-        reasons: [],
-      },
-      obligation: {
-        orderId: `order_${seed}`,
-        party: 'supplier',
-        amount: 8_500,
-        state,
-        holds: [],
-      },
+    const payload = (n: number) => ({
+      order_id: `order_${seed}_${n}`,
+      task_id: `task_${seed}_${n}`,
+      validation_id: `val_${seed}_${n}`,
+      result: 'validated' as const,
+      settlement_eligibility: true as const,
     });
     return [
-      { name: 'delivery.evidence_submitted.v1', payload: payload('Pending') },
-      { name: 'delivery.validated.v1', payload: payload('Pending') },
-      { name: 'settlement.supplier_payable.v1', payload: payload('Eligible') },
+      { name: 'delivery.validated.v1', payload: payload(1) },
+      { name: 'delivery.validated.v1', payload: payload(2) },
+      { name: 'delivery.validated.v1', payload: payload(3) },
     ];
   },
   projectionValue: (seed) => ({ orderId: `order_${seed}`, obligationState: 'Eligible' }),
