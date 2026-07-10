@@ -35,7 +35,11 @@ export interface LintData {
   marketingUrgencyTokens: readonly string[];
   financeJargonTokens: readonly string[];
   localLanguageTokens: readonly string[];
-  readingBudgets: Readonly<Record<ScreenClass, { maxWordsPerSentence: number; maxAvgSyllablesPerWord: number }>>;
+  readingBudgets: Readonly<Partial<Record<ScreenClass, { maxWordsPerSentence: number; maxAvgSyllablesPerWord: number }>>>;
+  /** D18: budgets bind only sentences with at least this many words. */
+  minWordsForBudget: number;
+  /** D18: these screen classes are exempt from reading-level budgets entirely. */
+  labelClasses: readonly ScreenClass[];
 }
 
 function tokenPattern(token: string): RegExp {
@@ -122,17 +126,24 @@ export function lintCatalog(catalog: Catalog, data: LintData): LintReport {
     }
 
     // (c) reading-level budget for the entry's screen class.
-    const budget = data.readingBudgets[entry.screenClass];
-    for (const sentence of splitSentences(entry.fr)) {
-      const sentenceWords = words(sentence);
-      if (sentenceWords.length > budget.maxWordsPerSentence) {
-        violations.push({
-          key: entry.key,
-          condition: 'reading_level',
-          message: `sentence of ${sentenceWords.length} words exceeds the ${entry.screenClass} budget of ${budget.maxWordsPerSentence}: "${sentence}"`,
-        });
+    // D18 (founder-signed 2026-07-10): label classes are exempt entirely;
+    // elsewhere, budgets bind only sentences of minWordsForBudget+ words.
+    const isLabelClass = data.labelClasses.includes(entry.screenClass);
+    if (!isLabelClass) {
+      const budget = data.readingBudgets[entry.screenClass];
+      if (budget === undefined) {
+        throw new Error(`reading-budgets data has no budget for non-label screen class: ${entry.screenClass}`);
       }
-      if (sentenceWords.length > 0) {
+      for (const sentence of splitSentences(entry.fr)) {
+        const sentenceWords = words(sentence);
+        if (sentenceWords.length < data.minWordsForBudget) continue;
+        if (sentenceWords.length > budget.maxWordsPerSentence) {
+          violations.push({
+            key: entry.key,
+            condition: 'reading_level',
+            message: `sentence of ${sentenceWords.length} words exceeds the ${entry.screenClass} budget of ${budget.maxWordsPerSentence}: "${sentence}"`,
+          });
+        }
         const avgSyllables =
           sentenceWords.reduce((sum, w) => sum + estimateSyllables(w), 0) / sentenceWords.length;
         if (avgSyllables > budget.maxAvgSyllablesPerWord) {

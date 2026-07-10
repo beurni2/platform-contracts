@@ -1,5 +1,7 @@
 {
-  "description": "§10.5 condition (c): reading-level budget per screen class — max sentence length (words) + average-syllables-per-word heuristic, calibrated to the 6th-grade rule and seeded to accept the canonical Shop+ §6.1 checkout copy. Maintained pilot parameters.",
+  "description": "§10.5 condition (c): reading-level budget per screen class — max sentence length (words) + average-syllables-per-word heuristic, calibrated to the 6th-grade rule and seeded to accept the canonical Shop+ §6.1 checkout copy. D18 (founder-signed 2026-07-10): budgets apply ONLY to sentences of minWordsForBudget (4) or more words, and labelClasses are exempt from reading-level entirely — banned tokens + register checks still apply to them. Maintained pilot parameters.",
+  "minWordsForBudget": 4,
+  "labelClasses": ["label"],
   "budgets": {
     "checkout": { "maxWordsPerSentence": 26, "maxAvgSyllablesPerWord": 2.6 },
     "instruction": { "maxWordsPerSentence": 16, "maxAvgSyllablesPerWord": 2.3 },
