@@ -5,7 +5,7 @@ import {
   UserIdSchema,
   VerifiedPhoneAliasSchema,
 } from '@platform/kernel-types';
-import { PaymentModeSchema, SupplyModeSchema } from '../enums.js';
+import { OrderStatusSchema, PaymentModeSchema, SupplyModeSchema } from '../enums.js';
 import { FcfaSchema, IdSchema, IsoTimestampSchema } from './common.js';
 
 /** §5.6 User — phone is an alias, never the key. */
@@ -166,7 +166,7 @@ export const OrderSchema = z
     reservationRef: IdSchema,
     escrowRef: IdSchema,
     paymentMode: PaymentModeSchema,
-    status: z.string().min(1),
+    status: OrderStatusSchema,
     timestamps: z.record(z.string(), IsoTimestampSchema),
   })
   .strict();

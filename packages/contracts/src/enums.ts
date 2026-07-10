@@ -25,6 +25,16 @@ export const FAULT_CLASSES = ['seller', 'sera', 'payment_provider', 'buyer', 'pl
 export const FaultClassSchema = z.enum(FAULT_CLASSES);
 export type FaultClass = z.infer<typeof FaultClassSchema>;
 
+/**
+ * E1 order status — the five-state list (canon at v0.3.0 per the WO-1.1
+ * verifier's NB-6 and Contract §2.2 single-definition; enum only, the state
+ * machine is app-repo work). Terminal/failure states are E2's and are
+ * deliberately absent.
+ */
+export const ORDER_STATUSES = ['quote_issued', 'reserved', 'payment_pending', 'paid', 'confirmed'] as const;
+export const OrderStatusSchema = z.enum(ORDER_STATUSES);
+export type OrderStatus = z.infer<typeof OrderStatusSchema>;
+
 /** §5.6: SettlementObligation state — Locked→Pending→Eligible→Payable→Processing→Paid|Held|Failed (enum only; the state machine is app-repo work). */
 export const SETTLEMENT_OBLIGATION_STATES = [
   'Locked',
