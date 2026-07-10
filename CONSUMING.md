@@ -48,14 +48,19 @@ a `./dist/*` passthrough keeps any legacy deep import working.
 
 ```json
 "dependencies": {
-  "@platform/contracts":    "git+https://github.com/beurni2/platform-contracts.git#v0.2.0&path:packages/contracts",
-  "@platform/kernel-types": "git+https://github.com/beurni2/platform-contracts.git#v0.2.0&path:packages/kernel-types",
-  "@platform/i18n":         "git+https://github.com/beurni2/platform-contracts.git#v0.2.0&path:packages/i18n",
-  "@platform/ui-tokens":    "git+https://github.com/beurni2/platform-contracts.git#v0.2.0&path:packages/ui-tokens"
+  "@platform/contracts":    "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/contracts",
+  "@platform/kernel-types": "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/kernel-types",
+  "@platform/i18n":         "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/i18n",
+  "@platform/ui-tokens":    "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/ui-tokens"
 }
 ```
 
-`pnpm-workspace.yaml` (both blocks are REQUIRED):
+`<RELEASE_SHA>` is the **release commit sha** announced per canon release —
+pins use the sha (founder tag ruling). Current example: the v0.3.0 release is
+`9308c641c368ea56d141867d667b122e10db682d`, so the contracts line reads
+`git+https://github.com/beurni2/platform-contracts.git#9308c641c368ea56d141867d667b122e10db682d&path:packages/contracts`.
+
+`pnpm-workspace.yaml` (both blocks are REQUIRED — override block current for ≥0.3.0):
 
 ```yaml
 # pnpm 10 blocks dependency build scripts by default; the prepare builds
@@ -65,12 +70,17 @@ onlyBuiltDependencies:
   - "@platform/kernel-types"
   - "@platform/i18n"
   - "@platform/ui-tokens"
+  - "@platform/certification"
 
-# @platform/contracts depends on @platform/kernel-types@0.2.0, which exists
-# on no registry; this override routes that transitive resolution to the
-# same pinned git ref.
+# Inter-package version-deps exist on no registry: @platform/contracts →
+# kernel-types, and @platform/certification (≥0.3.0) → contracts AND
+# ui-tokens. Route ALL THREE through the pinned ref so any transitive
+# resolution lands on the same release. <RELEASE_SHA> = the release commit
+# sha announced per canon release (current example below).
 overrides:
-  "@platform/kernel-types": "git+https://github.com/beurni2/platform-contracts.git#v0.2.0&path:packages/kernel-types"
+  "@platform/contracts": "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/contracts"
+  "@platform/kernel-types": "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/kernel-types"
+  "@platform/ui-tokens": "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/ui-tokens"
 ```
 
 ## CI auth step (CI-ONLY — never in a committed lockfile URL or local config)
@@ -96,13 +106,13 @@ git credentials.
 
 Sandbox tag pushes return HTTP 403 (known), so tags are cut by the founder in
 the **GitHub Releases UI** at the reviewed final sha after each canon release
-is approved. `v0.2.0` therefore appears on origin only after founder review
+is approved. A release tag therefore appears on origin only after founder review
 of the WO-0C branch; until it does, pin the reviewed sha with identical
 syntax.
 
 ## Version bumps
 
-Consumers move by changing the pinned ref (`#v0.2.0` → `#v0.3.0`) everywhere
+Consumers move by changing the pinned release sha everywhere
 it appears — dependencies AND the override — in one PR, alongside the
 refreshed `/docs` copy. The `drift-check` CLI shipped in `@platform/contracts`
 (bin: `drift-check <your-docs-dir> --pinned-version <version>`) must stay
