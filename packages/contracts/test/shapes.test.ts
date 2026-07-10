@@ -115,6 +115,31 @@ describe('Order — the five-state E1 status enum (canon at v0.3.0)', () => {
   );
 });
 
+describe('SupplyProjection — canonical single definition (promoted at v0.4.0)', () => {
+  const valid = {
+    productVersionId: 'pv_001',
+    offerVersion: 'offer_001@1',
+    basePrice: 10_000,
+    resellerCommission: 1_000,
+    available: 4,
+  };
+
+  it('parses the identity-free projection', async () => {
+    const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
+    expect(SupplyProjectionSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it.each(['supplierName', 'supplierPhone', 'pickupAddress', 'supplierContact'])(
+    'REFUSES supplier identity/contact leak: %s (B4.2/SP-I03)',
+    async (leak) => {
+      const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
+      const result = SupplyProjectionSchema.safeParse({ ...valid, [leak]: 'x' });
+      expect(result.success).toBe(false);
+      expect(JSON.stringify(result.error?.issues)).toContain('unrecognized_keys');
+    },
+  );
+});
+
 describe('PackageReadinessConfirmation — readiness evidence carries only the readiness challenge', () => {
   const validReadiness = {
     orderId: 'o_001',
