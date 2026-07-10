@@ -48,6 +48,32 @@ function rootEntryOf(packageDir) {
   return { name: pkg.name, entry: join(packageDir, target) };
 }
 
+/**
+ * Resolve a @platform/<pkg>[/subpath] specifier through the sibling's real
+ * exports map — a node-only subpath (e.g. @platform/i18n/data-loader) pulled
+ * into a root graph must be FOLLOWED so its builtins surface as violations,
+ * never silently mapped to the sibling's root (verifier finding, WO-0C).
+ */
+function resolvePlatformSpecifier(spec) {
+  const [, pkgDirName, ...rest] = spec.split('/');
+  const packageDir = join(repoRoot, 'packages', pkgDirName);
+  if (rest.length === 0) return rootEntryOf(packageDir).entry;
+  const subpath = `./${rest.join('/')}`;
+  const pkg = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
+  const entry = pkg.exports?.[subpath];
+  if (entry !== undefined) {
+    const target = typeof entry === 'string' ? entry : entry.import;
+    if (typeof target === 'string') return join(packageDir, target);
+  }
+  // wildcard passthroughs like "./dist/*"
+  for (const [key, value] of Object.entries(pkg.exports ?? {})) {
+    if (key.endsWith('/*') && typeof value === 'string' && subpath.startsWith(key.slice(0, -1))) {
+      return join(packageDir, value.slice(0, -1), subpath.slice(key.length - 1));
+    }
+  }
+  return null;
+}
+
 function scanPackage(packageDir) {
   const { name, entry } = rootEntryOf(packageDir);
   const violations = [];
@@ -72,8 +98,9 @@ function scanPackage(packageDir) {
       } else if (BUILTINS.has(spec)) {
         violations.push(`node builtin '${spec}' imported in ${file}`);
       } else if (spec.startsWith('@platform/')) {
-        const sibling = join(repoRoot, 'packages', spec.split('/')[1]);
-        queue.push(rootEntryOf(sibling).entry);
+        const resolved = resolvePlatformSpecifier(spec);
+        if (resolved === null) violations.push(`unresolvable @platform subpath '${spec}' in ${file}`);
+        else queue.push(resolved);
       } else if (RN_SAFE_EXTERNAL_ALLOWLIST.has(spec.split('/')[0])) {
         externals.add(spec);
       } else {
