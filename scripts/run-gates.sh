@@ -41,11 +41,20 @@ log "gate: drift-check — pristine consumer /docs copy (must pass)"
 DRIFT_CONSUMER="$(mktemp -d)/docs"
 mkdir -p "$DRIFT_CONSUMER"
 cp docs/*.md "$DRIFT_CONSUMER/"
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.1.0
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.2.0
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
 printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.1.0
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.2.0
+
+log "gate: RN-safe root entries — scanner over each package's '.' graph (must pass)"
+capture rn-safe-positive pass node scripts/scan-rn-safe-entry.mjs
+
+log "gate: RN-safe root entries — NEGATIVE FIXTURE (planted node:fs import in hardlinked copy, must fail)"
+capture rn-safe-negative fail bash scripts/show-rn-safe-negative.sh
+
+log "gate: export maps — every subpath target exists, node-only tooling behind subpaths (must pass)"
+capture export-maps pass node scripts/check-export-maps.mjs
 
 log "gate: reconciliation — NEGATIVE FIXTURE (independent-multiplication quote must not reconcile)"
 capture reconciliation-negative fail node scripts/show-reconciliation-negative.mjs
