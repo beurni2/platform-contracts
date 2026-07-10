@@ -1,0 +1,36 @@
+{
+  "name": "@platform/certification",
+  "version": "0.3.0",
+  "description": "E1 shared harness: the Contract §3 mock-certification suite (8 behaviors, 8/8 to certify), envelope conformance, and the §2.3 fifteen-step chain runner with the nine-id correlation chain report. Node tooling — never part of any app's runtime graph.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepare": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@platform/contracts": "0.3.0",
+    "@platform/ui-tokens": "0.3.0",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
