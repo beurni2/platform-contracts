@@ -80,7 +80,7 @@ describe('Quote — the frozen shape', () => {
   });
 });
 
-describe('Order — the five-state E1 status enum (canon at v0.3.0)', () => {
+describe('Order — the eight-state status enum (five E1 at v0.3.0 + three derived E2 failure states at v0.5.0)', () => {
   const validOrder = {
     id: 'o_001',
     quoteId: 'q_001',

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // WO-2.0 evidence: a payment-leg status outside the spec-enumerated
-// "status(held|captured|refunded)" (Boutik l.143 / Shop l.108) must REFUSE
+// "status(held|captured|refunded)" (Boutik l.143; Shop l.108 has a bare status) must REFUSE
 // at parse — including the WO-hinted 'released', which NO spec sentence
 // names for legs or escrow. Exits non-zero on the refusal.
 import { PaymentLegSchema } from '../packages/contracts/dist/index.js';

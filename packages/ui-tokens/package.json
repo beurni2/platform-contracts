@@ -1,7 +1,7 @@
 {
   "name": "@platform/ui-tokens",
   "version": "0.5.0",
-  "description": "Design tokens \u2014 color, type scale, spacing, radius, elevation, motion \u2014 one family DNA, three app themes (Boutik+, Shop+, S\u00e9ra). Tokens only at v0.1.0; no components.",
+  "description": "Design tokens — color, type scale, spacing, radius, elevation, motion — one family DNA, three app themes (Boutik+, Shop+, Séra). Tokens only at v0.1.0; no components.",
   "license": "UNLICENSED",
   "type": "module",
   "main": "./dist/index.js",

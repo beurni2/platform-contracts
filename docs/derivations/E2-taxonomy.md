@@ -30,7 +30,7 @@ Unknown states still refuse at parse (negative updated: a seventh string
 | Enum member | Governing quote (verbatim) | Source |
 |---|---|---|
 | `collect` / `hold` / `split` / `payout` | "**BCEAO-licensed aggregator** (**collect→hold→split→payout**; no app holds funds)" — the provider-side transaction's four flow stages, named identically in both specs | Boutik-Plus-Build-Spec §4 (l.78) · Shop-Plus-Build-Spec §4 (l.71) |
-| `refunded` | leg vocabulary "status(**held\|captured\|refunded**)" + "No seller-caused **refund** … may delay the buyer's **refund**" | Boutik/Shop §5.6 EscrowTxn line (l.143/l.108) · B+I-13 (l.57) |
+| `refunded` | leg vocabulary "status(**held\|captured\|refunded**)" + "No seller-caused **refund** … may delay the buyer's **refund**" | Boutik §5.6 EscrowTxn line (l.143) · B+I-13 (l.57) |
 
 **⚠ Founder note:** the WO-2.0 text hints at a "'held'/'**released**'/'refunded'
 family" — **no spec sentence names `released` for escrow or payment legs**
@@ -41,7 +41,7 @@ ratification.
 
 **Leg status (already canonical since WO-0):** `PaymentLegStatusSchema =
 held | captured | refunded` — spec-enumerated verbatim: "paymentLegs[{…,
-status(**held|captured|refunded**)}]" (Boutik l.143 / Shop l.108). No change;
+status(**held|captured|refunded**)}]" (Boutik l.143; Shop l.108 carries a BARE `status` in its paymentLegs line — a Boutik/Shop §5.6 textual non-identity for the founder's spec fix list). No change;
 negative added showing a `released` leg refuses at parse.
 
 ## 3. DeliveryOutcome (item 3 — new shape; bare `failed` unrepresentable)
@@ -80,7 +80,7 @@ derivable, none is made.**
 |---|---|---|
 | `reconciliation.alert.v1` | "produces the defined recovery state + **a reconciliation alert**" · "**reconciliation alerts**" | Contract E2 exit (l.31) · Contract §6 Standards (l.115) |
 | `saga.stuck.v1` | "**DLQ + stuck-saga detection** live" · "**DLQ + stuck-saga detection**" | Contract E2 exit (l.31) · Contract §6 Standards (l.115) |
-| `dlq.parked.v1` | same two sentences (the DLQ half) | Contract E2 exit (l.31) · Contract §6 Standards (l.115) |
+| `dlq.parked.v1` | same two sentences (the DLQ half). The noun DLQ is spec text; the verb `parked` is EDITORIAL (the spec names the queue, not the verb) — called out per the prime directive | Contract E2 exit (l.31) · Contract §6 Standards (l.115) |
 
 **Refund/reversal events:** the shop plan names the "**refund/earning-reversal
 saga**" at **E3** (Shop-Plus-Building-Plan l.23), and NEITHER spec's §5.7
