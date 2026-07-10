@@ -1,0 +1,26 @@
+# Standalone workspace: the E1 assembly harness. Its own lockfile; the root
+# platform-contracts workspace is untouched. See JOURNAL.md (E1 assembly).
+packages:
+  - '.'
+
+# pnpm 10 blocks dependency build scripts by default; the canon packages'
+# prepare builds need the allowlist (CONSUMING.md mechanism).
+onlyBuiltDependencies:
+  - "@platform/contracts"
+  - "@platform/kernel-types"
+  - "@platform/i18n"
+  - "@platform/ui-tokens"
+  - "@platform/certification"
+  - esbuild
+  - workerd
+
+# Canon at the pinned release sha be1df7a for EVERYTHING (assembly direct
+# deps AND the app git deps' transitives) — one contracts instance, §5
+# identity by construction. @platform/certification is deliberately NOT
+# overridden: it comes from this branch's worktree (file:) because the §3
+# registry alignments under review live there.
+overrides:
+  "@platform/contracts": "git+https://github.com/beurni2/platform-contracts.git#be1df7ad79a09d43182a638cc8acdd0a9081302e&path:packages/contracts"
+  "@platform/kernel-types": "git+https://github.com/beurni2/platform-contracts.git#be1df7ad79a09d43182a638cc8acdd0a9081302e&path:packages/kernel-types"
+  "@platform/ui-tokens": "git+https://github.com/beurni2/platform-contracts.git#be1df7ad79a09d43182a638cc8acdd0a9081302e&path:packages/ui-tokens"
+  "@platform/i18n": "git+https://github.com/beurni2/platform-contracts.git#be1df7ad79a09d43182a638cc8acdd0a9081302e&path:packages/i18n"
