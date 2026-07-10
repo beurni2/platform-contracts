@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { computeWaterfall } from '../src/money/waterfall.js';
 import { QuoteSchema } from '../src/shapes/quote.js';
 import { OrderSchema } from '../src/shapes/commerce.js';
-import { ORDER_STATUSES } from '../src/enums.js';
+import { DELIVERY_FAILURE_REASONS, DELIVERY_OUTCOME_FAMILIES, ORDER_STATUSES } from '../src/enums.js';
+import { DeliveryOutcomeSchema } from '../src/shapes/custody.js';
+import { EscrowTxnSchema, PaymentLegSchema } from '../src/shapes/settlement.js';
+import { EventNameSchema } from '../src/events.js';
 import {
   HandoffAuthorizationSchema,
   PackageReadinessConfirmationSchema,
@@ -77,7 +80,7 @@ describe('Quote — the frozen shape', () => {
   });
 });
 
-describe('Order — the five-state E1 status enum (canon at v0.3.0)', () => {
+describe('Order — the eight-state status enum (five E1 at v0.3.0 + three derived E2 failure states at v0.5.0)', () => {
   const validOrder = {
     id: 'o_001',
     quoteId: 'q_001',
@@ -98,21 +101,82 @@ describe('Order — the five-state E1 status enum (canon at v0.3.0)', () => {
     timestamps: { createdAt: '2026-07-09T10:00:00Z' },
   };
 
-  it('accepts exactly the five E1 statuses', () => {
-    expect(ORDER_STATUSES).toEqual(['quote_issued', 'reserved', 'payment_pending', 'paid', 'confirmed']);
+  it('accepts exactly the eight canon statuses (five E1 + three derived E2 failure states)', () => {
+    expect(ORDER_STATUSES).toEqual([
+      'quote_issued', 'reserved', 'payment_pending', 'paid', 'confirmed',
+      'payment_failed', 'cancelled', 'refunded',
+    ]);
     for (const status of ORDER_STATUSES) {
       expect(OrderSchema.safeParse({ ...validOrder, status }).success).toBe(true);
     }
   });
 
-  it.each(['shipped', 'delivered', 'failed', 'cancelled', 'refunded'])(
-    'REFUSES a sixth status string at parse: %s (terminal/failure states are E2 work)',
+  it.each(['shipped', 'delivered', 'failed', 'returned', 'on_hold'])(
+    'REFUSES a status outside the eight at parse: %s (incl. the SE-I10-banned generic failed)',
     (status) => {
       const result = OrderSchema.safeParse({ ...validOrder, status });
       expect(result.success).toBe(false);
       expect(JSON.stringify(result.error?.issues)).toContain('invalid_value');
     },
   );
+});
+
+describe('E2 failure-state taxonomy (canon at v0.5.0 — every name derived, E2-taxonomy.md)', () => {
+  const validOutcome = {
+    taskId: 'task_001',
+    orderId: 'o_001',
+    family: 'retry',
+    reasonCode: 'honest_absence',
+    humanReasonRef: 'delivery.reason.honest_absence',
+    faultClass: 'buyer',
+    attempt: { number: 1, at: '2026-07-10T10:00:00Z', windowExpiresAt: '2026-07-10T10:15:00Z' },
+  };
+
+  it('DeliveryOutcome parses for each SE6.1 family (retry/reschedule/return/incident)', () => {
+    for (const family of ['retry', 'reschedule', 'return', 'incident']) {
+      expect(DeliveryOutcomeSchema.safeParse({ ...validOutcome, family }).success).toBe(true);
+    }
+  });
+
+  it('a GENERIC failed outcome is UNREPRESENTABLE (SE-I10): no member, parse refuses', () => {
+    expect(DELIVERY_OUTCOME_FAMILIES).not.toContain('failed');
+    const result = DeliveryOutcomeSchema.safeParse({ ...validOutcome, family: 'failed' });
+    expect(result.success).toBe(false);
+  });
+
+  it('reason codes are exactly the §6.4 six plus provider_failure; unknown refuses', () => {
+    expect(DELIVERY_FAILURE_REASONS).toEqual([
+      'honest_absence', 'unusable_location', 'insufficient_balance',
+      'change_of_mind', 'repeated_abuse', 'fraud', 'provider_failure',
+    ]);
+    expect(DeliveryOutcomeSchema.safeParse({ ...validOutcome, reasonCode: 'bad_luck' }).success).toBe(false);
+  });
+
+  it('EscrowTxn.status is the aggregator flow enum (collect→hold→split→payout + refunded); a bare string refuses', () => {
+    const validEscrow = {
+      orderId: 'o_001',
+      provider: 'sandbox-provider',
+      paymentLegs: [{ legType: 'checkout', collectRef: 'c_1', amount: 12500, fee: 0, status: 'held' }],
+      splitBreakdown: {},
+      payoutRefs: [],
+    };
+    for (const status of ['collect', 'hold', 'split', 'payout', 'refunded']) {
+      expect(EscrowTxnSchema.safeParse({ ...validEscrow, status }).success).toBe(true);
+    }
+    expect(EscrowTxnSchema.safeParse({ ...validEscrow, status: 'released' }).success).toBe(false);
+  });
+
+  it("a payment-leg status outside held|captured|refunded refuses (incl. 'released' — no spec quote)", () => {
+    const leg = { legType: 'checkout', collectRef: 'c_1', amount: 12500, fee: 0, status: 'released' };
+    expect(PaymentLegSchema.safeParse(leg).success).toBe(false);
+  });
+
+  it('the three ops events are registered; a refund event name (not spec-listed) refuses', () => {
+    for (const name of ['reconciliation.alert.v1', 'saga.stuck.v1', 'dlq.parked.v1']) {
+      expect(EventNameSchema.safeParse(name).success).toBe(true);
+    }
+    expect(EventNameSchema.safeParse('refund.initiated.v1').success).toBe(false);
+  });
 });
 
 describe('SupplyProjection — canonical single definition (promoted at v0.4.0)', () => {

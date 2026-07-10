@@ -26,12 +26,27 @@ export const FaultClassSchema = z.enum(FAULT_CLASSES);
 export type FaultClass = z.infer<typeof FaultClassSchema>;
 
 /**
- * E1 order status — the five-state list (canon at v0.3.0 per the WO-1.1
- * verifier's NB-6 and Contract §2.2 single-definition; enum only, the state
- * machine is app-repo work). Terminal/failure states are E2's and are
- * deliberately absent.
+ * Order status (canon since v0.3.0/NB-6; the three E2 failure states added
+ * at v0.5.0 by deliberate bump — every member derived, quotes in
+ * docs/derivations/E2-taxonomy.md §1; enum only, the state machine is
+ * app-repo work):
+ *   payment_failed — Contract E2 "reservation-held-after-payment-fail" /
+ *                    §6 "a reservation stays held after payment failure"
+ *   cancelled      — SE-I10 "retry/return/cancellation/support/incident" /
+ *                    "refund/cancellation consume reason + evidence"
+ *   refunded       — B+7 "buyer refunded" / B+I-13 "the buyer's refund"
+ * NO generic 'failed' member exists (SE-I10) — unrepresentable, gate-proven.
  */
-export const ORDER_STATUSES = ['quote_issued', 'reserved', 'payment_pending', 'paid', 'confirmed'] as const;
+export const ORDER_STATUSES = [
+  'quote_issued',
+  'reserved',
+  'payment_pending',
+  'paid',
+  'confirmed',
+  'payment_failed',
+  'cancelled',
+  'refunded',
+] as const;
 export const OrderStatusSchema = z.enum(ORDER_STATUSES);
 export type OrderStatus = z.infer<typeof OrderStatusSchema>;
 
@@ -85,6 +100,48 @@ export type PaymentLegType = z.infer<typeof PaymentLegTypeSchema>;
 export const PAYMENT_LEG_STATUSES = ['held', 'captured', 'refunded'] as const;
 export const PaymentLegStatusSchema = z.enum(PAYMENT_LEG_STATUSES);
 export type PaymentLegStatus = z.infer<typeof PaymentLegStatusSchema>;
+
+/**
+ * §5.6 EscrowTxn.status — promoted from a bare string at v0.5.0. The four
+ * flow stages are the aggregator's, named identically in both specs:
+ * "BCEAO-licensed aggregator (collect→hold→split→payout; no app holds
+ * funds)"; refunded per the leg vocabulary + B+I-13. Derivations:
+ * docs/derivations/E2-taxonomy.md §2.
+ */
+export const ESCROW_TXN_STATUSES = ['collect', 'hold', 'split', 'payout', 'refunded'] as const;
+export const EscrowTxnStatusSchema = z.enum(ESCROW_TXN_STATUSES);
+export type EscrowTxnStatus = z.infer<typeof EscrowTxnStatusSchema>;
+
+/**
+ * SE6.1 delivery-outcome families — "Structured reasons;
+ * retry/reschedule/return/incident; no generic failed terminal;
+ * fault-attributed." A generic 'failed' member is deliberately
+ * UNREPRESENTABLE (SE-I10) — gate-proven at parse. Derivations:
+ * docs/derivations/E2-taxonomy.md §3 (spec-prose variant `return_required`
+ * flagged there for founder ratification).
+ */
+export const DELIVERY_OUTCOME_FAMILIES = ['retry', 'reschedule', 'return', 'incident'] as const;
+export const DeliveryOutcomeFamilySchema = z.enum(DELIVERY_OUTCOME_FAMILIES);
+export type DeliveryOutcomeFamily = z.infer<typeof DeliveryOutcomeFamilySchema>;
+
+/**
+ * Structured delivery-failure reason codes — Shop+ §6.4 verbatim ("Classify
+ * reason: honest_absence | unusable_location | insufficient_balance |
+ * change_of_mind | repeated_abuse | fraud") plus provider_failure ("Honest
+ * absence / provider failure do NOT escalate"). Human-readable text lives in
+ * the i18n catalog, register-tagged — never inline (Law 6 / §10.5).
+ */
+export const DELIVERY_FAILURE_REASONS = [
+  'honest_absence',
+  'unusable_location',
+  'insufficient_balance',
+  'change_of_mind',
+  'repeated_abuse',
+  'fraud',
+  'provider_failure',
+] as const;
+export const DeliveryFailureReasonSchema = z.enum(DELIVERY_FAILURE_REASONS);
+export type DeliveryFailureReason = z.infer<typeof DeliveryFailureReasonSchema>;
 
 /** §5.6: CustodyLiabilityClaim causes (Séra-caused; separate from the Protection Fund). */
 export const CUSTODY_LIABILITY_CAUSES = ['sera_loss', 'sera_damage'] as const;

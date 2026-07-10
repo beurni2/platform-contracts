@@ -114,6 +114,14 @@ export const EVENT_NAMES = [
   'commission.earned.v1',
   'reputation.updated.v1',
   'buyer.eligibility_changed.v1',
+  // Ops (Contract E2 exit: "the defined recovery state + a reconciliation
+  // alert"; §6 Standards: "DLQ + stuck-saga detection · reconciliation
+  // alerts"). Added v0.5.0 — derivations: E2-taxonomy.md §5. The specs list
+  // NO refund/reversal event names (the refund/earning-reversal saga is E3,
+  // shop plan l.23) — none are invented here.
+  'reconciliation.alert.v1',
+  'saga.stuck.v1',
+  'dlq.parked.v1',
 ] as const;
 
 export const EventNameSchema = z.enum(EVENT_NAMES);

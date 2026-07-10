@@ -9,7 +9,7 @@ registry involved (registry migration is a later Decision, non-blocking).
 - Each package carries a **`prepare` script** (`tsc -p tsconfig.json`), so pnpm
   builds it from source at install time — `dist/` is never committed.
 - Inter-package dependencies are **version-pinned** (`@platform/contracts` →
-  `@platform/kernel-types@0.2.0`), never `workspace:*`, so the packages
+  `@platform/kernel-types@0.5.0`, matching the release), never `workspace:*`, so the packages
   resolve outside this workspace; `linkWorkspacePackages: true` keeps local
   development linking the siblings.
 - Consumers install with **pnpm git-dependency `path:` syntax**, pinned to a
