@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { computeWaterfall } from '../src/money/waterfall.js';
 import { QuoteSchema } from '../src/shapes/quote.js';
+import { OrderSchema } from '../src/shapes/commerce.js';
+import { ORDER_STATUSES } from '../src/enums.js';
 import {
   HandoffAuthorizationSchema,
   PackageReadinessConfirmationSchema,
@@ -73,6 +75,44 @@ describe('Quote — the frozen shape', () => {
     const q = { ...validQuote(), buyerTotal: 12_500.5 };
     expect(QuoteSchema.safeParse(q).success).toBe(false);
   });
+});
+
+describe('Order — the five-state E1 status enum (canon at v0.3.0)', () => {
+  const validOrder = {
+    id: 'o_001',
+    quoteId: 'q_001',
+    productVersionId: 'pv_001',
+    supplierId: 'sup_001',
+    resellerId: 'rs_001',
+    buyerPhoneRef: 'by_001',
+    dropoff: {
+      pin: { lat: 12.3714, lng: -1.5197 },
+      zone: 'Ouaga 2000',
+      landmark: 'En face de la pharmacie',
+      directions: 'Portail vert',
+      maskedRelay: 'relay_1',
+    },
+    reservationRef: 'rsv_001',
+    escrowRef: 'esc_001',
+    paymentMode: 'FULL_PREPAY',
+    timestamps: { createdAt: '2026-07-09T10:00:00Z' },
+  };
+
+  it('accepts exactly the five E1 statuses', () => {
+    expect(ORDER_STATUSES).toEqual(['quote_issued', 'reserved', 'payment_pending', 'paid', 'confirmed']);
+    for (const status of ORDER_STATUSES) {
+      expect(OrderSchema.safeParse({ ...validOrder, status }).success).toBe(true);
+    }
+  });
+
+  it.each(['shipped', 'delivered', 'failed', 'cancelled', 'refunded'])(
+    'REFUSES a sixth status string at parse: %s (terminal/failure states are E2 work)',
+    (status) => {
+      const result = OrderSchema.safeParse({ ...validOrder, status });
+      expect(result.success).toBe(false);
+      expect(JSON.stringify(result.error?.issues)).toContain('invalid_value');
+    },
+  );
 });
 
 describe('PackageReadinessConfirmation — readiness evidence carries only the readiness challenge', () => {

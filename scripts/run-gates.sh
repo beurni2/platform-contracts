@@ -41,11 +41,11 @@ log "gate: drift-check — pristine consumer /docs copy (must pass)"
 DRIFT_CONSUMER="$(mktemp -d)/docs"
 mkdir -p "$DRIFT_CONSUMER"
 cp docs/*.md "$DRIFT_CONSUMER/"
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.2.0
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.3.0
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
 printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.2.0
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.3.0
 
 log "gate: RN-safe root entries — scanner over each package's '.' graph (must pass)"
 capture rn-safe-positive pass node scripts/scan-rn-safe-entry.mjs
@@ -55,6 +55,24 @@ capture rn-safe-negative fail bash scripts/show-rn-safe-negative.sh
 
 log "gate: export maps — every subpath target exists, node-only tooling behind subpaths (must pass)"
 capture export-maps pass node scripts/check-export-maps.mjs
+
+log "gate: mock certification — the four reference adapters must certify 8/8 (§3, no partial passes)"
+capture certification-positive pass node packages/certification/dist/run-self-certification.js
+
+log "gate: mock certification — NEGATIVE FIXTURE (deficient mock, one behavior removed, must fail)"
+capture certification-negative fail node packages/certification/dist/run-deficient-demo.js
+
+log "gate: envelope conformance — NEGATIVE FIXTURE (missing correlation_id must fail)"
+capture envelope-negative fail node packages/certification/dist/run-envelope-negative-demo.js
+
+log "gate: 15-step chain runner — 15/15 with the nine-id chain + HTML dashboard seed (must pass)"
+capture chain-positive pass node packages/certification/dist/run-chain.js --out "${EVIDENCE_DIR:-/tmp}/chain-report.html"
+
+log "gate: 15-step chain runner — NEGATIVE FIXTURE (validation_id dropped, must fail)"
+capture chain-negative fail node packages/certification/dist/run-broken-chain-demo.js
+
+log "gate: order status — NEGATIVE FIXTURE (a sixth status string must refuse at parse)"
+capture order-status-negative fail node scripts/show-order-status-negative.mjs
 
 log "gate: reconciliation — NEGATIVE FIXTURE (independent-multiplication quote must not reconcile)"
 capture reconciliation-negative fail node scripts/show-reconciliation-negative.mjs

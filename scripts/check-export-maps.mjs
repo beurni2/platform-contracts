@@ -7,15 +7,17 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const EXPECTED_VERSION = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8')).version;
 const EXPECTED_NODE_ONLY_SUBPATHS = {
   '@platform/contracts': ['./drift-check', './drift-cli'],
   '@platform/i18n': ['./data-loader', './lint-cli'],
   '@platform/kernel-types': [],
   '@platform/ui-tokens': [],
+  '@platform/certification': [],
 };
 
 let failed = false;
-for (const dir of ['contracts', 'kernel-types', 'i18n', 'ui-tokens']) {
+for (const dir of ['contracts', 'kernel-types', 'i18n', 'ui-tokens', 'certification']) {
   const packageDir = join(repoRoot, 'packages', dir);
   const pkg = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
   const problems = [];
@@ -32,7 +34,7 @@ for (const dir of ['contracts', 'kernel-types', 'i18n', 'ui-tokens']) {
   for (const subpath of expected) {
     if (!(subpath in (pkg.exports ?? {}))) problems.push(`missing node-only subpath ${subpath}`);
   }
-  if (pkg.version !== '0.2.0') problems.push(`version is ${pkg.version}, expected 0.2.0`);
+  if (pkg.version !== EXPECTED_VERSION) problems.push(`version is ${pkg.version}, expected ${EXPECTED_VERSION}`);
   if (!(pkg.exports?.['./dist/*'] === './dist/*')) problems.push('missing "./dist/*" passthrough (additive compat)');
 
   if (problems.length > 0) {
