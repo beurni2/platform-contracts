@@ -99,6 +99,19 @@ describe('copy-lint — D18 label rule (founder-signed 2026-07-10)', () => {
     expect(report.violations.some((v) => v.condition === 'banned_register_token' && v.message.includes('séquestre'))).toBe(true);
   });
 
+  it('a 4+-word over-budget string PASSES as a label but FAILS on a non-label class (isolates the label exemption)', async () => {
+    const data = await loadLintData();
+    // 4 words (min-words clause does NOT exempt it), avg ~4.5 syllables/word
+    // (over every class budget) — only the D18 label exemption lets it pass.
+    const fr = 'Coordonnées géolocalisées vérification communautaire';
+    const asLabel = lintCatalog([entry('nav.geo', fr, 'label')], data);
+    expect(asLabel.violations).toEqual([]);
+    expect(asLabel.ok).toBe(true);
+    const asStatus = lintCatalog([entry('status.geo', fr, 'status')], data);
+    expect(asStatus.ok).toBe(false);
+    expect(asStatus.violations.some((v) => v.condition === 'reading_level')).toBe(true);
+  });
+
   it('sentences under four words are budget-exempt even OUTSIDE labels (D18 min-words clause)', async () => {
     const data = await loadLintData();
     // 2 words, avg syllables ~4 — would have failed every budget before D18.
