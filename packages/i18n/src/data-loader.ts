@@ -12,7 +12,10 @@ const TokenFileSchema = z
 const BudgetFileSchema = z
   .object({
     description: z.string(),
-    budgets: z.record(
+    minWordsForBudget: z.number().int().positive(),
+    labelClasses: z.array(z.enum(SCREEN_CLASSES)),
+    // partialRecord: D18 label classes carry no budget entry at all.
+    budgets: z.partialRecord(
       z.enum(SCREEN_CLASSES),
       z
         .object({
@@ -39,8 +42,9 @@ export async function loadLintData(dataDir: string = defaultDataDir()): Promise<
     JSON.parse(await readFile(join(dataDir, 'reading-budgets.json'), 'utf8')),
   );
   const budgets = budgetFile.budgets as LintData['readingBudgets'];
+  // D18: label classes are exempt from budgets; every other class must have one.
   for (const screenClass of SCREEN_CLASSES) {
-    if (!(screenClass in budgets)) {
+    if (!budgetFile.labelClasses.includes(screenClass) && !(screenClass in budgets)) {
       throw new Error(`reading-budgets.json is missing screen class: ${screenClass}`);
     }
   }
@@ -50,5 +54,7 @@ export async function loadLintData(dataDir: string = defaultDataDir()): Promise<
     financeJargonTokens: await loadTokens(dataDir, 'finance-jargon-tokens.json'),
     localLanguageTokens: await loadTokens(dataDir, 'local-language-tokens.json'),
     readingBudgets: budgets,
+    minWordsForBudget: budgetFile.minWordsForBudget,
+    labelClasses: budgetFile.labelClasses,
   };
 }

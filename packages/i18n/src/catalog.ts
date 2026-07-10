@@ -12,8 +12,10 @@ export type Register = z.infer<typeof RegisterSchema>;
 /**
  * Screen classes drive the reading-level budget (maintained data, not canon):
  * `instruction` additionally forbids Mooré/Dioula tokens (§10.5 condition d).
+ * `label` (D18, founder-signed 2026-07-10) is exempt from reading-level
+ * budgets entirely — banned tokens and register checks still apply.
  */
-export const SCREEN_CLASSES = ['checkout', 'instruction', 'status', 'selling_surface', 'general'] as const;
+export const SCREEN_CLASSES = ['checkout', 'instruction', 'status', 'selling_surface', 'general', 'label'] as const;
 export const ScreenClassSchema = z.enum(SCREEN_CLASSES);
 export type ScreenClass = z.infer<typeof ScreenClassSchema>;
 

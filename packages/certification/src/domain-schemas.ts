@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import {
-  FcfaSchema,
   IdSchema,
   PaymentLegSchema,
   SettlementObligationSchema,
+  SupplyProjectionSchema,
   ValidationDecisionSchema,
 } from '@platform/contracts';
 import type { CertifiableDomain } from './adapter.js';
@@ -32,15 +32,11 @@ export const EligibilityEventPayloadSchema = z
   })
   .strict();
 
-export const SupplyProjectionEventPayloadSchema = z
-  .object({
-    productVersionId: IdSchema,
-    offerVersion: z.string().min(1),
-    basePrice: FcfaSchema,
-    resellerCommission: FcfaSchema,
-    available: z.number().int().min(0),
-  })
-  .strict();
+/**
+ * Promoted to @platform/contracts at v0.4.0 (§2.2 single definition) —
+ * re-exported here so the domain registry and existing imports keep working.
+ */
+export const SupplyProjectionEventPayloadSchema = SupplyProjectionSchema;
 
 export const ReadinessEventPayloadSchema = z
   .object({

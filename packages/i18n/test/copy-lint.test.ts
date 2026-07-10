@@ -64,6 +64,63 @@ describe('copy-lint — NEGATIVE FIXTURE (must fail, and for the right reasons)'
   });
 });
 
+describe('copy-lint — D18 label rule (founder-signed 2026-07-10)', () => {
+  const entry = (key: string, fr: string, screenClass: string, register = 'neutral') =>
+    ({ key, fr, register, screenClass }) as never;
+
+  it('« Espace revendeur » PASSES as a label (reading-level exempt)', async () => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry('nav.reseller_space', 'Espace revendeur', 'label', 'selling')], data);
+    expect(report.violations).toEqual([]);
+    expect(report.ok).toBe(true);
+  });
+
+  it('« Repère » PASSES as a label (the D18 collision instance — 1 word, 3 syllables)', async () => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry('nav.landmark', 'Repère', 'label')], data);
+    expect(report.violations).toEqual([]);
+    expect(report.ok).toBe(true);
+  });
+
+  it('a 5+-word administrative sentence still FAILS the budget on a non-label class', async () => {
+    const data = await loadLintData();
+    const report = lintCatalog(
+      [entry('bad.admin', 'Vérification administrative supplémentaire nécessaire immédiatement actuellement', 'status')],
+      data,
+    );
+    expect(report.ok).toBe(false);
+    expect(report.violations.some((v) => v.condition === 'reading_level')).toBe(true);
+  });
+
+  it('« séquestre » in a label still FAILS the banned-token check', async () => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry('bad.label', 'Séquestre actif', 'label', 'money')], data);
+    expect(report.ok).toBe(false);
+    expect(report.violations.some((v) => v.condition === 'banned_register_token' && v.message.includes('séquestre'))).toBe(true);
+  });
+
+  it('a 4+-word over-budget string PASSES as a label but FAILS on a non-label class (isolates the label exemption)', async () => {
+    const data = await loadLintData();
+    // 4 words (min-words clause does NOT exempt it), avg ~4.5 syllables/word
+    // (over every class budget) — only the D18 label exemption lets it pass.
+    const fr = 'Coordonnées géolocalisées vérification communautaire';
+    const asLabel = lintCatalog([entry('nav.geo', fr, 'label')], data);
+    expect(asLabel.violations).toEqual([]);
+    expect(asLabel.ok).toBe(true);
+    const asStatus = lintCatalog([entry('status.geo', fr, 'status')], data);
+    expect(asStatus.ok).toBe(false);
+    expect(asStatus.violations.some((v) => v.condition === 'reading_level')).toBe(true);
+  });
+
+  it('sentences under four words are budget-exempt even OUTSIDE labels (D18 min-words clause)', async () => {
+    const data = await loadLintData();
+    // 2 words, avg syllables ~4 — would have failed every budget before D18.
+    const report = lintCatalog([entry('status.done', 'Vérification terminée.', 'status')], data);
+    expect(report.violations).toEqual([]);
+    expect(report.ok).toBe(true);
+  });
+});
+
 describe('copy-lint internals', () => {
   it('token matching respects word boundaries (« vite » does not match « invité »)', () => {
     expect(findToken('Vous êtes invité à la fête', ['vite'])).toBeUndefined();

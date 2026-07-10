@@ -172,6 +172,23 @@ export const OrderSchema = z
   .strict();
 export type Order = z.infer<typeof OrderSchema>;
 
+/**
+ * Supply-to-reseller projection — the §2.2 canonical single definition
+ * (promoted from @platform/certification at v0.4.0; owner: Boutik+ → Shop+).
+ * B4.2/SP-I03: the projection NEVER carries supplier identity, contact, or
+ * precise pickup — the strict schema refuses any undeclared key.
+ */
+export const SupplyProjectionSchema = z
+  .object({
+    productVersionId: IdSchema,
+    offerVersion: z.string().min(1),
+    basePrice: FcfaSchema,
+    resellerCommission: FcfaSchema,
+    available: z.number().int().min(0),
+  })
+  .strict();
+export type SupplyProjection = z.infer<typeof SupplyProjectionSchema>;
+
 /** §5.6 DeliveryFeeQuote — OWNER: Logistics (Séra) → Checkout. */
 export const DeliveryFeeQuoteSchema = z
   .object({
