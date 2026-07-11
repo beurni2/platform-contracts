@@ -253,3 +253,15 @@ Every row verifies (Shop:52 idempotency; Boutik:50 readiness; Sera:109 mismatch 
 
 ### The last word
 The closing identity `11 500 = 8 500 + 2 000 + 1 000` (721) reconciles — Boutik:92. ✓
+
+---
+
+## ARBITRATION (founder ruling, 2026-07-11 — recorded verbatim; execution held on missing edit text)
+
+The founder's ruling, verbatim as received:
+
+> WO-0F ARBITRATION — founder rules: canon wins on all five flags. Apply the five corrections EXACTLY as the founder's relayed text (they are founder-labeled edits), commit the amended document as docs/ECOSYSTEM-MASTER-REFERENCE.md (v1.1, sha in journal, manifest regenerated), note the N-items as accepted wording nuances, then STEP 2–3 of the original order. The audit file records the arbitration verbatim.
+
+**Rulings now in force:** ① canon wins on FLAGS 1–5 (and the FLAG-3 companion rides FLAG 3's correction); ② the N-items (N1–N6 + the verifier's SE-I12/buyerRef notes) are **accepted wording nuances** — closed, no further action; ③ the corrected document enters `/docs` as **v1.1** under the DESIGN-LANGUAGE pattern once amended.
+
+**Execution status: HELD at the edit-text boundary.** The ruling instructs applying the five corrections "EXACTLY as the founder's relayed text (they are founder-labeled edits)" — but no corrected text reached this session: the relay message body carries none, and the uploads directory holds only the original document (sha `8f94051609eddc4bc378469aab69f76b7415e25b559021ad624c0b02803eb8ad`, verified at hold time). Under the untouchable-bytes law and the standing relay-content discipline (content must exist in the session's own record — never inferred from relay prose), the CTO does not author founder-labeled edits. The five corrected passages (or the amended v1.1 file) are awaited; on arrival each is re-verified against the canon lines in FLAGS 1–5 above, then the original order's STEP 2–3 runs unchanged.
