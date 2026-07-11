@@ -20,7 +20,9 @@ capture() {
   fi
   printf '%s\n(exit code: %d)\n' "$out" "$rc"
   if [ "$expected" = pass ] && [ $rc -ne 0 ]; then echo "GATE FAILED (expected pass): $name"; FAILED=1; fi
-  if [ "$expected" = fail ] && [ $rc -eq 0 ]; then echo "GATE FAILED (expected the negative fixture to fail): $name"; FAILED=1; fi
+  # exit EXACTLY 1 (WO-2.8 item 8, echoing the app harnesses): a crashed or
+  # misinvoked gate (exit 2+) must never pass for a working negative fixture.
+  if [ "$expected" = fail ] && [ $rc -ne 1 ]; then echo "GATE FAILED (expected the negative fixture to fail with exit 1, got $rc): $name"; FAILED=1; fi
 }
 
 cd "$ROOT"
@@ -93,7 +95,7 @@ log "gate: shape-freeze — NEGATIVE FIXTURE (tampered snapshot with kittingSeal
 capture shape-freeze-negative fail node scripts/show-shape-freeze-negative.mjs
 
 log "gate: secret-separation — NEGATIVE FIXTURE (substitution must not compile)"
-capture secret-separation-negative fail npx tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext packages/contracts/fixtures/secret-substitution.negative.ts
+capture secret-separation-negative fail node scripts/show-secret-separation-negative.mjs
 
 if [ $FAILED -ne 0 ]; then
   echo ""

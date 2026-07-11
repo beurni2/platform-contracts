@@ -5,9 +5,9 @@
 // (dist/ for consumed packages is produced by scripts/build-consumed.mjs
 // post-install; pnpm does not run hook-injected scripts at git-dep prep.)
 const REPO_PINS = {
-  '@sera/': { repo: 'sera', sha: '77f12bc01b25a5a8597edc685c5f4868fed6e04b' },
-  '@boutik/': { repo: 'boutik-plus', sha: '76ef6aae3b2d2aeca6906eb7db3f03886a0c906f' },
-  '@shop-plus/': { repo: 'shop-plus', sha: '0a8068fcb2bb3c7565aa734968886b80b6d0fa96' },
+  '@sera/': { repo: 'sera', sha: '6213d41ca073a16e344dc3e45931690f3158c547' },
+  '@boutik/': { repo: 'boutik-plus', sha: '7e4901d8e993b8d4462e2854aa79c44a631419a6' },
+  '@shop-plus/': { repo: 'shop-plus', sha: '74913d782bbf04e58cc5aee6b458ffcb025b33a5' },
 };
 // intra-repo leaf packages live under packages/ in all three repos
 const DIRS = {
