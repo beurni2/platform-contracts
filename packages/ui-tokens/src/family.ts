@@ -43,12 +43,26 @@ export const elevation = {
   overlay: { shadowOpacity: 0.14, shadowRadius: 12, shadowOffsetY: 6 },
 } as const;
 
-/** Motion — subtle, 60fps-safe on low-end Android; celebration with dignity. */
+/**
+ * Motion v2 — the Signature Design Doctrine's movement law
+ * (docs/DESIGN-LANGUAGE.md, « La loi du mouvement »): durations 150–250 ms,
+ * soft spring curves (never linear), no animation ever blocks input,
+ * celebration ≤ 800 ms, count-up ≤ 600 ms, reduced-motion honored.
+ * Tokens are DATA — apps interpret them; nothing here animates.
+ */
 export const motion = {
   instant: { durationMs: 80, easing: 'ease-out' },
-  quick: { durationMs: 160, easing: 'ease-out' },
-  standard: { durationMs: 240, easing: 'ease-in-out' },
-  celebrate: { durationMs: 420, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' },
+  quick: { durationMs: 150, easing: 'spring-soft' },
+  standard: { durationMs: 250, easing: 'spring-soft' },
+  celebrate: { durationMs: 420, easing: 'spring-soft' },
+  /** The ONE named soft-spring parameter set (« courbes spring douces »).
+   * ⏳ CTO defaults — the doctrine names the curve family, not the physics. */
+  springSoft: { damping: 20, stiffness: 250, mass: 1 },
+  /** Doctrine ceilings — hard limits, testable per export. */
+  celebrationMaxMs: 800,
+  countUpMaxMs: 600,
+  /** The flag name every app honors (« reduced-motion respecté »). */
+  reducedMotionFlag: 'prefers_reduced_motion',
 } as const;
 
 /** Touch — ≥44px targets, icons always paired with text. */
@@ -71,6 +85,62 @@ export const neutralColors = {
   info: '#33608C',
 } as const;
 
+/**
+ * Money display v2 — « L'argent en majesté » (DESIGN-LANGUAGE.md §2):
+ * FCFA amounts are first-class visual citizens — large, tabular, breathing.
+ * ⏳ the hero size is a CTO default (the doctrine names the role, not the px).
+ */
+export const money = {
+  amountScale: {
+    /** The seller's « Vous recevrez X F » — the hero of its screen. */
+    hero: { size: 40, lineHeight: 46, weight: 800 },
+    display: typeScale.displayFcfa,
+    inline: typeScale.bodyLarge,
+  },
+  /** Tabular numerals wherever francs appear (doctrine: « chiffres tabulaires partout »). */
+  tabularNumerals: true,
+  /** Count-up ceiling — a REF into the motion law, never a second clock. */
+  countUpMaxMs: motion.countUpMaxMs,
+  /** The receipt staged as proof (« mis en scène comme une preuve »). */
+  receiptEmphasis: { totalWeight: 700, ruleColor: neutralColors.line, reconciledBadgeColorToken: 'verifiedBadge' },
+} as const;
+
+/**
+ * Landmark v2 — « Le repère, pas l'adresse » (DESIGN-LANGUAGE.md §4):
+ * the landmark-first location UI is a visual PRIDE — hierarchy
+ * repère → indications → zone, icon-name slots for the illustrated cards.
+ * ⏳ icon names are CTO default slots; the assets are app-side work.
+ */
+export const landmark = {
+  hierarchy: {
+    repere: typeScale.heading,
+    indications: typeScale.body,
+    zone: typeScale.label,
+  },
+  iconNames: {
+    repere: 'repere-pin',
+    quartier: 'quartier',
+    marche: 'marche',
+    pharmacie: 'pharmacie',
+    zone: 'zone-badge',
+  },
+} as const;
+
+/** The three named celebration moments (DESIGN-LANGUAGE.md §3) — no fourth. */
+export const CELEBRATION_MOMENTS = ['produit_pret', 'premiere_vente', 'course_validee'] as const;
+export type CelebrationMomentName = (typeof CELEBRATION_MOMENTS)[number];
+
+export interface CelebrationMoment {
+  /** Woven-motif palette drawn FROM THE THEME (« motif tissé/étoiles aux couleurs du thème »). */
+  motifPalette: readonly [string, string, string];
+  /** « halo doux » — the theme's soft primary. */
+  halo: string;
+  /** Timing REFS into the motion law (≤ 800 ms, spring, never blocking). */
+  timing: { maxDurationMs: typeof motion.celebrationMaxMs; easing: 'spring-soft' };
+}
+
+export type CelebrationTokens = Record<CelebrationMomentName, CelebrationMoment>;
+
 export interface ThemeColors {
   /** App accent — the theme's identity color. */
   primary: string;
@@ -82,6 +152,19 @@ export interface ThemeColors {
   verifiedBadge: string;
 }
 
+function makeCelebration(colors: ThemeColors): CelebrationTokens {
+  const moment = (): CelebrationMoment => ({
+    motifPalette: [colors.primary, colors.primaryStrong, colors.primarySoft],
+    halo: colors.primarySoft,
+    timing: { maxDurationMs: motion.celebrationMaxMs, easing: 'spring-soft' },
+  });
+  return {
+    produit_pret: moment(),
+    premiere_vente: moment(),
+    course_validee: moment(),
+  };
+}
+
 export interface Theme {
   name: 'boutik-plus' | 'shop-plus' | 'sera';
   colors: ThemeColors & typeof neutralColors;
@@ -91,6 +174,8 @@ export interface Theme {
   elevation: typeof elevation;
   motion: typeof motion;
   touch: typeof touch;
+  /** v2: the three named celebration moments, colored by THIS theme. */
+  celebration: CelebrationTokens;
 }
 
 export function makeTheme(name: Theme['name'], colors: ThemeColors): Theme {
@@ -103,5 +188,6 @@ export function makeTheme(name: Theme['name'], colors: ThemeColors): Theme {
     elevation,
     motion,
     touch,
+    celebration: makeCelebration(colors),
   };
 }
