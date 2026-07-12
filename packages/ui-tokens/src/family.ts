@@ -216,6 +216,9 @@ export const landmark = {
     'reprendre', 'coche', 'refus', 'scelle', 'colis', 'horloge', 'argent', 'gains',
     'partager', 'recherche', 'filtre', 'alerte', 'sos', 'horsligne', 'oeil', 'cle',
     'chevron', 'telephone',
+    // WO-5.4 (v0.9.1): the three nav glyphs that closed the WO-6.0 tab-bar gap —
+    // the 26-icon set drew for screens, not for a bottom nav (Accueil · Produits · Vitrine).
+    'accueil', 'produits', 'vitrine',
   ],
 } as const;
 

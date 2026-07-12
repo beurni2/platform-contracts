@@ -3,10 +3,15 @@
     "source": "design_handoff_grand_teint/icons",
     "system": "Grand Teint v1.0.0",
     "law": "one shared source of truth for all four repos; every icon uses currentColor; icon + word, never icon alone",
-    "count": 26,
-    "totalRawBytes": 7356
+    "count": 29,
+    "totalRawBytes": 8184
   },
   "icons": {
+    "accueil": {
+      "file": "accueil.svg",
+      "bytes": 262,
+      "sha256": "34d8e573346bbb4ad98875fbe6349adcbb133efb5e345c0022c49a7ed721a4d8"
+    },
     "alerte": {
       "file": "alerte.svg",
       "bytes": 308,
@@ -92,6 +97,11 @@
       "bytes": 361,
       "sha256": "ce320612fa0db425b17d019814be1be31557944458a768a64ed6bda35edaa8d4"
     },
+    "produits": {
+      "file": "produits.svg",
+      "bytes": 297,
+      "sha256": "17ff2ff78c4de7dee6a2537e6c6c29ff0e169bd805a3de7ac7f204b3110e2724"
+    },
     "recherche": {
       "file": "recherche.svg",
       "bytes": 239,
@@ -126,6 +136,11 @@
       "file": "telephone.svg",
       "bytes": 303,
       "sha256": "3f0741f02317c6e06c075e17ebe49a02fc42bab86962c2e45452d8339e4d067c"
+    },
+    "vitrine": {
+      "file": "vitrine.svg",
+      "bytes": 269,
+      "sha256": "0aeae055d64f947419557fd1526b984f77fab2b5604f5a0168b4b20ccb7c3e24"
     },
     "voix": {
       "file": "voix.svg",

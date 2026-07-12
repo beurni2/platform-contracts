@@ -132,14 +132,19 @@ describe('touch · radius · spacing · motion — the layout grammar', () => {
   });
 });
 
-describe('landmark — le repère, pas l’adresse; 26 named icon slots', () => {
+describe('landmark — le repère, pas l’adresse; 29 named icon slots', () => {
   it('hierarchy descends repère → indications → zone; illustration palette is illustration-only', () => {
     expect(landmark.repere.size).toBeGreaterThan(landmark.indications.size);
     expect(landmark.indications.size).toBeGreaterThan(landmark.zone.size);
     expect(landmark.illustration.bleuPortail).toBe('#33608C');
-    expect(landmark.iconNames).toHaveLength(26);
+    expect(landmark.iconNames).toHaveLength(29);
     expect(landmark.iconNames).toContain('cadenas');
     expect(landmark.iconNames).toContain('moto');
+  });
+  it('WO-5.4 (v0.9.1): the three nav glyphs that closed the WO-6.0 tab-bar gap are present', () => {
+    expect(landmark.iconNames).toContain('accueil');
+    expect(landmark.iconNames).toContain('produits');
+    expect(landmark.iconNames).toContain('vitrine');
   });
 });
 
