@@ -1,20 +1,20 @@
-import { boutikPlusTheme, neutralColors } from '@platform/ui-tokens';
+import { boutikPlusTheme, sharedColour } from '@platform/ui-tokens';
 import { NINE_CHAIN_IDS } from './steps.js';
 import type { ChainReport } from './runner.js';
 
 /**
  * The E1 "basic dashboard" seed (Contract E1 exit): a static HTML chain
- * report. Warm family surfaces, one clear verdict, the nine-id chain visible
- * at a glance — sparse, never careless.
+ * report. Grand Teint family surfaces (v0.8.0), one clear verdict, the nine-id
+ * chain visible at a glance — sparse, never careless.
  */
 const c = {
-  surface: neutralColors.surface,
-  raised: neutralColors.surfaceRaised,
-  ink: neutralColors.ink,
-  muted: neutralColors.inkMuted,
-  line: neutralColors.line,
-  good: boutikPlusTheme.colors.primary,
-  bad: neutralColors.danger,
+  surface: sharedColour.paper,
+  raised: sharedColour.surfaceMuted,
+  ink: sharedColour.ink,
+  muted: sharedColour.muted,
+  line: sharedColour.hairline,
+  good: boutikPlusTheme.colours.primary,
+  bad: sharedColour.danger,
 };
 
 function esc(s: string): string {

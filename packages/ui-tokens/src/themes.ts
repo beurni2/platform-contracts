@@ -1,31 +1,36 @@
-import { makeTheme } from './family.js';
+import {
+  boutikColour,
+  seraColour,
+  sharedColour,
+  shopColour,
+  type Theme,
+} from './family.js';
+
+/**
+ * The three app themes on one family DNA (Grand Teint). Each theme's `colours`
+ * is the shared palette merged with exactly one app accent palette — per-theme
+ * resolution by construction. Names are canon identifiers (`boutik-plus`,
+ * `shop-plus`, `sera`); the designer's tokens.json keys (boutik/shop/sera) map
+ * to these one-to-one.
+ */
 
 /** Boutik+ — grounded, supply-green confidence. */
-export const boutikPlusTheme = makeTheme('boutik-plus', {
-  primary: '#1F6B44',
-  primaryStrong: '#14532F',
-  primarySoft: '#E3F0E8',
-  onPrimary: '#FFFFFF',
-  verifiedBadge: '#1F6B44',
-});
+export const boutikPlusTheme: Theme = {
+  name: 'boutik-plus',
+  colours: { ...sharedColour, ...boutikColour },
+};
 
 /** Shop+ — warm commerce energy. */
-export const shopPlusTheme = makeTheme('shop-plus', {
-  primary: '#C2571B',
-  primaryStrong: '#9A4212',
-  primarySoft: '#F9E9DE',
-  onPrimary: '#FFFFFF',
-  verifiedBadge: '#1F6B44',
-});
+export const shopPlusTheme: Theme = {
+  name: 'shop-plus',
+  colours: { ...sharedColour, ...shopColour },
+};
 
 /** Séra — road-and-custody clarity. */
-export const seraTheme = makeTheme('sera', {
-  primary: '#2B4C7E',
-  primaryStrong: '#1D3557',
-  primarySoft: '#E4EBF4',
-  onPrimary: '#FFFFFF',
-  verifiedBadge: '#1F6B44',
-});
+export const seraTheme: Theme = {
+  name: 'sera',
+  colours: { ...sharedColour, ...seraColour },
+};
 
 export const themes = {
   'boutik-plus': boutikPlusTheme,

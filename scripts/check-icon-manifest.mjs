@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+// WO-5.0 icon gate: every icon in assets/icons/ matches its manifest sha256,
+// every icon uses currentColor (one colour, tinted by context — the icon+word
+// law), and the manifest name set equals landmark.iconNames in the designer's
+// tokens.json. One source of truth for all four repos.
+import { createHash } from 'node:crypto';
+import { readFileSync, readdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const dir = join(root, 'assets', 'icons');
+const manifest = JSON.parse(readFileSync(join(dir, 'icons.manifest.json'), 'utf8'));
+const tokens = JSON.parse(readFileSync(join(root, 'docs', 'design', 'tokens.json'), 'utf8'));
+
+const problems = [];
+let total = 0;
+const svgs = readdirSync(dir).filter((f) => f.endsWith('.svg')).sort();
+for (const file of svgs) {
+  const bytes = readFileSync(join(dir, file));
+  total += bytes.length;
+  const name = file.slice(0, -4);
+  const entry = manifest.icons[name];
+  if (!entry) { problems.push(`${file}: absent from manifest`); continue; }
+  const sha = createHash('sha256').update(bytes).digest('hex');
+  if (sha !== entry.sha256) problems.push(`${file}: sha ${sha} != manifest ${entry.sha256}`);
+  if (bytes.length !== entry.bytes) problems.push(`${file}: ${bytes.length} bytes != manifest ${entry.bytes}`);
+  if (!bytes.includes('currentColor')) problems.push(`${file}: does not use currentColor`);
+}
+const fileNames = new Set(svgs.map((f) => f.slice(0, -4)));
+const tokenNames = new Set(tokens.landmark.iconNames);
+for (const n of tokenNames) if (!fileNames.has(n)) problems.push(`landmark.iconNames has "${n}" with no icon file`);
+for (const n of fileNames) if (!tokenNames.has(n)) problems.push(`icon "${n}" not in landmark.iconNames`);
+if (manifest.$meta.totalRawBytes !== total) problems.push(`manifest totalRawBytes ${manifest.$meta.totalRawBytes} != actual ${total}`);
+
+if (problems.length) {
+  console.error('icon-manifest FAILED:');
+  for (const p of problems) console.error('  - ' + p);
+  process.exit(1);
+}
+console.log(`icon-manifest OK: ${svgs.length} icons, ${total} raw bytes, all currentColor, names == landmark.iconNames`);

@@ -1,241 +1,279 @@
 /**
- * Family DNA (CTO charter §5): warm neutral surfaces, disciplined rounded
- * geometry, generous whitespace, large confident FCFA figures, ≥44px touch
- * targets, calm motion. Shared by all three themes; themes recolor, never
- * restructure. Tokens only — no components at v0.1.0.
+ * GRAND TEINT — the design system as data (canon v0.8.0, WO-5.0).
+ *
+ * The founder's signed design bundle (design_handoff_grand_teint, direction
+ * 1b, locked 2026-07) is the SOURCE OF TRUTH. Every value here is transcribed
+ * BYTE-FOR-VALUE from `docs/design/tokens.json` — every prior provisional
+ * default is now a real designer value. A CI fidelity gate
+ * (scripts/check-token-fidelity.mjs) cross-checks this file against that JSON;
+ * a value edit here that diverges from the designer's JSON fails the build.
+ * The DESIGN-LANGUAGE doctrine remains the law; Grand Teint is its expression
+ * (docs/GRAND-TEINT.md).
+ *
+ * Tokens are DATA — apps interpret them; nothing here is a component, nothing
+ * renders, nothing computes a colour at runtime (RN-safe root, no JSX).
  */
 
-/** Type scale — large readable type for FCFA amounts and names. Sizes in dp/px. */
-export const typeScale = {
-  displayFcfa: { size: 34, lineHeight: 40, weight: 700 },
-  title: { size: 24, lineHeight: 30, weight: 700 },
-  heading: { size: 20, lineHeight: 26, weight: 600 },
-  bodyLarge: { size: 17, lineHeight: 24, weight: 400 },
-  body: { size: 15, lineHeight: 22, weight: 400 },
-  label: { size: 13, lineHeight: 18, weight: 600 },
-  caption: { size: 12, lineHeight: 16, weight: 400 },
+/** tokens.json $meta — provenance, verbatim. */
+export const grandTeintMeta = {
+  name: 'Grand Teint',
+  version: '1.0.0',
+  replaces: 'platform-contracts/packages/ui-tokens v0.7.0',
+  themes: ['boutik', 'shop', 'sera'],
+  law: 'Zero hardcode. Every colour, dimension, duration and radius in any surface must resolve to a token in this file.',
+  provenance:
+    'Values proven on screen in: PWA Acheteuse - Prototype.dc.html, Celebrations.dc.html (direction 1b, founder-approved 2026-07-12)',
 } as const;
 
-/** Spacing scale (4pt base) — generous whitespace even on small screens. */
-export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  xxl: 32,
-  xxxl: 48,
+// ── colour ────────────────────────────────────────────────────────────────
+/** colour.shared — one ink, one paper; hairlines and scrim are rgba translucency (RN-legal literals). */
+export const sharedColour = {
+  ink: '#1B140D',
+  paper: '#FFFDF7',
+  onInk: '#FFF8F1',
+  body: '#4A3F33',
+  muted: '#6E6154',
+  soft: '#8D7C64',
+  sand: '#F3EBDB',
+  surfaceMuted: '#FBF7EC',
+  hairline: 'rgba(27,20,13,0.14)',
+  hairlineMid: 'rgba(27,20,13,0.22)',
+  hairlineStrong: 'rgba(27,20,13,0.35)',
+  success: '#1F4D36',
+  successTint: '#F2F7F1',
+  warning: '#6B4E0C',
+  warningTint: '#F7EED7',
+  warningStripe: '#F1DFAE',
+  danger: '#B3382C',
+  dangerDeep: '#7A2418',
+  dangerTint: '#F9E9E6',
+  scrim: 'rgba(27,20,13,0.45)',
+  desk: '#EBE6DC',
 } as const;
 
-/** Disciplined rounded geometry. */
-export const radius = {
-  none: 0,
-  sm: 6,
-  md: 10,
-  lg: 16,
-  pill: 999,
+/** colour.shop — warm commerce energy (#C2571B canon). */
+export const shopColour = {
+  primary: '#C2571B',
+  primaryStrong: '#A34312',
+  primarySoft: '#F4CFB4',
+  onPrimary: '#FFF8F1',
+  themeStrip: '#C2571B',
 } as const;
 
-/** Elevation levels — subtle; trust is calm, not glossy. */
-export const elevation = {
-  flat: { shadowOpacity: 0, shadowRadius: 0, shadowOffsetY: 0 },
-  raised: { shadowOpacity: 0.08, shadowRadius: 4, shadowOffsetY: 2 },
-  overlay: { shadowOpacity: 0.14, shadowRadius: 12, shadowOffsetY: 6 },
+/** colour.boutik — grounded supply-green confidence. */
+export const boutikColour = {
+  primary: '#1F4D36',
+  primaryStrong: '#163A28',
+  primarySoft: '#CFE0D4',
+  onPrimary: '#F2F7F1',
+  themeStrip: '#1F4D36',
+  artisanAccent: '#D9A441',
 } as const;
 
-/**
- * Motion v2 — the Signature Design Doctrine's movement law
- * (docs/DESIGN-LANGUAGE.md, « La loi du mouvement »): durations 150–250 ms,
- * soft spring curves (never linear), no animation ever blocks input,
- * celebration ≤ 800 ms, count-up ≤ 600 ms, reduced-motion honored.
- * Tokens are DATA — apps interpret them; nothing here animates.
- */
+/** colour.sera — road-and-custody clarity; ink primary, amber accent. */
+export const seraColour = {
+  primary: '#1B140D',
+  primaryStrong: '#000000',
+  onPrimary: '#FFF8F1',
+  accent: '#D9A441',
+  accentStrong: '#B98A1F',
+  accentTint: '#FBF4E4',
+  themeStrip: '#D9A441',
+} as const;
+
+// ── type ──────────────────────────────────────────────────────────────────
+/** type — Archivo variable; `lh` is a unitless line-height multiplier,
+ * `ls` letterspacing (px), `wght`/`wdth` variable-font axes, `caps` uppercase. */
+export const type = {
+  family: 'Archivo',
+  familyFallback: 'system-ui, sans-serif',
+  variableAxes: { wght: [400, 900], wdth: [75, 125] },
+  webFontDisplay: 'optional',
+  scale: {
+    labelXS: { size: 10, lh: 1.2, wght: 800, ls: 2.2, caps: true },
+    label: { size: 11, lh: 1.2, wght: 800, ls: 2.0, caps: true },
+    labelLG: { size: 12.5, lh: 1.2, wght: 800, ls: 2.4, caps: true },
+    caption: { size: 12.5, lh: 1.45, wght: 500 },
+    body: { size: 16, lh: 1.5, wght: 500 },
+    bodyStrong: { size: 16, lh: 1.5, wght: 700 },
+    row: { size: 14, lh: 1.4, wght: 600 },
+    title: { size: 19, lh: 1.15, wght: 800 },
+    titleLG: { size: 24, lh: 1.08, wght: 900, wdth: 110 },
+    display: { size: 28, lh: 1.08, wght: 900, wdth: 110 },
+  },
+  note: 'Web prototype rendered some body copy at 15 px inside a 360 px artboard; production RN builds use body=16 dp per canon. Titles may set wdth up to 112. tnum is mandatory in every franc context (see money.tabular).',
+} as const;
+
+// ── spacing · radius · touch ────────────────────────────────────────────────
+export const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 34 } as const;
+
+export const radius = { box: 0, card: 0, button: 6, chip: 4, badge: 0, sheet: 0, pill: 999 } as const;
+
+export const touch = { minTargetPx: 48, minGapPx: 8 } as const;
+
+// ── motion ──────────────────────────────────────────────────────────────────
+/** motion — durations in ms; easings are CSS cubic-bezier strings (web-proven,
+ * interpreted by each surface). layoutAnimation forbidden; only transform+opacity. */
 export const motion = {
-  instant: { durationMs: 80, easing: 'ease-out' },
-  quick: { durationMs: 150, easing: 'spring-soft' },
-  standard: { durationMs: 250, easing: 'spring-soft' },
-  celebrate: { durationMs: 420, easing: 'spring-soft' },
-  /** The ONE named soft-spring parameter set (« courbes spring douces »).
-   * ⏳ CTO defaults — the doctrine names the curve family, not the physics. */
-  springSoft: { damping: 20, stiffness: 250, mass: 1 },
-  /** Doctrine ceilings — hard limits, testable per export. */
-  celebrationMaxMs: 800,
-  countUpMaxMs: 600,
-  /** The flag name every app honors (« reduced-motion respecté »). */
-  reducedMotionFlag: 'prefers_reduced_motion',
+  instantMs: 90,
+  quickMs: 150,
+  standardMs: 240,
+  celebrateMaxMs: 800,
+  countUpMs: 560,
+  springSoft: 'cubic-bezier(0.2, 0.8, 0.25, 1)',
+  springPop: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+  flyOut: 'cubic-bezier(0.16, 0.8, 0.3, 1)',
+  animatableProperties: ['transform', 'opacity'],
+  layoutAnimation: 'forbidden',
+  reducedMotion: 'every animation has a static equivalent that loses no information',
 } as const;
 
-/** Touch — ≥44px targets, icons always paired with text. */
-export const touch = {
-  minTargetPx: 44,
+// ── celebration ──────────────────────────────────────────────────────────────
+/** celebration — three named moments only, each app-tagged, ≤ 800 ms, dismissible, non-blocking. */
+export const celebration = {
+  haloMs: 700,
+  ringMs: 620,
+  motifMs: 640,
+  motifStaggerMs: 14,
+  badgeMs: 260,
+  badgeDelayMs: 50,
+  particleCount: 10,
+  dismissible: true,
+  blocking: false,
+  produitPret: {
+    app: 'boutik',
+    motif: 'losange tissé (weave diamond)',
+    halo: 'rgba(31,77,54,0.20)',
+    ring: '#1F4D36',
+    motifColours: ['#1F4D36', '#D9A441'],
+    badgeBg: '#1F4D36',
+    badgeFg: '#F2F7F1',
+    label: 'PRODUIT PRÊT',
+  },
+  premiereVente: {
+    app: 'shop',
+    motif: 'losange tissé (weave diamond)',
+    halo: 'rgba(194,87,27,0.18)',
+    ring: '#C2571B',
+    motifColours: ['#C2571B', '#D9A441'],
+    badgeBg: '#C2571B',
+    badgeFg: '#FFF8F1',
+    label: 'PREMIÈRE VENTE',
+    countUpMs: 560,
+  },
+  courseValidee: {
+    app: 'sera',
+    motif: 'chevron de route',
+    halo: 'rgba(217,164,65,0.26)',
+    ring: '#B98A1F',
+    motifColours: ['#1B140D', '#B98A1F'],
+    badgeBg: '#1B140D',
+    badgeFg: '#D9A441',
+    label: 'COURSE VALIDÉE',
+  },
 } as const;
 
-/**
- * Interaction v3 — the interaction group (docketed BY NAME at WO-4.2R, canon
- * v0.7.0). Family-level constants under « la loi du mouvement »
- * (DESIGN-LANGUAGE.md): a press feedback and a skeleton-pulse floor that
- * explain without ever blocking a saisie, honoring D17. These replace the
- * per-kit token-laundering the WO-4.2R verifiers flagged (press scale 0.98,
- * pulse floor 0.4, the shadowOpacity×5 press-opacity). androidElevation is
- * NOT here — the doctrine differentiates elevation BY THEME, so it lives
- * per-theme (see makeTheme).
- * ⏳ CTO-default VALUES — the doctrine names the roles, not the physics;
- * tuned by the founder's eye at gallery reviews (the v2 pattern).
- */
-export const interaction = {
-  /** Press-down scale (« le mouvement explique »); the kits' laundered 0.98. */
-  pressScale: 0.98,
-  /** On-press opacity — replaces the laundered shadowOpacity×5 press-opacity. */
-  pressedOpacity: 0.92,
-  /** Disabled affordance opacity — the kits' laundered disabled multiplier. */
-  disabledOpacity: 0.4,
-  /** Lowest opacity of the skeleton-loading pulse (« skeleton-loading …
-   * jamais un spinner nu »); the kits' laundered 0.4. */
-  skeletonPulseFloor: 0.4,
-} as const;
-
-/** ⏳ CTO-default per-theme Android elevation (« Élévation visuelle par
- * thème »): structurally per-theme (each theme carries its own, ready to
- * tune), defaulted uniform until the founder's eye sets Boutik-premium-frame
- * vs Séra-calm at gallery. Differentiating the numbers now would invent a
- * differentiation the doctrine gives only as direction. */
-export const ANDROID_ELEVATION_DEFAULT = 2;
-
-/** Warm neutral surface + ink ramp shared by every theme. */
-export const neutralColors = {
-  surface: '#FAF7F2',
-  surfaceRaised: '#FFFFFF',
-  surfaceSunken: '#F1EDE6',
-  ink: '#26221C',
-  inkMuted: '#5C564C',
-  inkFaint: '#8A8377',
-  line: '#E3DDD2',
-  success: '#2E7D4F',
-  warning: '#B07818',
-  danger: '#B3402F',
-  info: '#33608C',
-} as const;
-
-/**
- * Money display v2 — « L'argent en majesté » (DESIGN-LANGUAGE.md §2):
- * FCFA amounts are first-class visual citizens — large, tabular, breathing.
- * ⏳ the hero size is a CTO default (the doctrine names the role, not the px).
- */
+// ── money ─────────────────────────────────────────────────────────────────
+/** money — l'argent en majesté; tabular always, narrow-space group separator
+ * (U+202F), narrow-space + F suffix; abbreviation and truncation forbidden. */
 export const money = {
   amountScale: {
-    /** The seller's « Vous recevrez X F » — the hero of its screen. */
-    hero: { size: 40, lineHeight: 46, weight: 800 },
-    display: typeScale.displayFcfa,
-    inline: typeScale.bodyLarge,
+    hero: { size: 52, lh: 1.0, wght: 900 },
+    page: { size: 40, lh: 1.05, wght: 900 },
+    section: { size: 18, lh: 1.2, wght: 900 },
+    row: { size: 14, lh: 1.4, wght: 700 },
   },
-  /** Tabular numerals wherever francs appear (doctrine: « chiffres tabulaires partout »). */
-  tabularNumerals: true,
-  /** Count-up ceiling — a REF into the motion law, never a second clock. */
-  countUpMaxMs: motion.countUpMaxMs,
-  /** The receipt staged as proof (« mis en scène comme une preuve »). */
-  receiptEmphasis: { totalWeight: 700, ruleColor: neutralColors.line, reconciledBadgeColorToken: 'verifiedBadge' },
+  tabular: true,
+  groupSeparator: ' ',
+  currencySuffix: ' F',
+  abbreviation: 'forbidden',
+  truncation: 'forbidden',
+  countUpMs: 560,
+  reconcileLine: { size: 11, wght: 600, ls: 0.4, align: 'right' },
+  receiptEmphasis: { totalBorderPx: 1.5, totalSize: 18, totalWght: 900 },
 } as const;
 
-/**
- * Landmark v2 — « Le repère, pas l'adresse » (DESIGN-LANGUAGE.md §4):
- * the landmark-first location UI is a visual PRIDE — hierarchy
- * repère → indications → zone, icon-name slots for the illustrated cards.
- * ⏳ icon names are CTO default slots; the assets are app-side work.
- */
+// ── landmark ─────────────────────────────────────────────────────────────────
+/** landmark — le repère, pas l'adresse; illustration palette is illustration-only
+ * (bleuPortail depicts real blue gates, never enters chrome). */
 export const landmark = {
-  hierarchy: {
-    repere: typeScale.heading,
-    indications: typeScale.body,
-    zone: typeScale.label,
+  repere: { size: 20, lh: 1.25, wght: 800 },
+  indications: { size: 16, lh: 1.5, wght: 500 },
+  zone: { size: 10.5, lh: 1.2, wght: 800, ls: 1.8, caps: true },
+  cardBorderPx: 2,
+  illustration: {
+    paper: '#FFFDF7',
+    sand: '#F3EBDB',
+    ink: '#1B140D',
+    terracotta: '#C2571B',
+    amber: '#D9A441',
+    green: '#1F4D36',
+    bleuPortail: '#33608C',
+    $note: 'illustration-only palette — bleuPortail depicts real blue gates and never enters chrome (proposals.md §9)',
   },
-  iconNames: {
-    repere: 'repere-pin',
-    quartier: 'quartier',
-    marche: 'marche',
-    pharmacie: 'pharmacie',
-    zone: 'zone-badge',
-    /** v0.7.0 (WO-4.4 docket) — names only; the illustrated assets stay
-     * app-side per the family note. `cadenas` = the « Paiement protégé »
-     * padlock (Master Reference §6.2); `moto` = Séra's electric-fleet glyph
-     * (Sera §7.2 Motorcycle · Master Reference §9). */
-    cadenas: 'cadenas',
-    moto: 'moto',
+  iconNames: [
+    'cadenas', 'moto', 'repere', 'zone', 'voix', 'enregistrer', 'ecouter', 'camera',
+    'reprendre', 'coche', 'refus', 'scelle', 'colis', 'horloge', 'argent', 'gains',
+    'partager', 'recherche', 'filtre', 'alerte', 'sos', 'horsligne', 'oeil', 'cle',
+    'chevron', 'telephone',
+  ],
+} as const;
+
+// ── interaction ──────────────────────────────────────────────────────────────
+/** interaction — press/skeleton feedback + structural selection (accent edge,
+ * corner ticks, focus ring); androidElevation is a small named scale, never elevation theatre. */
+export const interaction = {
+  pressScale: 0.98,
+  pressedOpacity: 0.92,
+  disabledOpacity: 0.4,
+  skeletonPulseFloor: 0.4,
+  androidElevation: { surface: 0, overlay: 4, sheet: 8 },
+  hairline: { thin: 1, medium: 1.5, strong: 2 },
+  selectedBorderPx: 2,
+  accentEdgePx: 5,
+  cornerTick: { sizePx: 14, strokePx: 2, insetPx: 12 },
+  selectedMark: { sizePx: 26 },
+  focusRing: { widthPx: 2, offsetPx: 2 },
+} as const;
+
+// ── band · ribbon · skeleton · statusbar (v0.8.0 — the four new groups) ──────
+/** band — the 4 px theme strip + the signature price band. */
+export const band = {
+  themeStripPx: 4,
+  priceBand: { padY: 13, padX: 16, labelToken: 'type.labelXS', amountToken: 'money.amountScale.page' },
+} as const;
+
+/** ribbon — the sandbox « APERÇU — BAC À SABLE » preview stripe. */
+export const ribbon = {
+  sandbox: {
+    heightPx: 24,
+    stripeA: '#F7EED7',
+    stripeB: '#F1DFAE',
+    stripePx: 10,
+    text: '#6B4E0C',
+    label: 'APERÇU — BAC À SABLE',
   },
 } as const;
 
-/** The three named celebration moments (DESIGN-LANGUAGE.md §3) — no fourth. */
-export const CELEBRATION_MOMENTS = ['produit_pret', 'premiere_vente', 'course_validee'] as const;
-export type CelebrationMomentName = (typeof CELEBRATION_MOMENTS)[number];
+/** skeleton — exact-dimension placeholders; layout shift forbidden. */
+export const skeleton = {
+  bg: '#F3EBDB',
+  pulseFloor: 0.4,
+  pulseMs: 1100,
+  rule: 'identical dimensions to the content it replaces; layout shift forbidden',
+} as const;
 
-export interface CelebrationMoment {
-  /** Woven-motif palette drawn FROM THE THEME (« motif tissé/étoiles aux couleurs du thème »). */
-  motifPalette: readonly [string, string, string];
-  /** « halo doux » — the theme's soft primary. */
-  halo: string;
-  /** Timing REFS into the motion law (≤ 800 ms, spring, never blocking). */
-  timing: { maxDurationMs: typeof motion.celebrationMaxMs; easing: 'spring-soft' };
-}
+/** statusbar — the app status bar clock + icon ink. */
+export const statusbar = {
+  clock: { size: 13, wght: 600 },
+  iconInk: 'colour.shared.ink',
+} as const;
 
-export type CelebrationTokens = Record<CelebrationMomentName, CelebrationMoment>;
-
-export interface ThemeColors {
-  /** App accent — the theme's identity color. */
-  primary: string;
-  primaryStrong: string;
-  primarySoft: string;
-  /** On-primary content. */
-  onPrimary: string;
-  /** The verified/sealed/delivered badge family — consistent across apps. */
-  verifiedBadge: string;
-}
-
-function makeCelebration(colors: ThemeColors): CelebrationTokens {
-  const moment = (): CelebrationMoment => ({
-    motifPalette: [colors.primary, colors.primaryStrong, colors.primarySoft],
-    halo: colors.primarySoft,
-    timing: { maxDurationMs: motion.celebrationMaxMs, easing: 'spring-soft' },
-  });
-  return {
-    produit_pret: moment(),
-    premiere_vente: moment(),
-    course_validee: moment(),
-  };
-}
+// ── theme composition (per-theme resolution: shared + one app palette) ───────
+export type ThemeName = 'boutik-plus' | 'shop-plus' | 'sera';
 
 export interface Theme {
-  name: 'boutik-plus' | 'shop-plus' | 'sera';
-  colors: ThemeColors & typeof neutralColors;
-  typeScale: typeof typeScale;
-  spacing: typeof spacing;
-  radius: typeof radius;
-  elevation: typeof elevation;
-  motion: typeof motion;
-  touch: typeof touch;
-  /** v2: the three named celebration moments, colored by THIS theme. */
-  celebration: CelebrationTokens;
-  /** v3: family interaction constants (shared — the movement law is uniform). */
-  interaction: typeof interaction;
-  /** v3: per-theme Android elevation (« Élévation visuelle par thème ») —
-   * structurally per-theme, ⏳ CTO-default value tuned per theme at gallery. */
-  androidElevation: number;
-}
-
-export function makeTheme(
-  name: Theme['name'],
-  colors: ThemeColors,
-  androidElevation: number = ANDROID_ELEVATION_DEFAULT,
-): Theme {
-  return {
-    name,
-    colors: { ...neutralColors, ...colors },
-    typeScale,
-    spacing,
-    radius,
-    elevation,
-    motion,
-    touch,
-    celebration: makeCelebration(colors),
-    interaction,
-    androidElevation,
-  };
+  name: ThemeName;
+  /** Merged palette: the shared ink/paper/hairlines + this app's accent palette. */
+  colours: typeof sharedColour & Record<string, string>;
 }
