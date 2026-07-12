@@ -116,7 +116,7 @@ HandoffAuthorization{ orderId, riderId, buyerRef, exactAmount, providerTransacti
        authorizationConsumedAt, breakGlassCaseId, signature, state }
 ValidationDecision(validated|review_hold|rejected)
 SettlementObligation{ state Locked→Pending→Eligible→Payable→Processing→Paid|Held|Failed }
-EscrowTxn{ orderId, provider, paymentLegs[{legType(checkout|door), collectRef, amount, fee, status: 'held' | 'released' | 'refunded'}], status, splitBreakdown, payoutRefs[] }
+EscrowTxn{ orderId, provider, paymentLegs[{legType(checkout|door), collectRef, amount, fee, status: 'held' | 'captured' | 'refunded'}], status, splitBreakdown, payoutRefs[] }
 ProtectionFund{ openingFundCapital, availableProtectionBalance, committedClaimsAmount, fundSolvencyState(HEALTHY|WATCH|RESTRICTED|CRITICAL), ... } // Ledger&Settlement
 ProtectionClaim{ faultClass(seller|sera|payment_provider|buyer|platform_system|unresolved) } · CustodyLiabilityClaim
 SellerTrustState{ tier(provisional|verified|trusted), ... }
