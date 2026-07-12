@@ -14,6 +14,7 @@ export * from './canonical-json.js';
 export * from './shapes/common.js';
 export * from './shapes/quote.js';
 export * from './shapes/commerce.js';
+export * from './shapes/attribution.js';
 export * from './shapes/custody.js';
 export * from './shapes/settlement.js';
 export * from './events.js';

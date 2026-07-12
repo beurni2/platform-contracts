@@ -1,5 +1,5 @@
 {
-  "packageVersion": "0.8.0",
+  "packageVersion": "0.9.0",
   "files": {
     "Boutik-Plus-Build-Spec.md": "7d061bf639bc0daf13b1d548735a43c7c32fc23e1af5043b66e237f5f902d053",
     "Boutik-Plus-Building-Plan.md": "e8d2ae5167392358292577c313247083b99330c7f0eda5e704f027764163de04",
@@ -8,9 +8,9 @@
     "Ecosystem-Engineering-Execution-Contract.md": "af619e27b5771384c5b4af1b92c3c2518cacf14d6dfc86d70568a0bc61f06b9b",
     "GRAND-TEINT.md": "b1a1bf6a982591da114b47bbe8970c6a41c69eb6d0191c93404f1fc7c1aa8834",
     "PERF-BUDGETS.md": "bffcb5328f994540c97a400c7494d2947c8304f287db8c8809fa94be8546b358",
-    "Sera-Build-Spec.md": "b8e9774ba8abea2000928aba0fa178b09c6b75cf13540362771f0a1873eb2ca2",
-    "Sera-Building-Plan.md": "7e3f48fb2b44c66bd68449b4a05eb95427bd52d7189a2ce349f223909327a32b",
-    "Shop-Plus-Build-Spec.md": "603ddf940192d26d9080f038f126ef0fd372603773e35087041865fed16c5dd9",
+    "Sera-Build-Spec.md": "d46c229184dbe86e49295aee8a1d4dfdb4f1b2f45171fc959dcb5424a66aff23",
+    "Sera-Building-Plan.md": "79aa45d6df817e54a8edb8122e6eed1c148b320423aae3501c3432cbee37b0cf",
+    "Shop-Plus-Build-Spec.md": "b82e629672607a508f39b726b09e82a120dc97f27c834d7e76f15e3b877b25c5",
     "Shop-Plus-Building-Plan.md": "adee67c2dad8ad7682d863f4898a1eb117285343bf38b92777a354a7bbe4dfc9"
   }
 }

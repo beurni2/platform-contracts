@@ -131,20 +131,24 @@ export const StorefrontSchema = z
   .strict();
 export type Storefront = z.infer<typeof StorefrontSchema>;
 
-/** §5.6 AttributionToken — signed; scope is listing/store/campaign. Tamper fails closed (SP-I09). */
-export const AttributionScopeSchema = z
-  .object({
-    kind: z.enum(['listing', 'store', 'campaign']),
-    refId: IdSchema,
-  })
-  .strict();
-export type AttributionScope = z.infer<typeof AttributionScopeSchema>;
-
+/**
+ * §5.6 AttributionToken — signed; the token's target scope is listing/store/
+ * campaign. Tamper fails closed (SP-I09). BYTE-IDENTICAL to v0.8.0: the object
+ * shape is unchanged — only the standalone `AttributionScope` export was
+ * retired at v0.9.0 (WO-5.2), the target inlined here so the canonical name
+ * `AttributionScope` can carry the A6 portée (product|identity, in
+ * shapes/attribution.ts). E1/E2 pins parse the same bytes.
+ */
 export const AttributionTokenSchema = z
   .object({
     id: IdSchema,
     resellerId: IdSchema,
-    scope: AttributionScopeSchema,
+    scope: z
+      .object({
+        kind: z.enum(['listing', 'store', 'campaign']),
+        refId: IdSchema,
+      })
+      .strict(),
     issued: IsoTimestampSchema,
     expiry: IsoTimestampSchema,
     signature: z.string().min(1),
