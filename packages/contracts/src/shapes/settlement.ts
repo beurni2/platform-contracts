@@ -102,6 +102,34 @@ export const CustodyLiabilityClaimSchema = z
   .strict();
 export type CustodyLiabilityClaim = z.infer<typeof CustodyLiabilityClaimSchema>;
 
+/**
+ * §5.6 probationLimits — closed at v0.7.0 (WO-0G) from the open record to the
+ * STRICT set of limits the trust-tier text names (Boutik-Plus-Build-Spec.md
+ * :31–35; derivation quotes in docs/derivations/V0.7.0-DOCKET.md). Every key
+ * optional (limits vary by tier — a trusted seller may carry none). STRICT by
+ * construction: the zero-deposit law (B+I-12) is enforced at the type
+ * boundary — a deposit/reserve/money key has no home here and refuses at
+ * parse. `maxOrderValueFcfa` is the spec's named "order value" CEILING, never
+ * a held/deposit amount.
+ */
+export const ProbationLimitsSchema = z
+  .object({
+    /** "one active order at a time" / "multiple concurrent orders" / "lower concurrency" */
+    maxActiveOrders: z.number().int().min(0).optional(),
+    /** "limited quantity/order value" / "higher value limits" — a ceiling, not a deposit */
+    maxOrderValueFcfa: FcfaSchema.optional(),
+    /** "limited quantity/order value" — a per-order quantity ceiling */
+    maxOrderQuantity: z.number().int().min(0).optional(),
+    /** "approved launch categories only, no high-risk/counterfeit-prone categories" */
+    approvedCategoriesOnly: z.boolean().optional(),
+    /** "FULL_PREPAY orders only" / "Option B disabled, FULL_PREPAY-only" */
+    fullPrepayOnly: z.boolean().optional(),
+    /** "every pickup rider-verified" / "mandatory pickup verification" */
+    everyPickupVerified: z.boolean().optional(),
+  })
+  .strict();
+export type ProbationLimits = z.infer<typeof ProbationLimitsSchema>;
+
 /** §5.6 SellerTrustState — progression, not payment (zero deposit, ever). */
 export const SellerTrustStateSchema = z
   .object({
@@ -109,7 +137,7 @@ export const SellerTrustStateSchema = z
     tier: SellerTrustTierSchema,
     faultCount: z.number().int().min(0),
     restrictions: z.array(z.string().min(1)),
-    probationLimits: z.record(z.string(), z.unknown()),
+    probationLimits: ProbationLimitsSchema,
   })
   .strict();
 export type SellerTrustState = z.infer<typeof SellerTrustStateSchema>;

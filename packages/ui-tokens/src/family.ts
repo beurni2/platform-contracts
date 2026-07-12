@@ -70,6 +70,37 @@ export const touch = {
   minTargetPx: 44,
 } as const;
 
+/**
+ * Interaction v3 — the interaction group (docketed BY NAME at WO-4.2R, canon
+ * v0.7.0). Family-level constants under « la loi du mouvement »
+ * (DESIGN-LANGUAGE.md): a press feedback and a skeleton-pulse floor that
+ * explain without ever blocking a saisie, honoring D17. These replace the
+ * per-kit token-laundering the WO-4.2R verifiers flagged (press scale 0.98,
+ * pulse floor 0.4, the shadowOpacity×5 press-opacity). androidElevation is
+ * NOT here — the doctrine differentiates elevation BY THEME, so it lives
+ * per-theme (see makeTheme).
+ * ⏳ CTO-default VALUES — the doctrine names the roles, not the physics;
+ * tuned by the founder's eye at gallery reviews (the v2 pattern).
+ */
+export const interaction = {
+  /** Press-down scale (« le mouvement explique »); the kits' laundered 0.98. */
+  pressScale: 0.98,
+  /** On-press opacity — replaces the laundered shadowOpacity×5 press-opacity. */
+  pressedOpacity: 0.92,
+  /** Disabled affordance opacity — the kits' laundered disabled multiplier. */
+  disabledOpacity: 0.4,
+  /** Lowest opacity of the skeleton-loading pulse (« skeleton-loading …
+   * jamais un spinner nu »); the kits' laundered 0.4. */
+  skeletonPulseFloor: 0.4,
+} as const;
+
+/** ⏳ CTO-default per-theme Android elevation (« Élévation visuelle par
+ * thème »): structurally per-theme (each theme carries its own, ready to
+ * tune), defaulted uniform until the founder's eye sets Boutik-premium-frame
+ * vs Séra-calm at gallery. Differentiating the numbers now would invent a
+ * differentiation the doctrine gives only as direction. */
+export const ANDROID_ELEVATION_DEFAULT = 2;
+
 /** Warm neutral surface + ink ramp shared by every theme. */
 export const neutralColors = {
   surface: '#FAF7F2',
@@ -123,6 +154,12 @@ export const landmark = {
     marche: 'marche',
     pharmacie: 'pharmacie',
     zone: 'zone-badge',
+    /** v0.7.0 (WO-4.4 docket) — names only; the illustrated assets stay
+     * app-side per the family note. `cadenas` = the « Paiement protégé »
+     * padlock (Master Reference §6.2); `moto` = Séra's electric-fleet glyph
+     * (Sera §7.2 Motorcycle · Master Reference §9). */
+    cadenas: 'cadenas',
+    moto: 'moto',
   },
 } as const;
 
@@ -176,9 +213,18 @@ export interface Theme {
   touch: typeof touch;
   /** v2: the three named celebration moments, colored by THIS theme. */
   celebration: CelebrationTokens;
+  /** v3: family interaction constants (shared — the movement law is uniform). */
+  interaction: typeof interaction;
+  /** v3: per-theme Android elevation (« Élévation visuelle par thème ») —
+   * structurally per-theme, ⏳ CTO-default value tuned per theme at gallery. */
+  androidElevation: number;
 }
 
-export function makeTheme(name: Theme['name'], colors: ThemeColors): Theme {
+export function makeTheme(
+  name: Theme['name'],
+  colors: ThemeColors,
+  androidElevation: number = ANDROID_ELEVATION_DEFAULT,
+): Theme {
   return {
     name,
     colors: { ...neutralColors, ...colors },
@@ -189,5 +235,7 @@ export function makeTheme(name: Theme['name'], colors: ThemeColors): Theme {
     motion,
     touch,
     celebration: makeCelebration(colors),
+    interaction,
+    androidElevation,
   };
 }
