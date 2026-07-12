@@ -144,11 +144,12 @@ describe('E2 failure-state taxonomy (canon at v0.5.0 — every name derived, E2-
     expect(result.success).toBe(false);
   });
 
-  it('reason codes are exactly the §6.4 six plus provider_failure; unknown refuses', () => {
+  it('reason codes are the §6.4 six + provider_failure + conformity_mismatch (v0.9.0, A3/A4); unknown refuses', () => {
     expect(DELIVERY_FAILURE_REASONS).toEqual([
       'honest_absence', 'unusable_location', 'insufficient_balance',
-      'change_of_mind', 'repeated_abuse', 'fraud', 'provider_failure',
+      'change_of_mind', 'repeated_abuse', 'fraud', 'provider_failure', 'conformity_mismatch',
     ]);
+    expect(DeliveryOutcomeSchema.safeParse({ ...validOutcome, reasonCode: 'conformity_mismatch' }).success).toBe(true);
     expect(DeliveryOutcomeSchema.safeParse({ ...validOutcome, reasonCode: 'bad_luck' }).success).toBe(false);
   });
 

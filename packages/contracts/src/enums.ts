@@ -127,9 +127,13 @@ export type DeliveryOutcomeFamily = z.infer<typeof DeliveryOutcomeFamilySchema>;
 /**
  * Structured delivery-failure reason codes — Shop+ §6.4 verbatim ("Classify
  * reason: honest_absence | unusable_location | insufficient_balance |
- * change_of_mind | repeated_abuse | fraud") plus provider_failure ("Honest
- * absence / provider failure do NOT escalate"). Human-readable text lives in
- * the i18n catalog, register-tagged — never inline (Law 6 / §10.5).
+ * change_of_mind | repeated_abuse | fraud | conformity_mismatch") plus
+ * provider_failure ("Honest absence / provider failure do NOT escalate").
+ * conformity_mismatch added at v0.9.0 (WO-5.2): Shop+ §6.4 reason enum (A4) +
+ * Séra Building-Plan SE5.1 (A3): "Un refus valide à l'inspection porte le code
+ * `conformity_mismatch`." Human-readable text lives in the i18n catalog,
+ * register-tagged — never inline (Law 6 / §10.5). Derivations:
+ * docs/derivations/ATTRIBUTION-AND-CONFORMITY.md §1.
  */
 export const DELIVERY_FAILURE_REASONS = [
   'honest_absence',
@@ -139,6 +143,7 @@ export const DELIVERY_FAILURE_REASONS = [
   'repeated_abuse',
   'fraud',
   'provider_failure',
+  'conformity_mismatch',
 ] as const;
 export const DeliveryFailureReasonSchema = z.enum(DELIVERY_FAILURE_REASONS);
 export type DeliveryFailureReason = z.infer<typeof DeliveryFailureReasonSchema>;
