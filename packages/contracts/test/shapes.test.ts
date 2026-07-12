@@ -4,7 +4,7 @@ import { QuoteSchema } from '../src/shapes/quote.js';
 import { OrderSchema } from '../src/shapes/commerce.js';
 import { DELIVERY_FAILURE_REASONS, DELIVERY_OUTCOME_FAMILIES, ORDER_STATUSES } from '../src/enums.js';
 import { DeliveryOutcomeSchema } from '../src/shapes/custody.js';
-import { EscrowTxnSchema, PaymentLegSchema } from '../src/shapes/settlement.js';
+import { EscrowTxnSchema, PaymentLegSchema, SellerTrustStateSchema } from '../src/shapes/settlement.js';
 import { EventNameSchema } from '../src/events.js';
 import {
   HandoffAuthorizationSchema,
@@ -265,5 +265,50 @@ describe('HandoffAuthorization — payment-confirmed handoff', () => {
       authorizationReason: 'dead zone — operator verified on provider interface',
     });
     expect(result.success).toBe(true);
+  });
+});
+
+describe('probationLimits — closed to the spec-named limits at v0.7.0 (zero-deposit at the type boundary)', () => {
+  const validTrustState = (probationLimits: Record<string, unknown>) => ({
+    sellerId: 's_001',
+    tier: 'provisional' as const,
+    faultCount: 0,
+    restrictions: ['fullPrepayOnly'],
+    probationLimits,
+  });
+
+  it('accepts exactly the six spec-named limit keys (Boutik:31–35)', () => {
+    const result = SellerTrustStateSchema.safeParse(
+      validTrustState({
+        maxActiveOrders: 1,
+        maxOrderValueFcfa: 25_000,
+        maxOrderQuantity: 3,
+        approvedCategoriesOnly: true,
+        fullPrepayOnly: true,
+        everyPickupVerified: true,
+      }),
+    );
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts an empty limits record and any subset (limits vary by tier)', () => {
+    expect(SellerTrustStateSchema.safeParse(validTrustState({})).success).toBe(true);
+    expect(SellerTrustStateSchema.safeParse(validTrustState({ maxActiveOrders: 3 })).success).toBe(true);
+  });
+
+  it('REFUSES a deposit-class money key — B+I-12 zero-deposit enforced at parse', () => {
+    for (const depositKey of ['requiredDeposit', 'reserve', 'caution', 'bond', 'sellerNet']) {
+      const result = SellerTrustStateSchema.safeParse(validTrustState({ [depositKey]: 5_000 }));
+      expect(result.success, `${depositKey} must refuse`).toBe(false);
+      expect(JSON.stringify(result.error?.issues)).toContain(depositKey);
+    }
+  });
+
+  it('REFUSES any unknown key (strict) and a wrong-typed named limit', () => {
+    expect(SellerTrustStateSchema.safeParse(validTrustState({ someFutureLimit: true })).success).toBe(false);
+    // maxOrderValueFcfa is a ceiling but still a proper FCFA integer ≥ 0
+    expect(SellerTrustStateSchema.safeParse(validTrustState({ maxOrderValueFcfa: -1 })).success).toBe(false);
+    expect(SellerTrustStateSchema.safeParse(validTrustState({ maxOrderValueFcfa: 25_000.5 })).success).toBe(false);
+    expect(SellerTrustStateSchema.safeParse(validTrustState({ maxActiveOrders: 'one' })).success).toBe(false);
   });
 });
