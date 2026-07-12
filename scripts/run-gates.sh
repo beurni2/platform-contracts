@@ -43,11 +43,11 @@ log "gate: drift-check — pristine consumer /docs copy (must pass)"
 DRIFT_CONSUMER="$(mktemp -d)/docs"
 mkdir -p "$DRIFT_CONSUMER"
 cp docs/*.md "$DRIFT_CONSUMER/"
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.7.0
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.8.0
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
 printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.7.0
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.8.0
 
 log "gate: RN-safe root entries — scanner over each package's '.' graph (must pass)"
 capture rn-safe-positive pass node scripts/scan-rn-safe-entry.mjs
@@ -57,6 +57,15 @@ capture rn-safe-negative fail bash scripts/show-rn-safe-negative.sh
 
 log "gate: export maps — every subpath target exists, node-only tooling behind subpaths (must pass)"
 capture export-maps pass node scripts/check-export-maps.mjs
+
+log "gate: token-fidelity — built ui-tokens deep-equal docs/design/tokens.json, no ⏳ marker (must pass)"
+capture token-fidelity-positive pass node scripts/check-token-fidelity.mjs
+
+log "gate: token-fidelity — NEGATIVE FIXTURE (one designer value altered in a tmp copy must fail)"
+capture token-fidelity-negative fail bash scripts/show-token-fidelity-negative.sh
+
+log "gate: icon-manifest — 26 icons match sha256, all currentColor, names == landmark.iconNames (must pass)"
+capture icon-manifest pass node scripts/check-icon-manifest.mjs
 
 log "gate: mock certification — the four reference adapters must certify 8/8 (§3, no partial passes)"
 capture certification-positive pass node packages/certification/dist/run-self-certification.js
