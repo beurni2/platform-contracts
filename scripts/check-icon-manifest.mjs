@@ -26,6 +26,13 @@ for (const file of svgs) {
   if (sha !== entry.sha256) problems.push(`${file}: sha ${sha} != manifest ${entry.sha256}`);
   if (bytes.length !== entry.bytes) problems.push(`${file}: ${bytes.length} bytes != manifest ${entry.bytes}`);
   if (!bytes.includes('currentColor')) problems.push(`${file}: does not use currentColor`);
+  const text = bytes.toString('utf8');
+  // WO-5.4 PERMANENT regression test for the WO-5.1 invisible-icon defect: a
+  // namespace prefix like `<ns0:path>` (left by some SVG toolchains) renders
+  // invisible on many engines. Zero `ns0:` anywhere — never again.
+  if (text.includes('ns0:')) problems.push(`${file}: carries an "ns0:" namespace prefix (WO-5.1 invisible-icon regression)`);
+  // Every root <svg> must declare its namespace or it will not render standalone.
+  if (!/<svg\b[^>]*\sxmlns=/.test(text)) problems.push(`${file}: root <svg> is missing xmlns`);
 }
 const fileNames = new Set(svgs.map((f) => f.slice(0, -4)));
 const tokenNames = new Set(tokens.landmark.iconNames);
@@ -38,4 +45,4 @@ if (problems.length) {
   for (const p of problems) console.error('  - ' + p);
   process.exit(1);
 }
-console.log(`icon-manifest OK: ${svgs.length} icons, ${total} raw bytes, all currentColor, names == landmark.iconNames`);
+console.log(`icon-manifest OK: ${svgs.length} icons, ${total} raw bytes, all currentColor, zero ns0: prefixes, every root <svg> carries xmlns, names == landmark.iconNames`);
