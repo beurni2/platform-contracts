@@ -1,0 +1,421 @@
+
+=== gate: typecheck (incl. secret-separation type tests) ===
+
+> platform-contracts@0.9.1 typecheck /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091
+> turbo run typecheck
+
+• turbo 2.10.4
+
+   • Packages in scope: @platform/certification, @platform/contracts, @platform/i18n, @platform/kernel-types, @platform/ui-tokens
+   • Running typecheck in 5 packages
+   • Remote caching disabled
+
+@platform/ui-tokens:build: cache miss, executing 882a41530933cf94
+@platform/i18n:typecheck: cache miss, executing 68eaa33e078eaee1
+@platform/ui-tokens:typecheck: cache miss, executing f44315fa5a672c7a
+@platform/kernel-types:build: cache miss, executing 0113f4bf23ef1f52
+@platform/kernel-types:typecheck: cache miss, executing 6038760f1f99f10c
+@platform/i18n:typecheck: 
+@platform/i18n:typecheck: > @platform/i18n@0.9.1 typecheck /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/i18n
+@platform/i18n:typecheck: > tsc -p tsconfig.json --noEmit
+@platform/i18n:typecheck: 
+@platform/ui-tokens:typecheck: 
+@platform/ui-tokens:typecheck: > @platform/ui-tokens@0.9.1 typecheck /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/ui-tokens
+@platform/ui-tokens:typecheck: > tsc -p tsconfig.json --noEmit
+@platform/ui-tokens:typecheck: 
+@platform/ui-tokens:build: 
+@platform/ui-tokens:build: > @platform/ui-tokens@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/ui-tokens
+@platform/ui-tokens:build: > tsc -p tsconfig.json
+@platform/ui-tokens:build: 
+@platform/kernel-types:build: 
+@platform/kernel-types:build: > @platform/kernel-types@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/kernel-types
+@platform/kernel-types:build: > tsc -p tsconfig.json
+@platform/kernel-types:build: 
+@platform/kernel-types:typecheck: 
+@platform/kernel-types:typecheck: > @platform/kernel-types@0.9.1 typecheck /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/kernel-types
+@platform/kernel-types:typecheck: > tsc -p tsconfig.json --noEmit
+@platform/kernel-types:typecheck: 
+@platform/contracts:build: cache miss, executing c3a8db73d2ed6edd
+@platform/contracts:typecheck: cache miss, executing 6c2eab3698ae48ba
+@platform/contracts:build: 
+@platform/contracts:build: > @platform/contracts@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/contracts
+@platform/contracts:build: > tsc -p tsconfig.json
+@platform/contracts:build: 
+@platform/contracts:typecheck: 
+@platform/contracts:typecheck: > @platform/contracts@0.9.1 typecheck /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/contracts
+@platform/contracts:typecheck: > tsc -p tsconfig.json --noEmit && tsc -p tsconfig.typetest.json
+@platform/contracts:typecheck: 
+@platform/certification:typecheck: cache miss, executing 598de076e9292ce9
+@platform/certification:typecheck: 
+@platform/certification:typecheck: > @platform/certification@0.9.1 typecheck /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/certification
+@platform/certification:typecheck: > tsc -p tsconfig.json --noEmit
+@platform/certification:typecheck: 
+
+ Tasks:    8 successful, 8 total
+Cached:    0 cached, 8 total
+  Time:    6.068s 
+(exit code: 0)
+
+=== gate: unit + property + shape tests (reconciliation, shape-freeze, secrets, no-gated-shapes) ===
+
+> platform-contracts@0.9.1 test /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091
+> turbo run test
+
+• turbo 2.10.4
+
+   • Packages in scope: @platform/certification, @platform/contracts, @platform/i18n, @platform/kernel-types, @platform/ui-tokens
+   • Running test in 5 packages
+   • Remote caching disabled
+
+@platform/ui-tokens:build: cache hit, replaying logs 882a41530933cf94
+@platform/ui-tokens:build: 
+@platform/ui-tokens:build: > @platform/ui-tokens@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/ui-tokens
+@platform/ui-tokens:build: > tsc -p tsconfig.json
+@platform/ui-tokens:build: 
+@platform/i18n:build: cache miss, executing b64d1eda6ca2605a
+@platform/ui-tokens:test: cache miss, executing 2133a1ee9e9848b5
+@platform/kernel-types:build: cache hit, replaying logs 0113f4bf23ef1f52
+@platform/kernel-types:build: 
+@platform/kernel-types:build: > @platform/kernel-types@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/kernel-types
+@platform/kernel-types:build: > tsc -p tsconfig.json
+@platform/kernel-types:build: 
+@platform/kernel-types:test: cache miss, executing ad926b1648673ca2
+@platform/contracts:build: cache hit, replaying logs c3a8db73d2ed6edd
+@platform/contracts:build: 
+@platform/contracts:build: > @platform/contracts@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/contracts
+@platform/contracts:build: > tsc -p tsconfig.json
+@platform/contracts:build: 
+@platform/certification:build: cache miss, executing a1ccd6ad02905c70
+@platform/contracts:test: cache miss, executing 796b9af20bd49af3
+@platform/kernel-types:test: 
+@platform/kernel-types:test: > @platform/kernel-types@0.9.1 test /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/kernel-types
+@platform/kernel-types:test: > vitest run
+@platform/kernel-types:test: 
+@platform/contracts:test: 
+@platform/contracts:test: > @platform/contracts@0.9.1 test /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/contracts
+@platform/contracts:test: > vitest run
+@platform/contracts:test: 
+@platform/certification:build: 
+@platform/certification:build: > @platform/certification@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/certification
+@platform/certification:build: > tsc -p tsconfig.json
+@platform/certification:build: 
+@platform/i18n:build: 
+@platform/i18n:build: > @platform/i18n@0.9.1 build /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/i18n
+@platform/i18n:build: > tsc -p tsconfig.json
+@platform/i18n:build: 
+@platform/ui-tokens:test: 
+@platform/ui-tokens:test: > @platform/ui-tokens@0.9.1 test /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/ui-tokens
+@platform/ui-tokens:test: > vitest run
+@platform/ui-tokens:test: 
+@platform/kernel-types:test: 
+@platform/kernel-types:test:  RUN  v3.2.7 /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/kernel-types
+@platform/kernel-types:test: 
+@platform/contracts:test: 
+@platform/contracts:test:  RUN  v3.2.7 /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/contracts
+@platform/contracts:test: 
+@platform/ui-tokens:test: 
+@platform/ui-tokens:test:  RUN  v3.2.7 /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/ui-tokens
+@platform/ui-tokens:test: 
+@platform/kernel-types:test:  ✓ test/kernel.test.ts (5 tests) 18ms
+@platform/kernel-types:test: 
+@platform/kernel-types:test:  Test Files  1 passed (1)
+@platform/kernel-types:test:       Tests  5 passed (5)
+@platform/kernel-types:test:    Start at  20:52:47
+@platform/kernel-types:test:    Duration  1.32s (transform 163ms, setup 0ms, collect 368ms, tests 18ms, environment 0ms, prepare 226ms)
+@platform/kernel-types:test: 
+@platform/contracts:test:  ✓ test/attribution.test.ts (21 tests) 37ms
+@platform/contracts:test:  ✓ test/shapes.test.ts (33 tests) 78ms
+@platform/ui-tokens:test:  ✓ test/tokens.test.ts (19 tests) 13ms
+@platform/ui-tokens:test: 
+@platform/ui-tokens:test:  Test Files  1 passed (1)
+@platform/ui-tokens:test:       Tests  19 passed (19)
+@platform/ui-tokens:test:    Start at  20:52:48
+@platform/ui-tokens:test:    Duration  1.17s (transform 181ms, setup 0ms, collect 177ms, tests 13ms, environment 0ms, prepare 241ms)
+@platform/ui-tokens:test: 
+@platform/i18n:test: cache miss, executing ef93e2be8987e05b
+@platform/contracts:test:  ✓ test/drift-check.test.ts (5 tests) 46ms
+@platform/contracts:test:  ✓ test/events-and-gates.test.ts (6 tests) 29ms
+@platform/contracts:test:  ✓ test/money.test.ts (11 tests) 1232ms
+@platform/contracts:test:    ✓ reconciliation property — ∀ integer FCFA inputs in realistic ranges, both identities hold exactly > funded legs per mode always sum to buyerTotal, and every money field is an integer  686ms
+@platform/i18n:test: 
+@platform/i18n:test: > @platform/i18n@0.9.1 test /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/i18n
+@platform/i18n:test: > vitest run
+@platform/i18n:test: 
+@platform/contracts:test:  ✓ test/canonical-json.test.ts (5 tests) 4ms
+@platform/contracts:test:  ✓ test/shape-freeze.test.ts (3 tests) 82ms
+@platform/contracts:test: 
+@platform/contracts:test:  Test Files  7 passed (7)
+@platform/contracts:test:       Tests  84 passed (84)
+@platform/contracts:test:    Start at  20:52:47
+@platform/contracts:test:    Duration  2.85s (transform 527ms, setup 0ms, collect 1.99s, tests 1.51s, environment 1ms, prepare 1.32s)
+@platform/contracts:test: 
+@platform/i18n:test: 
+@platform/i18n:test:  RUN  v3.2.7 /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/i18n
+@platform/i18n:test: 
+@platform/certification:test: cache miss, executing fa90357d40c2d80a
+@platform/certification:test: 
+@platform/certification:test: > @platform/certification@0.9.1 test /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/certification
+@platform/certification:test: > vitest run
+@platform/certification:test: 
+@platform/i18n:test:  ✓ test/copy-lint.test.ts (15 tests) 67ms
+@platform/i18n:test: 
+@platform/i18n:test:  Test Files  1 passed (1)
+@platform/i18n:test:       Tests  15 passed (15)
+@platform/i18n:test:    Start at  20:52:50
+@platform/i18n:test:    Duration  552ms (transform 82ms, setup 0ms, collect 141ms, tests 67ms, environment 0ms, prepare 63ms)
+@platform/i18n:test: 
+@platform/certification:test: 
+@platform/certification:test:  RUN  v3.2.7 /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/certification
+@platform/certification:test: 
+@platform/certification:test:  ✓ test/envelope.test.ts (3 tests) 8ms
+@platform/certification:test:  ✓ test/chain.test.ts (5 tests) 20ms
+@platform/certification:test:  ✓ test/certify.test.ts (12 tests) 476ms
+@platform/certification:test: 
+@platform/certification:test:  Test Files  3 passed (3)
+@platform/certification:test:       Tests  20 passed (20)
+@platform/certification:test:    Start at  20:52:51
+@platform/certification:test:    Duration  1.08s (transform 289ms, setup 0ms, collect 918ms, tests 504ms, environment 1ms, prepare 256ms)
+@platform/certification:test: 
+
+ Tasks:    10 successful, 10 total
+Cached:    3 cached, 10 total
+  Time:    6.383s 
+(exit code: 0)
+
+=== gate: copy-lint — seed catalog (must pass) ===
+copy-lint OK: 8 entries, 0 violations
+(exit code: 0)
+
+=== gate: copy-lint — NEGATIVE FIXTURE (must fail: « Veuillez patienter », « séquestre », all four conditions) ===
+copy-lint FAILED: 8 violation(s) across 7 entries
+  [banned_register_token] bad.banned.veuillez: banned-register token « veuillez » in fr: "Veuillez patienter"
+  [banned_register_token] bad.banned.sequestre: banned-register token « séquestre » in fr: "Votre argent est placé sous séquestre jusqu'à validation."
+  [register_mismatch] bad.register_mismatch.money_with_urgency: marketing/urgency token « vite » in a register:money string (fr): "Payez vite — offre limitée !"
+  [register_mismatch] bad.register_mismatch.selling_with_jargon: ledger/finance jargon « grand livre » in a register:selling string (fr): "Chaque créance est suivie dans le grand livre de votre boutique"
+  [reading_level] bad.reading_level.administrative_wall: sentence of 37 words exceeds the instruction budget of 16: "La confirmation de la transaction actuellement en cours de traitement sera communiquée à l'utilisateur concerné dès que les vérifications nécessaires auront été effectuées par les services compétents de la plateforme conformément aux procédures applicables en la matière"
+  [reading_level] bad.reading_level.administrative_wall: average 2.32 syllables/word exceeds the instruction budget of 2.3: "La confirmation de la transaction actuellement en cours de traitement sera communiquée à l'utilisateur concerné dès que les vérifications nécessaires auront été effectuées par les services compétents de la plateforme conformément aux procédures applicables en la matière"
+  [local_language_in_money_or_instruction] bad.local_language.moore_in_money: Mooré/Dioula token « barka » in a money/status string: "Barka ! Votre paiement est arrivé."
+  [local_language_in_money_or_instruction] bad.local_language.dioula_variant_on_instruction: moore/dioula variant carried on a neutral/instruction entry — money and instruction strings stay French
+(exit code: 1)
+
+=== gate: drift-check — pristine consumer /docs copy (must pass) ===
+drift-check OK: 11 canonical docs match manifest (packageVersion 0.9.1)
+(exit code: 0)
+
+=== gate: drift-check — TAMPERED consumer doc (must fail) ===
+drift-check FAILED — consumer /docs diverges from canon:
+  - doc drifted from canon: Shop-Plus-Build-Spec.md (expected sha256 b82e629672607a508f39b726b09e82a120dc97f27c834d7e76f15e3b877b25c5, got 65263bddf75ffb3473188f5481519b1c4ccf6a3020985993ea22f1f2751a54f8)
+(exit code: 1)
+
+=== gate: RN-safe root entries — scanner over each package's '.' graph (must pass) ===
+✓ @platform/contracts: root entry graph RN-safe — 20 files, no node builtins, externals: [zod]
+✓ @platform/kernel-types: root entry graph RN-safe — 5 files, no node builtins, externals: [zod]
+✓ @platform/i18n: root entry graph RN-safe — 3 files, no node builtins, externals: [zod]
+✓ @platform/ui-tokens: root entry graph RN-safe — 3 files, no node builtins, externals: [none]
+(exit code: 0)
+
+=== gate: RN-safe root entries — NEGATIVE FIXTURE (planted node:fs import in hardlinked copy, must fail) ===
+planted 'node:fs' import into hardlinked copy at /tmp/tmp.SnCcVPEkOS/dist/enums.js
+$ node scripts/scan-rn-safe-entry.mjs --package-dir /tmp/tmp.SnCcVPEkOS
+✗ @platform/contracts: root entry graph is NOT RN-safe (20 files scanned):
+    - node builtin 'node:fs' imported in /tmp/tmp.SnCcVPEkOS/dist/enums.js
+scanner exited non-zero as required (rc=1)
+planted '@platform/i18n/data-loader' import into hardlinked copy at /tmp/tmp.UbUF2CTACz/dist/enums.js
+$ node scripts/scan-rn-safe-entry.mjs --package-dir /tmp/tmp.UbUF2CTACz
+✗ @platform/contracts: root entry graph is NOT RN-safe (22 files scanned):
+    - node builtin 'node:fs/promises' imported in /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/i18n/dist/data-loader.js
+    - node builtin 'node:path' imported in /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/i18n/dist/data-loader.js
+    - node builtin 'node:url' imported in /tmp/claude-0/-home-user/ec1e706a-04dd-546f-b722-7327c99daa2f/scratchpad/cold-v091/packages/i18n/dist/data-loader.js
+scanner exited non-zero as required (rc=1)
+(exit code: 1)
+
+=== gate: export maps — every subpath target exists, node-only tooling behind subpaths (must pass) ===
+✓ @platform/contracts@0.9.1: exports map complete — subpaths: ., ./drift-check, ./drift-cli, ./dist/*, ./package.json
+✓ @platform/kernel-types@0.9.1: exports map complete — subpaths: ., ./dist/*, ./package.json
+✓ @platform/i18n@0.9.1: exports map complete — subpaths: ., ./data-loader, ./lint-cli, ./catalog.json, ./dist/*, ./package.json
+✓ @platform/ui-tokens@0.9.1: exports map complete — subpaths: ., ./dist/*, ./package.json
+✓ @platform/certification@0.9.1: exports map complete — subpaths: ., ./dist/*, ./package.json
+(exit code: 0)
+
+=== gate: token-fidelity — built ui-tokens deep-equal docs/design/tokens.json, no ⏳ marker (must pass) ===
+token-fidelity OK: 17 groups deep-equal docs/design/tokens.json; no ⏳ placeholder survives
+(exit code: 0)
+
+=== gate: token-fidelity — NEGATIVE FIXTURE (one designer value altered in a tmp copy must fail) ===
+token-fidelity negative OK: altered #C2571B→#C2571C rejected (exit 1)
+(exit code: 1)
+
+=== gate: icon-manifest — 26 icons match sha256, all currentColor, names == landmark.iconNames (must pass) ===
+icon-manifest OK: 29 icons, 8184 raw bytes, all currentColor, zero ns0: prefixes, every root <svg> carries xmlns, names == landmark.iconNames
+(exit code: 0)
+
+=== gate: mock certification — the four reference adapters must certify 8/8 (§3, no partial passes) ===
+CERTIFIED — payment-provider — 8/8 §3 behaviors
+  ✓ emits_duplicates: duplicated command_ids under control: 1; without control: 0
+  ✓ delivers_out_of_order: clean delivery ordered: true; controlled delivery out of order: true
+  ✓ delays_events: requested 40ms, observed 40ms before first delivery (tolerance 2ms for clock quantization)
+  ✓ returns_stale_projections: fresh version 2, stale version 1
+  ✓ simulates_timeouts: MockTimeoutError raised
+  ✓ simulates_partial_failures: clean sequence 3 events; partial delivered 1 then failed: payment-provider: simulated mid-sequence failure
+  ✓ rejects_invalid_state_transitions: refunded -> held: accepted=false (a refunded payment leg can never re-enter held — provider truth is final)
+  ✓ generated_from_producer_contract_schema: producerSchema identical to domain registry: true; envelopes conformant: true; payload parse failures: 0/3
+
+CERTIFIED — eligibility — 8/8 §3 behaviors
+  ✓ emits_duplicates: duplicated command_ids under control: 1; without control: 0
+  ✓ delivers_out_of_order: clean delivery ordered: true; controlled delivery out of order: true
+  ✓ delays_events: requested 40ms, observed 40ms before first delivery (tolerance 2ms for clock quantization)
+  ✓ returns_stale_projections: fresh version 2, stale version 1
+  ✓ simulates_timeouts: MockTimeoutError raised
+  ✓ simulates_partial_failures: clean sequence 3 events; partial delivered 1 then failed: eligibility: simulated mid-sequence failure
+  ✓ rejects_invalid_state_transitions: Paid -> Eligible: accepted=false (a paid settlement obligation can never regress to eligible)
+  ✓ generated_from_producer_contract_schema: producerSchema identical to domain registry: true; envelopes conformant: true; payload parse failures: 0/3
+
+CERTIFIED — supply-projection — 8/8 §3 behaviors
+  ✓ emits_duplicates: duplicated command_ids under control: 1; without control: 0
+  ✓ delivers_out_of_order: clean delivery ordered: true; controlled delivery out of order: true
+  ✓ delays_events: requested 40ms, observed 40ms before first delivery (tolerance 2ms for clock quantization)
+  ✓ returns_stale_projections: fresh version 2, stale version 1
+  ✓ simulates_timeouts: MockTimeoutError raised
+  ✓ simulates_partial_failures: clean sequence 3 events; partial delivered 1 then failed: supply-projection: simulated mid-sequence failure
+  ✓ rejects_invalid_state_transitions: expired -> active: accepted=false (an expired offer version never reactivates — a change is a new version (B+I-04))
+  ✓ generated_from_producer_contract_schema: producerSchema identical to domain registry: true; envelopes conformant: true; payload parse failures: 0/3
+
+CERTIFIED — readiness — 8/8 §3 behaviors
+  ✓ emits_duplicates: duplicated command_ids under control: 1; without control: 0
+  ✓ delivers_out_of_order: clean delivery ordered: true; controlled delivery out of order: true
+  ✓ delays_events: requested 40ms, observed 41ms before first delivery (tolerance 2ms for clock quantization)
+  ✓ returns_stale_projections: fresh version 2, stale version 1
+  ✓ simulates_timeouts: MockTimeoutError raised
+  ✓ simulates_partial_failures: clean sequence 3 events; partial delivered 1 then failed: readiness: simulated mid-sequence failure
+  ✓ rejects_invalid_state_transitions: dispatched -> ready: accepted=false (a dispatched package never returns to ready — custody rules govern from pickup)
+  ✓ generated_from_producer_contract_schema: producerSchema identical to domain registry: true; envelopes conformant: true; payload parse failures: 0/3
+
+certification: 4/4 domains certified (8/8 behaviors each required)
+(exit code: 0)
+
+=== gate: mock certification — NEGATIVE FIXTURE (deficient mock, one behavior removed, must fail) ===
+deficient mock (duplicates behavior removed):
+NOT CERTIFIED — payment-provider — 7/8 §3 behaviors
+  ✗ emits_duplicates: duplicated command_ids under control: 0; without control: 0
+  ✓ delivers_out_of_order: clean delivery ordered: true; controlled delivery out of order: true
+  ✓ delays_events: requested 40ms, observed 41ms before first delivery (tolerance 2ms for clock quantization)
+  ✓ returns_stale_projections: fresh version 2, stale version 1
+  ✓ simulates_timeouts: MockTimeoutError raised
+  ✓ simulates_partial_failures: clean sequence 3 events; partial delivered 1 then failed: payment-provider: simulated mid-sequence failure
+  ✓ rejects_invalid_state_transitions: refunded -> held: accepted=false (a refunded payment leg can never re-enter held — provider truth is final)
+  ✓ generated_from_producer_contract_schema: producerSchema identical to domain registry: true; envelopes conformant: true; payload parse failures: 0/3
+certification REFUSED as required (7/8)
+(exit code: 1)
+
+=== gate: envelope conformance — NEGATIVE FIXTURE (missing correlation_id must fail) ===
+envelope conformance REFUSED as required:
+  - event[0] does not parse via the pinned PlatformEventSchema: envelope.correlation_id invalid_type
+(exit code: 1)
+
+=== gate: 15-step chain runner — 15/15 with the nine-id chain + HTML dashboard seed (must pass) ===
+15-STEP CHAIN COMPLETE — correlation corr_e1demo — 28 events
+  ✓  1. Create one supplier (manual) → supplier_id=sup_e1demo
+  ✓  2. Create one basic product, one image (premium-frame only — no cleanup), one variant → product_version_id=pv_e1demo, variant_id=var_e1demo
+  ✓  3. Publish one supply projection → offer_version=offer_e1demo@1
+  ✓  4. Create one reseller listing → listing_id=lst_e1demo
+  ✓  5. Open one signed buyer link → attribution_token_id=att_e1demo
+  ✓  6. Create one immutable sandbox Quote → quote_id=quote_e1demo
+  ✓  7. Reserve one unit (atomic) → reservation_id=rsv_e1demo
+  ✓  8. Complete one sandbox payment (hold) → payment_attempt_id=payatt_e1demo, order_id=order_e1demo
+  ✓  9. Mark the supplier package ready (package/seal) → package_id=pkg_e1demo
+  ✓ 10. Assign one courier manually → delivery_task_id=dtask_e1demo, rider_id=rider_e1demo
+  ✓ 11. Transfer one package into courier custody (two-party, single-use code + seal) → custody_seal_id=seal_e1demo
+  ✓ 12. Record one delivery confirmation (buyer drop code)
+  ✓ 13. Produce one validated settlement-eligibility event → validation_id=val_e1demo
+  ✓ 14. Create one supplier + reseller SettlementObligation → settlement_obligation_id=sob_supplier_e1demo, reseller_settlement_obligation_id=sob_reseller_e1demo
+  ✓ 15. Reconcile the sandbox provider response → provider_payout_id=payout_e1demo
+  nine-id chain:
+    ✓ quote_id = quote_e1demo
+    ✓ reservation_id = rsv_e1demo
+    ✓ payment_attempt_id = payatt_e1demo
+    ✓ order_id = order_e1demo
+    ✓ package_id = pkg_e1demo
+    ✓ delivery_task_id = dtask_e1demo
+    ✓ validation_id = val_e1demo
+    ✓ settlement_obligation_id = sob_supplier_e1demo
+    ✓ provider_payout_id = payout_e1demo
+
+chain report written: /tmp/chain-report.html
+(exit code: 0)
+
+=== gate: 15-step chain runner — NEGATIVE FIXTURE (validation_id dropped, must fail) ===
+15-STEP CHAIN BROKEN — correlation corr_e1demo — 28 events
+  ✓  1. Create one supplier (manual) → supplier_id=sup_e1demo
+  ✓  2. Create one basic product, one image (premium-frame only — no cleanup), one variant → product_version_id=pv_e1demo, variant_id=var_e1demo
+  ✓  3. Publish one supply projection → offer_version=offer_e1demo@1
+  ✓  4. Create one reseller listing → listing_id=lst_e1demo
+  ✓  5. Open one signed buyer link → attribution_token_id=att_e1demo
+  ✓  6. Create one immutable sandbox Quote → quote_id=quote_e1demo
+  ✓  7. Reserve one unit (atomic) → reservation_id=rsv_e1demo
+  ✓  8. Complete one sandbox payment (hold) → payment_attempt_id=payatt_e1demo, order_id=order_e1demo
+  ✓  9. Mark the supplier package ready (package/seal) → package_id=pkg_e1demo
+  ✓ 10. Assign one courier manually → delivery_task_id=dtask_e1demo, rider_id=rider_e1demo
+  ✓ 11. Transfer one package into courier custody (two-party, single-use code + seal) → custody_seal_id=seal_e1demo
+  ✓ 12. Record one delivery confirmation (buyer drop code)
+  ✗ 13. Produce one validated settlement-eligibility event
+       ! missing link: step 13 did not mint validation_id
+  ✓ 14. Create one supplier + reseller SettlementObligation → settlement_obligation_id=sob_supplier_e1demo, reseller_settlement_obligation_id=sob_reseller_e1demo
+  ✓ 15. Reconcile the sandbox provider response → provider_payout_id=payout_e1demo
+  nine-id chain:
+    ✓ quote_id = quote_e1demo
+    ✓ reservation_id = rsv_e1demo
+    ✓ payment_attempt_id = payatt_e1demo
+    ✓ order_id = order_e1demo
+    ✓ package_id = pkg_e1demo
+    ✓ delivery_task_id = dtask_e1demo
+    ✗ validation_id = MISSING
+    ✓ settlement_obligation_id = sob_supplier_e1demo
+    ✓ provider_payout_id = payout_e1demo
+  ! missing link: validation_id absent from the completed chain
+chain REFUSED as required (missing link detected)
+(exit code: 1)
+
+=== gate: order status — NEGATIVE FIXTURE (a sixth status string must refuse at parse) ===
+order status 'failed' REFUSED at parse (as required — SE-I10):
+  - invalid_value: Invalid option: expected one of "quote_issued"|"reserved"|"payment_pending"|"paid"|"confirmed"|"payment_failed"|"cancelled"|"refunded"
+(exit code: 1)
+
+=== gate: supply projection — NEGATIVE FIXTURE (supplier identity/contact leak must refuse at parse) ===
+supply projection with identity leak REFUSED at parse (as required):
+  - unrecognized_keys: Unrecognized keys: "supplierName", "supplierPhone", "pickupAddress"
+(exit code: 1)
+
+=== gate: delivery outcome — NEGATIVE FIXTURE (generic 'failed' must be unrepresentable — refuse at parse) ===
+delivery outcome family 'failed' REFUSED at parse (SE-I10 — unrepresentable):
+  - family: invalid_value
+(exit code: 1)
+
+=== gate: payment-leg status — NEGATIVE FIXTURE (a 'released' leg must refuse at parse) ===
+payment-leg status 'released' REFUSED at parse (spec enumerates held|captured|refunded):
+  - status: invalid_value
+(exit code: 1)
+
+=== gate: fault class — NEGATIVE FIXTURE (a non-§5.6 faultClass must refuse at parse) ===
+faultClass 'logistics' REFUSED at parse (§5.6 enumerates six members):
+  - faultClass: invalid_value
+(exit code: 1)
+
+=== gate: reconciliation — NEGATIVE FIXTURE (independent-multiplication quote must not reconcile) ===
+QuoteReconciliationError: Quote does not reconcile to the franc:
+  - productSubtotal (10779) != sellerNet + resellerNet + platformProductFeeRevenue (9168 + 888 + 722 = 10778)
+(exit code: 1)
+
+=== gate: shape-freeze — NEGATIVE FIXTURE (tampered snapshot with kittingSealId on the Quote must fail) ===
+shape-freeze FAILED (as required against the tampered snapshot):
+  - schema changed: QuoteSchema
+(exit code: 1)
+
+=== gate: secret-separation — NEGATIVE FIXTURE (substitution must not compile) ===
+packages/contracts/fixtures/secret-substitution.negative.ts(15,14): error TS2322: Type 'BuyerDropCode' is not assignable to type 'SellerReadinessChallenge'.
+  Property '[SellerReadinessChallengeBrand]' is missing in type 'String & { readonly [BuyerDropCodeBrand]: "BuyerDropCode"; }' but required in type '{ readonly [SellerReadinessChallengeBrand]: "SellerReadinessChallenge"; }'.
+packages/contracts/fixtures/secret-substitution.negative.ts(19,14): error TS2322: Type 'string' is not assignable to type 'BuyerDropCode'.
+  Type 'string' is not assignable to type '{ readonly [BuyerDropCodeBrand]: "BuyerDropCode"; }'.
+secret substitution refused by the compiler (tsc exit 2) — the negative bit
+(exit code: 1)
+
+ALL GATES GREEN (positive suites pass; every negative fixture demonstrably fails)
