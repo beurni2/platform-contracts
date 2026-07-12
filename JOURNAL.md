@@ -294,3 +294,11 @@ Format per entry:
 - **The two reviewer drafting slips (A2 `released`, A7's self-contradicting charset) were caught by the derivation discipline BEFORE any canon byte moved — the loop working upward, journaled as such** (founder noted the A2 STOP-before-deriving over a §5 money-adjacent conflict and the attempt to construct an ambiguous normalizer input rather than assert absence, both with approval).
 - **`conformity_mismatch` is CLOSED after being blocked since E2; the attribution identity scope makes the share hub buildable; the merge sha `fa2ff24` is the pin for the shop-plus vitrine slice.**
 - **Attribution identity scope + conformity_mismatch = the founder's canon.**
+
+## 2026-07-12 · Master-Reference parity sweep (WO-6.1 RIDER-FIRST, founder-authorized) — v1.2
+- **Authorized as WO-6.1's docs-only first step.** Swept `docs/ECOSYSTEM-MASTER-REFERENCE.md` against the v0.9.0 specs for every token the WO-5.2 ten edits changed. **Report (each hit + governing spec quote):**
+  - **`return_required` → `return` — ONE hit, l.490.** Governing quote: Sera-Build-Spec l.121 (post-A1) « dispatcher applies retry/reschedule/**return**/incident »; the code enum `DELIVERY_OUTCOME_FAMILIES = ['retry','reschedule','return','incident']`; AND the Master Reference's OWN five other uses already read `return` (l.386/454/507/608). A stale token, an internal inconsistency — corrected. Not a contradiction.
+  - **EscrowTxn leg statuses (held|captured|refunded):** 0 hits — the doc does not enumerate them (l.602 « reservation released » is an unrelated reservation state). No divergence.
+  - **`coarseLocation` optionality (A5):** 0 hits — « coarse progress » prose (l.371/585) is unrelated to the `EvidenceBundle.coarseLocation` field. No divergence.
+  - **§6.4 reason enum / `conformity_mismatch` (A3/A4):** 0 hits — conformity is described as SE-I12 verification prose; the reason codes are not enumerated in this doc. No divergence.
+- **Applied ONLY the one quote-matched correction; invented nothing; no genuine contradiction found (no STOP needed).** Doc → **v1.2**, sha256 **`2bafe3eaded062ef2cf43dfa6e0b32e37122b1494a1005bbc7f2e5d2c29fb83a`**; docs-manifest regenerated (11 docs, packageVersion 0.9.0). Gates green.

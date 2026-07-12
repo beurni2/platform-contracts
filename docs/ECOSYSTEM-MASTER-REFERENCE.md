@@ -487,7 +487,7 @@ One **RouteManifest** per rider · **one current stop** (SE-I03) · **exactly on
 
 ### 4. The exceptions desk *(the most important screen in the building)*
 Every failure lands here with a **structured reason + evidence**. The dispatcher applies exactly one explicit outcome:
-**retry · reschedule · return_required · incident** — and **there is no generic "failed"** (SE-I10). A package is **never unowned**: custody stays with the rider or the hub until a **two-key return handoff + inspection** puts it back with the supplier.
+**retry · reschedule · return · incident** — and **there is no generic "failed"** (SE-I10). A package is **never unowned**: custody stays with the rider or the hub until a **two-key return handoff + inspection** puts it back with the supplier.
 
 ### 5. Break-glass verification *(the maker-checker seam)*
 Two different people, deliberately:
