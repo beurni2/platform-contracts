@@ -43,11 +43,11 @@ log "gate: drift-check — pristine consumer /docs copy (must pass)"
 DRIFT_CONSUMER="$(mktemp -d)/docs"
 mkdir -p "$DRIFT_CONSUMER"
 cp docs/*.md "$DRIFT_CONSUMER/"
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.3
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.4
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
 printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.3
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.4
 
 log "gate: RN-safe root entries — scanner over each package's '.' graph (must pass)"
 capture rn-safe-positive pass node scripts/scan-rn-safe-entry.mjs
@@ -57,6 +57,12 @@ capture rn-safe-negative fail bash scripts/show-rn-safe-negative.sh
 
 log "gate: export maps — every subpath target exists, node-only tooling behind subpaths (must pass)"
 capture export-maps pass node scripts/check-export-maps.mjs
+
+log "gate: lockfile url-form — pnpm-lock.yaml carries zero SSH-form git URLs, cold-installable (must pass)"
+capture lockfile-url-form-positive pass node scripts/check-lockfile-url-form.mjs
+
+log "gate: lockfile url-form — NEGATIVE FIXTURE (a planted git@github.com: SSH URL must fail)"
+capture lockfile-url-form-negative fail bash scripts/show-lockfile-url-form-negative.sh
 
 log "gate: token-fidelity — built ui-tokens deep-equal docs/design/tokens.json, no ⏳ marker (must pass)"
 capture token-fidelity-positive pass node scripts/check-token-fidelity.mjs
