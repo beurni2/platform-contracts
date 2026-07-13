@@ -10,6 +10,7 @@ TMP="$(mktemp -d)"
 mkdir -p "$TMP/packages"
 cp -r "$ROOT/packages/ui-tokens" "$TMP/packages/ui-tokens"
 cp -r "$ROOT/docs" "$TMP/docs"
+cp "$ROOT/scripts/token-surface.data.mjs" "$TMP/"   # WO-5.7: gate imports the shared lists
 # tamper: one hex digit in the BUILT dist (#C2571B shop primary -> #C2571C)
 sed -i 's/#C2571B/#C2571C/' "$TMP/packages/ui-tokens/dist/family.js"
 # fidelity check rooted at the tampered tree

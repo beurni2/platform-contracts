@@ -43,11 +43,11 @@ log "gate: drift-check — pristine consumer /docs copy (must pass)"
 DRIFT_CONSUMER="$(mktemp -d)/docs"
 mkdir -p "$DRIFT_CONSUMER"
 cp docs/*.md "$DRIFT_CONSUMER/"
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.2
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.3
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
 printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.2
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.3
 
 log "gate: RN-safe root entries — scanner over each package's '.' graph (must pass)"
 capture rn-safe-positive pass node scripts/scan-rn-safe-entry.mjs
@@ -64,11 +64,17 @@ capture token-fidelity-positive pass node scripts/check-token-fidelity.mjs
 log "gate: token-fidelity — NEGATIVE FIXTURE (one designer value altered in a tmp copy must fail)"
 capture token-fidelity-negative fail bash scripts/show-token-fidelity-negative.sh
 
-log "gate: design-dimensions — 9 doc-derived tokens each equal their value AND byte-stated in canon (must pass)"
+log "gate: design-dimensions — 11 design-dimension tokens each equal their value AND warranted (doc-quote or computed) (must pass)"
 capture design-dimensions-positive pass node scripts/check-design-dimensions.mjs
 
 log "gate: design-dimensions — NEGATIVE FIXTURE (bad token value AND bad doc, both must be caught)"
 capture design-dimensions-negative fail bash scripts/show-design-dimensions-negative.sh
+
+log "gate: token-coverage — every ui-tokens export owned by exactly one gate (fidelity ∪ derived ∪ structural) (must pass)"
+capture token-coverage-positive pass node scripts/check-token-coverage.mjs
+
+log "gate: token-coverage — NEGATIVE FIXTURE (stray top-level export AND stray leaf, both must be caught)"
+capture token-coverage-negative fail bash scripts/show-token-coverage-negative.sh
 
 log "gate: icon-manifest — 26 icons match sha256, all currentColor, names == landmark.iconNames (must pass)"
 capture icon-manifest pass node scripts/check-icon-manifest.mjs

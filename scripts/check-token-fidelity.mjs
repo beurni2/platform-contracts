@@ -14,31 +14,13 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { FIDELITY_MAP as MAP } from './token-surface.data.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokens = JSON.parse(readFileSync(join(root, 'docs', 'design', 'tokens.json'), 'utf8'));
 const built = await import(join(root, 'packages', 'ui-tokens', 'dist', 'index.js'));
 
-// tokens.json group  →  built export it must deep-equal
-const MAP = {
-  'colour.shared': 'sharedColour',
-  'colour.shop': 'shopColour',
-  'colour.boutik': 'boutikColour',
-  'colour.sera': 'seraColour',
-  type: 'type',
-  spacing: 'spacing',
-  radius: 'radius',
-  touch: 'touch',
-  motion: 'motion',
-  celebration: 'celebration',
-  money: 'money',
-  landmark: 'landmark',
-  interaction: 'interaction',
-  band: 'band',
-  ribbon: 'ribbon',
-  skeleton: 'skeleton',
-  statusbar: 'statusbar',
-};
+// tokens.json group → built export it must deep-equal (WO-5.7: shared source).
 
 function getPath(obj, path) {
   return path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
