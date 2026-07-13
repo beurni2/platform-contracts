@@ -50,6 +50,28 @@ export const ORDER_STATUSES = [
 export const OrderStatusSchema = z.enum(ORDER_STATUSES);
 export type OrderStatus = z.infer<typeof OrderStatusSchema>;
 
+/**
+ * Moderation reason codes — Boutik A1 RATIFIED v1 set (founder-ratified
+ * 2026-07-13; canon since v0.9.6). Every `changes_requested` decision names one
+ * or more of these; a silent/reasonless rejection is unrepresentable (see
+ * `ModerationDecisionSchema`, shapes/moderation.ts). Grounded in
+ * Boutik-Plus-Build-Spec: B+I-01 (approved facts + public-safe actual-item
+ * proof), the price-free / contact-free hero rule, the neutral-packaging rule
+ * (B+3), category rules, and "no unresolved moderation / authenticity concern".
+ * PLATFORM Desk 3 issues decisions naming these; boutik catalog-service consumes
+ * them.
+ */
+export const MODERATION_REASON_CODES = [
+  'facts_incomplete',
+  'no_public_safe_proof',
+  'price_or_contact_in_image',
+  'not_neutral_packaging',
+  'prohibited_or_unlaunched_category',
+  'authenticity_concern',
+] as const;
+export const ModerationReasonCodeSchema = z.enum(MODERATION_REASON_CODES);
+export type ModerationReasonCode = z.infer<typeof ModerationReasonCodeSchema>;
+
 /** §5.6: SettlementObligation state — Locked→Pending→Eligible→Payable→Processing→Paid|Held|Failed (enum only; the state machine is app-repo work). */
 export const SETTLEMENT_OBLIGATION_STATES = [
   'Locked',
