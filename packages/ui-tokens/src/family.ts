@@ -318,6 +318,21 @@ export const dimension = {
     // never alone · not a hit target · do not upscale (fix the label, not this).
     badge: 12,
   },
+  // WO-5.11 — QR-vitrine PRIMITIVES. Unlike the doc-derived controlHeight/iconSize
+  // above, these are DESIGNER-BUNDLE values: they live in docs/design/tokens.json
+  // (fidelity-owned), sourced from the QRVitrine spec sheet (WO-7.2 handoff), with
+  // each derivation quoted in docs/derivations/QR-DIMENSIONS.md. Only the four
+  // primitives are tokens; the on-screen side is NOT frozen — the encoder is ruled
+  // versions 1–5, so the real URL may force V4+, and a frozen side would put a
+  // larger QR under its own floor. The component derives the side at render from
+  // these primitives: minSidePx = (modules(version) + 2·quietZoneModules)·moduleMinPx
+  // (see QR-DIMENSIONS.md), asserting the print floor as it goes.
+  qr: {
+    quietZoneModules: 4, // ISO 18004 quiet zone (4 modules of pure paper)
+    moduleMinPx: 4, // = spacing.xs (no sub-pixel)
+    printModuleMinMm: 1.0, // print floor: 1.0 mm/module
+    printSideMm: 48, // 37 × 1.3 mm ≈ 48 mm — scannable across a shop wall
+  },
 } as const;
 
 // ── theme composition (per-theme resolution: shared + one app palette) ───────

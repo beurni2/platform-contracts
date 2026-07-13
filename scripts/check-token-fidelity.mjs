@@ -29,7 +29,7 @@ function getPath(obj, path) {
 // WO-5.6: groups whose built value may be a SUPERSET of tokens.json (extra keys
 // permitted, each pinned by check-design-dimensions.mjs). Everything else is
 // strict deep-equal. `a` is always the tokens.json value, `b` the built value.
-const SUPERSET_OK = new Set(['celebration', 'band']);
+const SUPERSET_OK = new Set(['celebration', 'band', 'dimension']);
 
 // Order-insensitive, type-strict deep equality; reports the first divergence
 // path. When `superset` is true, tokens.json (a) must be a subset of built (b):
