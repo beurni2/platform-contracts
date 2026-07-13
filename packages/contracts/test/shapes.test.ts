@@ -235,7 +235,7 @@ describe('HandoffAuthorization — payment-confirmed handoff', () => {
     buyerRef: 'by_001',
     exactAmount: 10_779,
     providerTransactionReference: 'prov_tx_889',
-    authorizedBy: 'op_001',
+    authorizedBy: 'ops:payment:op1', // WO-5.12: authorizedBy is now an ops:payment:* actor (was 'op_001')
     authorizationExpiresAt: '2026-07-09T10:15:00Z',
     signature: 'sig_abc',
     state: 'issued',
@@ -266,6 +266,34 @@ describe('HandoffAuthorization — payment-confirmed handoff', () => {
       authorizationReason: 'dead zone — operator verified on provider interface',
     });
     expect(result.success).toBe(true);
+  });
+
+  // WO-5.12 — authorizedBy is the ISSUER (« ÉMIS PAR — payment operator ») half:
+  // only an ops:payment:* actor may issue. Allow-list, both directions.
+  it('accepts a valid ops:payment:* issuer (the payment-operator half)', () => {
+    const result = HandoffAuthorizationSchema.safeParse({
+      ...base,
+      authorizationSource: 'provider_webhook',
+      authorizedBy: 'ops:payment:desk-1',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it.each([
+    ['supplier:aicha', 'a supplier actor'],
+    ['logistics-service:dispatch', "the dispatcher (sera's real literal — VÉRIFIÉ PAR half, may not issue)"],
+    ['ops:moderation:x', 'a moderation operator (wrong domain)'],
+    ['ops:payment:', 'an empty-suffix ops:payment: (no operator id)'],
+  ])('REJECTS a non-ops:payment:* issuer: %s (%s)', (authorizedBy) => {
+    const result = HandoffAuthorizationSchema.safeParse({
+      ...base,
+      authorizationSource: 'provider_webhook',
+      authorizedBy,
+    });
+    expect(result.success).toBe(false);
+    // the ONLY failing field is authorizedBy — the source/leg are valid
+    expect(JSON.stringify(result.error?.issues)).toContain('authorizedBy');
+    expect(JSON.stringify(result.error?.issues)).toContain('ops:payment:* actor');
   });
 });
 
