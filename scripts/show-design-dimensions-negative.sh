@@ -11,6 +11,7 @@ TMP="$(mktemp -d)"
 mkdir -p "$TMP/packages"
 cp -r "$ROOT/packages/ui-tokens" "$TMP/packages/ui-tokens"
 cp -r "$ROOT/docs" "$TMP/docs"
+cp "$ROOT/scripts/token-surface.data.mjs" "$TMP/"   # WO-5.7: gate imports the shared lists
 # a copy of the gate re-rooted at the tampered tree
 sed "s#join(dirname(fileURLToPath(import.meta.url)), '..')#'$TMP'#" \
   "$ROOT/scripts/check-design-dimensions.mjs" > "$TMP/check.mjs"

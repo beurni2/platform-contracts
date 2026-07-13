@@ -309,7 +309,14 @@ export const dimension = {
   },
   iconSizePx: {
     listRow: 17, // components.md — ListRow "icon 17"
+    tab: 20, // components.md — TabBar "icon 20 + word `labelXS`" (WO-5.7 Part D)
     emptyState: 28, // components.md — EmptyState "Icon 28"
+    // WO-5.7 Part C — the trust-strip badge glyph (« PAIEMENT PROTÉGÉ »). NOT a
+    // fourth structural icon size: it FILLS the labelXS line box, so its px =
+    // type.scale.labelXS.size × lh = 10 × 1.2 = 12. Computed-anchored by the gate
+    // to canon's own type scale. Three laws (DESIGN-DIMENSIONS.md): icon+word
+    // never alone · not a hit target · do not upscale (fix the label, not this).
+    badge: 12,
   },
 } as const;
 
