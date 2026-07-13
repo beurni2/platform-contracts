@@ -2,3 +2,6 @@ node_modules/
 dist/
 .turbo/
 *.tsbuildinfo
+# transient build evidence + loose review staging (only the _review/*.zip packet is committed)
+_evidence/
+_review/*/

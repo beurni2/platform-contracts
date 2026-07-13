@@ -1,11 +1,11 @@
 {
-  "packageVersion": "0.9.1",
+  "packageVersion": "0.9.2",
   "files": {
     "Boutik-Plus-Build-Spec.md": "7d061bf639bc0daf13b1d548735a43c7c32fc23e1af5043b66e237f5f902d053",
     "Boutik-Plus-Building-Plan.md": "e8d2ae5167392358292577c313247083b99330c7f0eda5e704f027764163de04",
     "DESIGN-LANGUAGE.md": "e478db70771fac8d5a9993a8530db4573d08b04548e70aa1860d3ccb039fa9b7",
-    "ECOSYSTEM-MASTER-REFERENCE.md": "2bafe3eaded062ef2cf43dfa6e0b32e37122b1494a1005bbc7f2e5d2c29fb83a",
-    "Ecosystem-Engineering-Execution-Contract.md": "af619e27b5771384c5b4af1b92c3c2518cacf14d6dfc86d70568a0bc61f06b9b",
+    "ECOSYSTEM-MASTER-REFERENCE.md": "4fd065c7c4409cee022bfee562e7ac2a44c755566ea1e2bb4bbe8880ac785490",
+    "Ecosystem-Engineering-Execution-Contract.md": "069cd35c0d781cf44f9533cdc80a367cd1c2d93730ec4e6578db4a6ee84b8089",
     "GRAND-TEINT.md": "b1a1bf6a982591da114b47bbe8970c6a41c69eb6d0191c93404f1fc7c1aa8834",
     "PERF-BUDGETS.md": "bffcb5328f994540c97a400c7494d2947c8304f287db8c8809fa94be8546b358",
     "Sera-Build-Spec.md": "d46c229184dbe86e49295aee8a1d4dfdb4f1b2f45171fc959dcb5424a66aff23",

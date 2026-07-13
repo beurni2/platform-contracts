@@ -133,6 +133,11 @@ export const motion = {
 export const celebration = {
   haloMs: 700,
   ringMs: 620,
+  // WO-5.6 design-dimension tokens — pixel geometry of the two celebration
+  // rings, DERIVED from docs/design/motion.md (the celebration storyboard), NOT
+  // from tokens.json. Anchored token-by-token by check-design-dimensions.mjs.
+  haloPx: 220,
+  ringPx: 132,
   motifMs: 640,
   motifStaggerMs: 14,
   badgeMs: 260,
@@ -243,7 +248,15 @@ export const interaction = {
 /** band — the 4 px theme strip + the signature price band. */
 export const band = {
   themeStripPx: 4,
-  priceBand: { padY: 13, padX: 16, labelToken: 'type.labelXS', amountToken: 'money.amountScale.page' },
+  priceBand: {
+    padY: 13,
+    padX: 16,
+    labelToken: 'type.labelXS',
+    amountToken: 'money.amountScale.page',
+    // WO-5.6 — width of the PriceBand right-column honesty note, DERIVED from
+    // docs/design/components.md (PriceBand ⭐, "w 118"). Anchored by the gate.
+    noteWidth: 118,
+  },
 } as const;
 
 /** ribbon — the sandbox « APERÇU — BAC À SABLE » preview stripe. */
@@ -270,6 +283,34 @@ export const skeleton = {
 export const statusbar = {
   clock: { size: 13, wght: 600 },
   iconInk: 'colour.shared.ink',
+} as const;
+
+// ── dimension (v0.9.2 — WO-5.6 design-dimension tokens) ──────────────────────
+/**
+ * dimension — component pixel dimensions that canon's DESIGN DOCS state as
+ * values but tokens.json never carried, surfaced by WO-6.0's zero-hardcode
+ * finding (a kit that held them as literals). Each is DERIVED AND QUOTED from
+ * its `docs/design/components.md` line in `docs/derivations/DESIGN-DIMENSIONS.md`
+ * and byte-anchored by `scripts/check-design-dimensions.mjs`. These live OUTSIDE
+ * tokens.json (whose values stay immutable); the fidelity gate is amended to
+ * permit tokens.json ⊆ built, and this new gate owns every added value.
+ *
+ * NOT here — the STOP: the kit's third icon-size prop (12 px) has NO canon line
+ * stating a 12 px icon (12 appears only as the spacing step 4/8/12/16/24/34 and
+ * as row padding "11–12", neither an icon size). Per derive-never-invent it is
+ * flagged for the founder → designer in DESIGN-DIMENSIONS.md, not tokenised.
+ */
+export const dimension = {
+  controlHeightPx: {
+    primaryButton: 56, // components.md — PrimaryButton "Size: h 56"
+    searchField: 50, // components.md — SearchField "Hairline 1.5 box h 50"
+    listRow: 44, // components.md — ListRow "fixed h 44 (list virtualization law)"
+    offlineBanner: 30, // components.md — OfflineBanner "Ink band h 30"
+  },
+  iconSizePx: {
+    listRow: 17, // components.md — ListRow "icon 17"
+    emptyState: 28, // components.md — EmptyState "Icon 28"
+  },
 } as const;
 
 // ── theme composition (per-theme resolution: shared + one app palette) ───────
