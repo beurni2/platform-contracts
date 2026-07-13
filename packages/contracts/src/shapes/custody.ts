@@ -223,6 +223,25 @@ export const EvidenceBundleSchema = z
 export type EvidenceBundle = z.infer<typeof EvidenceBundleSchema>;
 
 /**
+ * Payment-operator actor — `ops:payment:*` (founder ruling 2026-07-13, extending
+ * canon's `ops:<domain>:*` convention; sibling of `ops:moderation:*`). Break-glass
+ * issuance validates by ALLOW-LIST: ONLY an actor matching this pattern validates;
+ * a supplier, a dispatcher (`logistics-service:*`), an `ops:moderation:*`, or
+ * anything else is refused by non-match. This is the ISSUER (« ÉMIS PAR — payment
+ * operator ») half of the maker-checker seam — the authorized payment operator who
+ * *issues* the HandoffAuthorization (ECOSYSTEM-MASTER-REFERENCE §5.494; Sera §115).
+ * The dispatcher's « VÉRIFIÉ PAR » ground-verification is a separate act and is NOT
+ * a field on this shape (canon bars the dispatcher from issuing — "nobody holds
+ * both halves"), so this schema constrains issuance identity only.
+ */
+export const PaymentOperatorActorSchema = z
+  .string()
+  .regex(
+    /^ops:payment:[A-Za-z0-9._:-]+$/,
+    'authorizedBy must be an ops:payment:* actor (only the authorized payment operator issues a break-glass handoff authorization)',
+  );
+
+/**
  * §5.6 HandoffAuthorization — signed, single-use, payment-confirmed handoff
  * (the fourth secret; its `signature` is the branded credential).
  * `break_glass` REQUIRES a breakGlassCaseId (mandatory incident review).
@@ -235,7 +254,7 @@ export const HandoffAuthorizationSchema = z
     exactAmount: FcfaSchema,
     providerTransactionReference: z.string().min(1),
     authorizationSource: AuthorizationSourceSchema,
-    authorizedBy: IdSchema,
+    authorizedBy: PaymentOperatorActorSchema,
     authorizationExpiresAt: IsoTimestampSchema,
     authorizationConsumedAt: IsoTimestampSchema.optional(),
     authorizationReason: z.string().min(1).optional(),
