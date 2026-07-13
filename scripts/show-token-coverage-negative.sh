@@ -22,12 +22,12 @@ printf '\nexport const icon = { badge: { size: 12 } };\n' >> "$FAMILY"
 codeA="$(run_gate)"
 cp "$ROOT/packages/ui-tokens/dist/family.js" "$FAMILY"      # restore pristine
 
-# ── Tamper B: a STRAY LEAF on an existing value group (spacing) ────────────────
-printf '\nObject.assign(spacing, { strayLeaf: 99 });\n' >> "$FAMILY"
+# ── Tamper B: a STRAY LEAF on the QR block (WO-5.11 — dimension.qr) ────────────
+printf '\nObject.assign(dimension.qr, { strayLeaf: 99 });\n' >> "$FAMILY"
 codeB="$(run_gate)"
 
 if [ "$codeA" -eq 1 ] && [ "$codeB" -eq 1 ]; then
-  echo "token-coverage negative OK: stray top-level export 'icon' rejected (exit $codeA); stray leaf 'spacing.strayLeaf' rejected (exit $codeB)"
+  echo "token-coverage negative OK: stray top-level export 'icon' rejected (exit $codeA); stray leaf 'dimension.qr.strayLeaf' rejected (exit $codeB)"
   exit 1   # both caught — the fixture failed as required (harness expects 'fail')
 fi
 echo "NEGATIVE FIXTURE MISBEHAVED — stray-export exit $codeA, stray-leaf exit $codeB (expected 1 and 1)"

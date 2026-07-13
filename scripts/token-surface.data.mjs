@@ -26,6 +26,11 @@ export const FIDELITY_MAP = {
   ribbon: 'ribbon',
   skeleton: 'skeleton',
   statusbar: 'statusbar',
+  // WO-5.11: tokens.json gains a `dimension` group carrying ONLY the QR block
+  // (designer-bundle values). The rest of `dimension` (controlHeight/iconSize) is
+  // doc-derived and design-dimensions-owned; `dimension` is a SUPERSET group, so
+  // fidelity checks the qr leaves ⊆ built and the derived leaves stay owned there.
+  dimension: 'dimension',
 };
 
 /** Groups whose built value is a SUPERSET of tokens.json (doc-derived additions). */
