@@ -6,7 +6,7 @@ import {
   VerifiedPhoneAliasSchema,
 } from '@platform/kernel-types';
 import { OrderStatusSchema, PaymentModeSchema, SupplyModeSchema } from '../enums.js';
-import { FcfaSchema, IdSchema, IsoTimestampSchema } from './common.js';
+import { FcfaSchema, IdSchema, IsoTimestampSchema, TrimmedNonEmptyString } from './common.js';
 
 /** §5.6 User — phone is an alias, never the key. */
 export const UserSchema = z
@@ -36,11 +36,11 @@ export const ProductVersionSchema = z
     id: IdSchema,
     supplierId: IdSchema,
     version: z.number().int().min(1),
-    name: z.string().min(1),
+    name: TrimmedNonEmptyString, // WO-5.14 name-class (trimmed non-empty)
     productCode: z.string().min(1),
     facts: z.record(z.string(), z.unknown()),
-    category: z.string().min(1),
-    zone: z.string().min(1),
+    category: TrimmedNonEmptyString, // WO-5.14 display string (trimmed non-empty)
+    zone: TrimmedNonEmptyString, // WO-5.14 display string (trimmed non-empty)
     moderationState: z.string().min(1),
     status: z.string().min(1),
     supplyMode: SupplyModeSchema,
@@ -84,7 +84,7 @@ export const SupplierOfferSchema = z
     resellerCommission: FcfaSchema,
     platformFeeVersion: z.string().min(1),
     eligibleVariants: z.array(IdSchema),
-    zones: z.array(z.string().min(1)),
+    zones: z.array(TrimmedNonEmptyString), // WO-5.14 display strings (trimmed non-empty)
     effective: IsoTimestampSchema,
     expiry: IsoTimestampSchema,
     status: z.string().min(1),
@@ -136,9 +136,9 @@ export const StorefrontSchema = z
     discoverable: z.boolean(),
     curatedItems: z.array(IdSchema),
     // WO-5.13 — additive: the Seller #001 aggregate fields (SP0.2).
-    name: z.string().min(1).max(120), // .max(120) is a boundary guard, not a canon value (founder-overridable)
-    zone: z.string().min(1), // display string — no zone enum (founder decision)
-    category: z.string().min(1), // display string — no category floor (open founder decision)
+    name: TrimmedNonEmptyString.max(120), // WO-5.14 name-class (trimmed non-empty); .max(120) boundary guard, not a canon value (founder-overridable)
+    zone: TrimmedNonEmptyString, // WO-5.14 display string (trimmed non-empty) — still no zone enum (founder decision)
+    category: TrimmedNonEmptyString, // WO-5.14 display string (trimmed non-empty) — still no category floor (open founder decision)
     createdAt: IsoTimestampSchema,
     updatedAt: IsoTimestampSchema,
   })
@@ -210,8 +210,8 @@ export type SupplyProjection = z.infer<typeof SupplyProjectionSchema>;
 /** §5.6 DeliveryFeeQuote — OWNER: Logistics (Séra) → Checkout. */
 export const DeliveryFeeQuoteSchema = z
   .object({
-    zoneFrom: z.string().min(1),
-    zoneTo: z.string().min(1),
+    zoneFrom: TrimmedNonEmptyString, // WO-5.14 display string (trimmed non-empty)
+    zoneTo: TrimmedNonEmptyString, // WO-5.14 display string (trimmed non-empty)
     fee: FcfaSchema,
     serviceable: z.boolean(),
     version: z.string().min(1),

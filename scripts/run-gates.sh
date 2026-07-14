@@ -43,11 +43,11 @@ log "gate: drift-check — pristine consumer /docs copy (must pass)"
 DRIFT_CONSUMER="$(mktemp -d)/docs"
 mkdir -p "$DRIFT_CONSUMER"
 cp docs/*.md "$DRIFT_CONSUMER/"
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.9
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.10
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
 printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.9
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 0.9.10
 
 log "gate: RN-safe root entries — scanner over each package's '.' graph (must pass)"
 capture rn-safe-positive pass node scripts/scan-rn-safe-entry.mjs
@@ -126,6 +126,9 @@ capture moderation-decision-negative fail node scripts/show-moderation-decision-
 
 log "gate: payment operator — NEGATIVE FIXTURE (supplier + dispatcher + ops:moderation + empty-suffix authorizedBy must refuse; ops:payment:* issues)"
 capture payment-operator-negative fail node scripts/show-payment-operator-negative.mjs
+
+log "gate: trimmed strings — NEGATIVE FIXTURE (whitespace-only/untrimmed id/name/zone/category must refuse; a clean storefront parses)"
+capture trimmed-string-negative fail node scripts/show-trimmed-string-negative.mjs
 
 log "gate: reconciliation — NEGATIVE FIXTURE (independent-multiplication quote must not reconcile)"
 capture reconciliation-negative fail node scripts/show-reconciliation-negative.mjs
