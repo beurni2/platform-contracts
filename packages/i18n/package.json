@@ -1,6 +1,6 @@
 {
   "name": "@platform/i18n",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "French Voice Standard i18n catalog + copy-lint (Execution Contract §10.5). All user-facing strings live here with register tags — never inline in app code.",
   "license": "UNLICENSED",
   "type": "module",

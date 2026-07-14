@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { computeWaterfall } from '../src/money/waterfall.js';
 import { QuoteSchema } from '../src/shapes/quote.js';
-import { OrderSchema } from '../src/shapes/commerce.js';
+import { OrderSchema, StorefrontSchema } from '../src/shapes/commerce.js';
 import { DELIVERY_FAILURE_REASONS, DELIVERY_OUTCOME_FAMILIES, ORDER_STATUSES } from '../src/enums.js';
 import { DeliveryOutcomeSchema } from '../src/shapes/custody.js';
 import { EscrowTxnSchema, PaymentLegSchema, SellerTrustStateSchema } from '../src/shapes/settlement.js';
@@ -339,5 +339,56 @@ describe('probationLimits — closed to the spec-named limits at v0.7.0 (zero-de
     expect(SellerTrustStateSchema.safeParse(validTrustState({ maxOrderValueFcfa: -1 })).success).toBe(false);
     expect(SellerTrustStateSchema.safeParse(validTrustState({ maxOrderValueFcfa: 25_000.5 })).success).toBe(false);
     expect(SellerTrustStateSchema.safeParse(validTrustState({ maxActiveOrders: 'one' })).success).toBe(false);
+  });
+});
+
+describe('Storefront — Seller #001 aggregate fields (WO-5.13, additive)', () => {
+  const valid = (): Record<string, unknown> => ({
+    id: 'sf_001',
+    resellerId: 'rs_001',
+    slug: 'chez-aicha',
+    discoverable: true,
+    curatedItems: ['lst_001'],
+    name: 'Chez Aïcha',
+    zone: 'Rood Woko, Ouagadougou',
+    category: 'Cosmétiques',
+    createdAt: '2026-07-13T09:00:00Z',
+    updatedAt: '2026-07-13T09:00:00Z',
+  });
+
+  it('accepts a fully-populated storefront (both directions: valid parses)', () => {
+    expect(StorefrontSchema.safeParse(valid()).success).toBe(true);
+  });
+
+  it('REJECTS an empty name (min 1)', () => {
+    const r = StorefrontSchema.safeParse({ ...valid(), name: '' });
+    expect(r.success).toBe(false);
+    expect(JSON.stringify(r.error?.issues)).toContain('name');
+  });
+
+  it('REJECTS a name past the boundary guard (max 120)', () => {
+    const r = StorefrontSchema.safeParse({ ...valid(), name: 'x'.repeat(121) });
+    expect(r.success).toBe(false);
+    expect(JSON.stringify(r.error?.issues)).toContain('name');
+  });
+
+  it.each(['createdAt', 'updatedAt', 'zone', 'category'])('REJECTS a missing required field: %s', (field) => {
+    const obj = valid();
+    delete obj[field];
+    const r = StorefrontSchema.safeParse(obj);
+    expect(r.success).toBe(false);
+    expect(JSON.stringify(r.error?.issues)).toContain(field);
+  });
+
+  it('REJECTS a stray field under .strict()', () => {
+    const r = StorefrontSchema.safeParse({ ...valid(), reputationScore: 5 });
+    expect(r.success).toBe(false);
+  });
+
+  it('leaves the pre-existing fields intact (additive — old required fields still enforced)', () => {
+    // discoverable was already required; still is (not re-added, not loosened).
+    const obj = valid();
+    delete obj.discoverable;
+    expect(StorefrontSchema.safeParse(obj).success).toBe(false);
   });
 });
