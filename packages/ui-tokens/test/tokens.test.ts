@@ -1,5 +1,5 @@
 import { describe, expect, it, expectTypeOf } from 'vitest';
-import { boutikPlusTheme, seraTheme, shopPlusTheme, themes } from '../src/themes.js';
+import { boutikPlusTheme, seraTheme, shopPlusTheme, themes } from '../src/legacy/themes.js';
 import {
   band,
   celebration,
@@ -17,7 +17,7 @@ import {
   touch,
   type,
   type Theme,
-} from '../src/family.js';
+} from '../src/legacy/family.js';
 
 // ── Grand Teint — canon v0.8.0 (WO-5.0) ─────────────────────────────────────
 // The values themselves are machine-verified against docs/design/tokens.json

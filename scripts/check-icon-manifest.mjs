@@ -11,7 +11,9 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dir = join(root, 'assets', 'icons');
 const manifest = JSON.parse(readFileSync(join(dir, 'icons.manifest.json'), 'utf8'));
-const tokens = JSON.parse(readFileSync(join(root, 'docs', 'design', 'tokens.json'), 'utf8'));
+// WO-FP-0: the icon set is a Grand Teint asset (landmark.iconNames); it stays on
+// the v1 source while Faso Premium (tokens.json) takes the root this wave.
+const tokens = JSON.parse(readFileSync(join(root, 'docs', 'design', 'tokens.grand-teint.json'), 'utf8'));
 
 const problems = [];
 let total = 0;
