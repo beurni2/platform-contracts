@@ -1,6 +1,6 @@
 {
   "name": "platform-contracts",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "private": true,
   "description": "Boutik+ × Shop+ × Séra — canonical contracts, kernel types, i18n catalog + French Voice copy-lint, ui design tokens. Consumed by app repos as a pinned versioned package.",
   "license": "UNLICENSED",

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TrimmedNonEmptyString } from './strings.js';
 
 /**
  * Phone-alias identity (spec §5.1, all apps): the phone number is an alias,
@@ -8,18 +9,14 @@ import { z } from 'zod';
 declare const PhoneAliasBrand: unique symbol;
 export type PhoneAlias = string & { readonly [PhoneAliasBrand]: 'PhoneAlias' };
 
-export const PhoneAliasSchema = z
-  .string()
-  .min(1)
-  .transform((v) => v as PhoneAlias);
+// WO-5.14: identity-class — trimmed non-empty (phone alias is the identity handle).
+export const PhoneAliasSchema = TrimmedNonEmptyString.transform((v) => v as PhoneAlias);
 
 declare const UserIdBrand: unique symbol;
 export type UserId = string & { readonly [UserIdBrand]: 'UserId' };
 
-export const UserIdSchema = z
-  .string()
-  .min(1)
-  .transform((v) => v as UserId);
+// WO-5.14: id-class — trimmed non-empty.
+export const UserIdSchema = TrimmedNonEmptyString.transform((v) => v as UserId);
 
 export const VerifiedPhoneAliasSchema = z.object({
   alias: PhoneAliasSchema,

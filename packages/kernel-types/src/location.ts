@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TrimmedNonEmptyString } from './strings.js';
 
 /**
  * No-street-address Location (spec §5.6, all apps):
@@ -8,8 +9,8 @@ import { z } from 'zod';
 export const LocationSchema = z
   .object({
     pin: z.object({ lat: z.number(), lng: z.number() }),
-    zone: z.string().min(1),
-    landmark: z.string().min(1),
+    zone: TrimmedNonEmptyString, // WO-5.14 display string (delivery-route zone) — trimmed non-empty
+    landmark: TrimmedNonEmptyString, // WO-5.14 display/name string — trimmed non-empty
     directions: z.string(),
     maskedRelay: z.string(),
   })

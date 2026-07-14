@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { computeWaterfall } from '../src/money/waterfall.js';
 import { QuoteSchema } from '../src/shapes/quote.js';
-import { OrderSchema, StorefrontSchema } from '../src/shapes/commerce.js';
+import { OrderSchema, StorefrontSchema, UserSchema } from '../src/shapes/commerce.js';
 import { DELIVERY_FAILURE_REASONS, DELIVERY_OUTCOME_FAMILIES, ORDER_STATUSES } from '../src/enums.js';
 import { DeliveryOutcomeSchema } from '../src/shapes/custody.js';
 import { EscrowTxnSchema, PaymentLegSchema, SellerTrustStateSchema } from '../src/shapes/settlement.js';
@@ -10,6 +10,7 @@ import {
   HandoffAuthorizationSchema,
   PackageReadinessConfirmationSchema,
 } from '../src/shapes/custody.js';
+import { IdSchema, TrimmedNonEmptyString } from '../src/shapes/common.js';
 
 function validQuote(): Record<string, unknown> {
   const money = computeWaterfall({
@@ -390,5 +391,87 @@ describe('Storefront — Seller #001 aggregate fields (WO-5.13, additive)', () =
     const obj = valid();
     delete obj.discoverable;
     expect(StorefrontSchema.safeParse(obj).success).toBe(false);
+  });
+});
+
+// WO-5.14 — the whitespace tightening (founder ruling 2026-07-15). Id-class and
+// name-class / display strings are trimmed non-empty: whitespace-only AND
+// surrounding-whitespace values are refused; internal whitespace is preserved.
+describe('WO-5.14 — trimmed-non-empty (IdSchema + name/zone/category)', () => {
+  const REFUSE = ['', ' ', '  ', '\t', '\n', ' x', 'x ', ' Chez', 'Aïcha ', '\tx'];
+  const ACCEPT = ['q_001', 'sf_001', 'Chez Aïcha', 'Rood Woko, Ouagadougou', 'Cosmétiques', 'a\nb'];
+
+  it.each(ACCEPT)('IdSchema / TrimmedNonEmptyString ACCEPTS a clean value: %j', (v) => {
+    expect(IdSchema.safeParse(v).success).toBe(true);
+    expect(TrimmedNonEmptyString.safeParse(v).success).toBe(true);
+  });
+
+  it.each(REFUSE)('IdSchema / TrimmedNonEmptyString REFUSES a whitespace-only/untrimmed value: %j', (v) => {
+    expect(IdSchema.safeParse(v).success).toBe(false);
+    expect(TrimmedNonEmptyString.safeParse(v).success).toBe(false);
+  });
+
+  const validStorefront = () => ({
+    id: 'sf_001',
+    resellerId: 'rs_001',
+    slug: 'chez-aicha',
+    discoverable: true,
+    curatedItems: ['lst_001'],
+    name: 'Chez Aïcha',
+    zone: 'Rood Woko, Ouagadougou',
+    category: 'Cosmétiques',
+    createdAt: '2026-07-15T09:00:00Z',
+    updatedAt: '2026-07-15T09:00:00Z',
+  });
+
+  it('the tightening reaches real shape fields — a whitespace-only id / name / zone / category is refused ON that field', () => {
+    for (const field of ['id', 'resellerId', 'name', 'zone', 'category'] as const) {
+      for (const bad of [' ', '\t', '']) {
+        const obj = { ...validStorefront(), [field]: bad };
+        const r = StorefrontSchema.safeParse(obj);
+        expect(r.success).toBe(false);
+        expect(JSON.stringify(r.error?.issues)).toContain(field);
+      }
+    }
+  });
+
+  it('internal whitespace is preserved (a name/zone with internal spaces still parses)', () => {
+    expect(StorefrontSchema.safeParse(validStorefront()).success).toBe(true);
+  });
+
+  // The tightening lives in @platform/kernel-types (UserId, PhoneAlias, Location.zone/
+  // landmark) and must reach shapes typed by them: User.id, User.phoneAlias.alias,
+  // Order.dropoff.zone/landmark. (UserId/PhoneAlias serialize opaquely in the snapshot
+  // because of their brand `.transform`, so this behavioural test is their drift-lock.)
+  const validUser = () => ({
+    id: 'u_001',
+    phoneAlias: { alias: '+22670000000', verified: true, unique: true as const },
+    roles: { supplier: false, reseller: true, buyer: false },
+    trustState: 'provisional',
+  });
+  const validOrder = () => ({
+    id: 'o_001', quoteId: 'q_001', productVersionId: 'pv_001', supplierId: 'sup_001',
+    resellerId: 'rs_001', buyerPhoneRef: 'by_001',
+    dropoff: { pin: { lat: 12.3714, lng: -1.5197 }, zone: 'Ouaga 2000', landmark: 'En face de la pharmacie', directions: 'Portail vert', maskedRelay: 'relay_1' },
+    reservationRef: 'rsv_001', escrowRef: 'esc_001', paymentMode: 'FULL_PREPAY', status: 'confirmed',
+    timestamps: { createdAt: '2026-07-15T10:00:00Z' },
+  });
+
+  it('kernel-types id/identity tightening reaches User.id and User.phoneAlias.alias', () => {
+    expect(UserSchema.safeParse(validUser()).success).toBe(true);
+    for (const bad of [' ', '\t', '', ' u', 'u ']) {
+      expect(UserSchema.safeParse({ ...validUser(), id: bad }).success).toBe(false);
+      expect(UserSchema.safeParse({ ...validUser(), phoneAlias: { alias: bad, verified: true, unique: true } }).success).toBe(false);
+    }
+  });
+
+  it('kernel-types display tightening reaches Order.dropoff.zone and .landmark (the delivery-route zone)', () => {
+    expect(OrderSchema.safeParse(validOrder()).success).toBe(true);
+    for (const field of ['zone', 'landmark'] as const) {
+      for (const bad of [' ', '\t', '', ' x', 'x ']) {
+        const obj = { ...validOrder(), dropoff: { ...validOrder().dropoff, [field]: bad } };
+        expect(OrderSchema.safeParse(obj).success).toBe(false);
+      }
+    }
   });
 });
