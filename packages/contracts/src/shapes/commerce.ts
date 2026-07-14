@@ -119,7 +119,15 @@ export const ResellerListingSchema = z
   .strict();
 export type ResellerListing = z.infer<typeof ResellerListingSchema>;
 
-/** §5.6 Storefront. */
+/**
+ * §5.6 Storefront. OWNER: Shop+ (§5.2 "owns Storefront & Attribution").
+ * WO-5.13 (SP0.2 — "reseller activation (store name/zone/category focus)",
+ * Shop-Plus-Building-Plan:34): the Seller #001 aggregate fields are added
+ * ADDITIVELY — every field above `name` is byte-unchanged. `zone` and `category`
+ * are free DISPLAY STRINGS (« Rood Woko, Ouagadougou » precedent, copy.md:157); a
+ * zone enum / gazetteer and the category-floor taxonomy are FOUNDER DECISIONS and
+ * do NOT enter this shape. See docs/derivations/STOREFRONT-FIELDS.md.
+ */
 export const StorefrontSchema = z
   .object({
     id: IdSchema,
@@ -127,6 +135,12 @@ export const StorefrontSchema = z
     slug: z.string().min(1),
     discoverable: z.boolean(),
     curatedItems: z.array(IdSchema),
+    // WO-5.13 — additive: the Seller #001 aggregate fields (SP0.2).
+    name: z.string().min(1).max(120), // .max(120) is a boundary guard, not a canon value (founder-overridable)
+    zone: z.string().min(1), // display string — no zone enum (founder decision)
+    category: z.string().min(1), // display string — no category floor (open founder decision)
+    createdAt: IsoTimestampSchema,
+    updatedAt: IsoTimestampSchema,
   })
   .strict();
 export type Storefront = z.infer<typeof StorefrontSchema>;
