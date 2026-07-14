@@ -14,20 +14,22 @@ cp "$ROOT/scripts/token-surface.data.mjs" "$TMP/"           # shared lists the g
 sed "s#join(dirname(fileURLToPath(import.meta.url)), '..')#'$TMP'#" \
   "$ROOT/scripts/check-token-coverage.mjs" > "$TMP/check.mjs"
 
-FAMILY="$TMP/packages/ui-tokens/dist/family.js"
+# the Faso Premium built module, re-exported by dist/index.js (the FP entry the
+# coverage gate imports) — a stray here surfaces on the primary surface.
+FAMILY="$TMP/packages/ui-tokens/dist/faso-premium.js"
 run_gate() { node "$TMP/check.mjs" >/dev/null 2>&1; echo $?; }
 
 # ── Tamper A: a STRAY TOP-LEVEL export owned by no gate (the designer's `icon`) ─
 printf '\nexport const icon = { badge: { size: 12 } };\n' >> "$FAMILY"
 codeA="$(run_gate)"
-cp "$ROOT/packages/ui-tokens/dist/family.js" "$FAMILY"      # restore pristine
+cp "$ROOT/packages/ui-tokens/dist/faso-premium.js" "$FAMILY"   # restore pristine
 
-# ── Tamper B: a STRAY LEAF on the QR block (WO-5.11 — dimension.qr) ────────────
-printf '\nObject.assign(dimension.qr, { strayLeaf: 99 });\n' >> "$FAMILY"
+# ── Tamper B: a STRAY LEAF on an FP value group (motion.fpIn) ──────────────────
+printf '\nObject.assign(motion.fpIn, { strayLeaf: 99 });\n' >> "$FAMILY"
 codeB="$(run_gate)"
 
 if [ "$codeA" -eq 1 ] && [ "$codeB" -eq 1 ]; then
-  echo "token-coverage negative OK: stray top-level export 'icon' rejected (exit $codeA); stray leaf 'dimension.qr.strayLeaf' rejected (exit $codeB)"
+  echo "token-coverage negative OK: stray top-level export 'icon' rejected (exit $codeA); stray leaf 'motion.fpIn.strayLeaf' rejected (exit $codeB)"
   exit 1   # both caught — the fixture failed as required (harness expects 'fail')
 fi
 echo "NEGATIVE FIXTURE MISBEHAVED — stray-export exit $codeA, stray-leaf exit $codeB (expected 1 and 1)"

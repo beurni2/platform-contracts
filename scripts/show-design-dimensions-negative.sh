@@ -18,11 +18,11 @@ sed "s#join(dirname(fileURLToPath(import.meta.url)), '..')#'$TMP'#" \
 
 run_gate() { node "$TMP/check.mjs" >/dev/null 2>&1; echo $?; }
 
-# ── Tamper A: a BAD TOKEN VALUE in the built dist (haloPx 220 → 221) ──────────
-sed -i 's/haloPx: 220/haloPx: 221/' "$TMP/packages/ui-tokens/dist/family.js"
+# ── Tamper A: a BAD TOKEN VALUE in the built Grand Teint dist (haloPx 220 → 221) ─
+sed -i 's/haloPx: 220/haloPx: 221/' "$TMP/packages/ui-tokens/dist/legacy/family.js"
 codeA="$(run_gate)"
 # restore the built value; leave the doc pristine
-cp "$ROOT/packages/ui-tokens/dist/family.js" "$TMP/packages/ui-tokens/dist/family.js"
+cp "$ROOT/packages/ui-tokens/dist/legacy/family.js" "$TMP/packages/ui-tokens/dist/legacy/family.js"
 
 # ── Tamper B: a BAD DOC (motion.md 220px → 221px) — value now unstated ────────
 sed -i 's/220px/221px/' "$TMP/docs/design/motion.md"

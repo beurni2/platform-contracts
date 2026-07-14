@@ -11,15 +11,15 @@ mkdir -p "$TMP/packages"
 cp -r "$ROOT/packages/ui-tokens" "$TMP/packages/ui-tokens"
 cp -r "$ROOT/docs" "$TMP/docs"
 cp "$ROOT/scripts/token-surface.data.mjs" "$TMP/"   # WO-5.7: gate imports the shared lists
-# tamper: one hex digit in the BUILT dist (#C2571B shop primary -> #C2571C)
-sed -i 's/#C2571B/#C2571C/' "$TMP/packages/ui-tokens/dist/family.js"
+# tamper: one hex digit in the BUILT Faso Premium dist (#A31D4E shop primary -> #A31D4F)
+sed -i 's/#A31D4E/#A31D4F/' "$TMP/packages/ui-tokens/dist/faso-premium.js"
 # fidelity check rooted at the tampered tree
 sed "s#join(dirname(fileURLToPath(import.meta.url)), '..')#'$TMP'#" \
   "$ROOT/scripts/check-token-fidelity.mjs" > "$TMP/check.mjs"
 node "$TMP/check.mjs" >/dev/null 2>&1
 code=$?
 if [ "$code" -eq 1 ]; then
-  echo "token-fidelity negative OK: altered #C2571B→#C2571C rejected (exit 1)"
+  echo "token-fidelity negative OK: altered Faso Premium #A31D4E→#A31D4F rejected (exit 1)"
   exit 1   # the fixture failed as required — harness expects 'fail'
 fi
 echo "NEGATIVE FIXTURE MISBEHAVED — check exited $code (expected 1: caught)"

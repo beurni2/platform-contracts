@@ -1,7 +1,7 @@
 {
   "name": "@platform/ui-tokens",
-  "version": "0.9.10",
-  "description": "Design tokens — color, type scale, spacing, radius, elevation, motion — one family DNA, three app themes (Boutik+, Shop+, Séra). Tokens only at v0.1.0; no components.",
+  "version": "1.0.0",
+  "description": "Design tokens — color, type scale, radius, geometry, motion. Faso Premium (v2, four app accents) at the root; Grand Teint (v1) preserved at ./legacy for the transition window. Tokens only; no components.",
   "license": "UNLICENSED",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,6 +10,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./legacy": {
+      "types": "./dist/legacy/index.d.ts",
+      "import": "./dist/legacy/index.js"
     },
     "./dist/*": "./dist/*",
     "./package.json": "./package.json"

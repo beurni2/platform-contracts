@@ -1,11 +1,13 @@
-import { boutikPlusTheme, sharedColour } from '@platform/ui-tokens';
+import { boutikPlusTheme, sharedColour } from '@platform/ui-tokens/legacy';
 import { NINE_CHAIN_IDS } from './steps.js';
 import type { ChainReport } from './runner.js';
 
 /**
  * The E1 "basic dashboard" seed (Contract E1 exit): a static HTML chain
- * report. Grand Teint family surfaces (v0.8.0), one clear verdict, the nine-id
- * chain visible at a glance — sparse, never careless.
+ * report. Grand Teint family surfaces, one clear verdict, the nine-id chain
+ * visible at a glance — sparse, never careless. WO-FP-0: this internal E1
+ * dashboard stays on Grand Teint (v1) this wave, consumed via the ./legacy
+ * path while Faso Premium takes the root; its reskin is a later named slice.
  */
 const c = {
   surface: sharedColour.paper,
