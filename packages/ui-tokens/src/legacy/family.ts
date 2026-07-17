@@ -180,7 +180,7 @@ export const celebration = {
 
 // ── money ─────────────────────────────────────────────────────────────────
 /** money — l'argent en majesté; tabular always, narrow-space group separator
- * (U+202F), narrow-space + F suffix; abbreviation and truncation forbidden. */
+ * (U+202F), narrow-space + FCFA suffix; abbreviation and truncation forbidden. */
 export const money = {
   amountScale: {
     hero: { size: 52, lh: 1.0, wght: 900 },
@@ -190,7 +190,7 @@ export const money = {
   },
   tabular: true,
   groupSeparator: ' ',
-  currencySuffix: ' F',
+  currencySuffix: ' FCFA',
   abbreviation: 'forbidden',
   truncation: 'forbidden',
   countUpMs: 560,

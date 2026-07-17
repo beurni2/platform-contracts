@@ -34,7 +34,7 @@ t≈860    layer self-removes; the state underneath is already true
 
 **1 · « Produit prêt » — Boutik+ (B7).** Trigger: press « CONFIRMER : PRODUIT PRÊT ». Motif: woven diamond (losange tissé), supply green `#1F4D36` + ochre `#D9A441`. Badge: green block « PRODUIT PRÊT ». Under the layer, the screen has already flipped to the confirmed panel with « Dès que c'est confirmé, Séra vient chercher le colis. » + « Avant ce soir 18 h. » *Feeling: my work is ready, and the system saw it.*
 
-**2 · « Première vente » — Shop+ (S6).** Trigger: first validated sale lands. Motif: woven diamond, terracotta `#C2571B` + ochre. Badge « PREMIÈRE VENTE ». Simultaneous **count-up 0 → 2 000 F in 560 ms** (outCubic, tnum). Chip « PREMIÈRE VENTE ! » persists after the layer leaves — the celebration ends, the fact remains. *Feeling: I earned this, and it's mine.*
+**2 · « Première vente » — Shop+ (S6).** Trigger: first validated sale lands. Motif: woven diamond, terracotta `#C2571B` + ochre. Badge « PREMIÈRE VENTE ». Simultaneous **count-up 0 → 2 000 FCFA in 560 ms** (outCubic, tnum). Chip « PREMIÈRE VENTE ! » persists after the layer leaves — the celebration ends, the fact remains. *Feeling: I earned this, and it's mine.*
 
 **3 · « Course validée » — Séra (R11).** Trigger: drop code validated. Motif: **road chevrons** (not weave — his language is the road), ink + amber `#B98A1F`, rays offset 18°. Badge: ink block, amber text « COURSE VALIDÉE ». *Feeling: the proof is complete.*
 

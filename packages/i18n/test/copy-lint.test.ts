@@ -25,10 +25,13 @@ describe('copy-lint — seed catalog (canonical Shop+ §6.1 checkout strings)', 
 
   it('the seed contains the required §6.1 strings, tagged register: money', () => {
     const byKey = new Map(seedCatalog.map((e) => [e.key, e]));
-    expect(byKey.get('checkout.pay_now_line')?.fr).toBe('À payer maintenant : {X} F');
-    expect(byKey.get('checkout.pay_at_delivery_line')?.fr).toBe('À payer à la livraison : {Y} F');
+    expect(byKey.get('checkout.pay_now_line')?.fr).toBe('À payer maintenant : {X} FCFA');
+    expect(byKey.get('checkout.pay_at_delivery_line')?.fr).toBe('À payer à la livraison : {Y} FCFA');
+    // the 4th changed money string (Option B body) — its « {D} FCFA » suffix is asserted
+    // too, so all four §6.1 money strings are guarded against a « F » regression, not three.
+    expect(byKey.get('checkout.option_b.body')?.fr).toContain('({D} FCFA)');
     expect(byKey.get('checkout.replay_line')?.fr).toBe(
-      "Vous payez {X} F maintenant et {Y} F à la livraison — d'accord ?",
+      "Vous payez {X} FCFA maintenant et {Y} FCFA à la livraison — d'accord ?",
     );
     expect(byKey.get('checkout.option_b.fee_warning')?.fr).toContain('non remboursables');
     for (const entry of seedCatalog) {

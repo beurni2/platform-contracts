@@ -2,7 +2,7 @@
 
 **Date : 10 juillet 2026 · Monde épinglé : canon `be1df7a` · sera `77f12bc` · boutik-plus `76ef6aa` · shop-plus `0a8068f`**
 
-Une seule commande — un pagne tissé main à 10 000 F CFA — est partie d'un
+Une seule commande — un pagne tissé main à 10 000 FCFA — est partie d'un
 fournisseur Boutik+, a trouvé son acheteur par un lien signé Shop+, et a été
 livrée par Séra contre le code de retrait. Chaque étape a tourné sur le vrai
 code des trois applications, épinglé commit par commit. Rien n'a été simulé
@@ -15,9 +15,9 @@ sauf le prestataire de paiement, qui reste un bac à sable certifié.
 Les neuf identifiants sont là, tous distincts :
 `quote_e1live → rsv_e1live → payatt_e1live → order_e1live → pkg_e1live →
 dtask_e1live → val-order_e1live → sob_supplier_e1live → payout_e1live`.
-L'argent tombe juste, au franc près : total acheteur **12 500 F** (retenu par
-le prestataire) · fournisseur **8 500 F** · revendeur **2 000 F** · plateforme
-**1 000 F** — montants **copiés** du devis, jamais recalculés.
+L'argent tombe juste, au franc près : total acheteur **12 500 FCFA** (retenu par
+le prestataire) · fournisseur **8 500 FCFA** · revendeur **2 000 FCFA** · plateforme
+**1 000 FCFA** — montants **copiés** du devis, jamais recalculés.
 *Preuve : `logs/e1-run.txt` · le devis vérifié en direct par
 `assertQuoteReconciles` à l'étape 6.*
 

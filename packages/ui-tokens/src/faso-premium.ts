@@ -133,7 +133,7 @@ export const type = {
     pill: { size: 11, wght: 700 },
   },
   $note:
-    "Money values and codes render font-feature-settings:'tnum' + white-space:nowrap, format fr-FR grouping + narrow-space F (« 11 500 F ») — a rendering rule carried verbatim from the README type section; the franc formatter itself stays the Grand Teint money group for this wave. `body` carries no weight in the README, so none is encoded (derive-never-invent). `titleLetterSpacing` transcribes the README's typographic U+2212 minus to the functional CSS value -.02em.",
+    "Money values and codes render font-feature-settings:'tnum' + white-space:nowrap, format fr-FR grouping + narrow-space FCFA (« 11 500 FCFA ») — a rendering rule carried verbatim from the README type section; the franc formatter itself stays the Grand Teint money group for this wave (its currencySuffix is « FCFA », founder ruling WO-FCFA). `body` carries no weight in the README, so none is encoded (derive-never-invent). `titleLetterSpacing` transcribes the README's typographic U+2212 minus to the functional CSS value -.02em.",
 } as const;
 
 // ── radius — px; art + secondary-button are ranges (README § Geometry). ────────
