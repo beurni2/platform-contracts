@@ -150,7 +150,7 @@
     },
     "tabular": true,
     "groupSeparator": "\u202f",
-    "currencySuffix": "\u202fF",
+    "currencySuffix": "\u202fFCFA",
     "abbreviation": "forbidden",
     "truncation": "forbidden",
     "countUpMs": 560,

@@ -1,13 +1,13 @@
 [
   {
     "key": "checkout.pay_now_line",
-    "fr": "À payer maintenant : {X} F",
+    "fr": "À payer maintenant : {X} FCFA",
     "register": "money",
     "screenClass": "checkout"
   },
   {
     "key": "checkout.pay_at_delivery_line",
-    "fr": "À payer à la livraison : {Y} F",
+    "fr": "À payer à la livraison : {Y} FCFA",
     "register": "money",
     "screenClass": "checkout"
   },
@@ -32,7 +32,7 @@
   },
   {
     "key": "checkout.option_b.body",
-    "fr": "Payez seulement les frais de livraison ({D} F) maintenant. À l'arrivée du livreur, vérifiez votre article, puis payez le montant du produit de manière sécurisée avant de le recevoir.",
+    "fr": "Payez seulement les frais de livraison ({D} FCFA) maintenant. À l'arrivée du livreur, vérifiez votre article, puis payez le montant du produit de manière sécurisée avant de le recevoir.",
     "register": "money",
     "screenClass": "checkout",
     "audioScriptRef": "audio/checkout/option-b.fr"
@@ -45,7 +45,7 @@
   },
   {
     "key": "checkout.replay_line",
-    "fr": "Vous payez {X} F maintenant et {Y} F à la livraison — d'accord ?",
+    "fr": "Vous payez {X} FCFA maintenant et {Y} FCFA à la livraison — d'accord ?",
     "register": "money",
     "screenClass": "checkout"
   }

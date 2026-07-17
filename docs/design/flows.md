@@ -47,7 +47,7 @@ B4 Studio (permission → cadrage héro → capture → cadrage preuve → captu
    ├ permission refusée → import galerie (repli honnête, mêmes guides)
    └ échec capture → bandeau « réessayez », shutter reste
 B5 ──GARDER──▶ B6 Offre ──PUBLIER──▶ [offre en ligne]     B5 ──REPRENDRE──▶ B4 (même coût de geste)
-B6 : net recalculé en direct (count-up ≤600 ms) · sous le plancher (8 000 F) → CTA bloqué, refus gentil · re-offre v2 (v1 servie jusqu'à validation)
+B6 : net recalculé en direct (count-up ≤600 ms) · sous le plancher (8 000 FCFA) → CTA bloqué, refus gentil · re-offre v2 (v1 servie jusqu'à validation)
 [commande payée] ──▶ B7 Produit prêt ──CONFIRMER (checklist gate)──▶ envoi → confirmé + célébration #1
    ├ hors ligne → file « C'est noté » (pas de célébration avant confirmation)
    └ réseau lent → « envoyé — en attente »

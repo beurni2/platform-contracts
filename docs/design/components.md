@@ -85,7 +85,7 @@ Wrap row gap 7; chip = zone-chip style (hairline; selected = ink fill `onInk`). 
 
 ### ProductCard (premium frame — Boutik+/Shop+ signature)
 - **Anatomy:** photo slot (sand bg, **corner ticks ×4**, exact aspect 4:5) + caption bar « Photo réelle — ce que vous recevrez. » + name `title` + PriceBand-mini or row amount + StatusChip.
-- **Shop+ variant law:** leads with « Vous gagnez 2 000 F net » (net first, always).
+- **Shop+ variant law:** leads with « Vous gagnez 2 000 FCFA net » (net first, always).
 - **States:** default · loading (photo skeleton, ticks persist) · paused/out-of-stock (ÉPUISÉ overlay chip, band muted) · pressed.
 - **Size:** grid 164×246 or list row h 96 (fixed heights for virtualization).
 - **RN:** Image sized exactly to slot; ticks are 4 absolute Views. ✓
@@ -104,10 +104,10 @@ Wrap row gap 7; chip = zone-chip style (hairline; selected = ink fill `onInk`). 
 Exact bytes that will ship, rendered inside ProductCard's premium frame at final size. Two equal buttons: REPRENDRE (hairline) / GARDER (ink) — same gesture cost. States: preview · retake · confirm-pending (offline queue). RN ✓.
 
 ### ReceiptCard / PriceBreakdown (staged as proof)
-Ink box table: product line · « Livraison Séra — jamais cachée » · TOTAL row (1.5 px top border, 900) · **reconcile line** under the box (`money.reconcileLine`): « 12 500 = 11 500 + 1 000 — chaque franc a sa place. » Seller variant heroes « Vous recevrez 8 500 F ». States: default · pending amounts (muted + chip) · settled. RN ✓.
+Ink box table: product line · « Livraison Séra — jamais cachée » · TOTAL row (1.5 px top border, 900) · **reconcile line** under the box (`money.reconcileLine`): « 12 500 = 11 500 + 1 000 — chaque franc a sa place. » Seller variant heroes « Vous recevrez 8 500 FCFA ». States: default · pending amounts (muted + chip) · settled. RN ✓.
 
 ### AmountInput (franc entry)
-Hairline 1.5 box h 56; amount `page` scale `tnum` right-aligned; « F » suffix fixed; opens **numeric keypad** (`keyboardType="number-pad"`); keyboard never covers the CTA (screen scrolls, CTA pinned above keyboard). States: empty (0 muted) · typing · **below-floor refusal** (kind: « Le prix plancher de cette catégorie est 4 000 F. » — warningTint, never red-scold) · live-net recompute (count-up on the linked « Vous recevrez » hero). RN: TextInput. ✓
+Hairline 1.5 box h 56; amount `page` scale `tnum` right-aligned; « FCFA » suffix fixed; opens **numeric keypad** (`keyboardType="number-pad"`); keyboard never covers the CTA (screen scrolls, CTA pinned above keyboard). States: empty (0 muted) · typing · **below-floor refusal** (kind: « Le prix plancher de cette catégorie est 4 000 FCFA. » — warningTint, never red-scold) · live-net recompute (count-up on the linked « Vous recevrez » hero). RN: TextInput. ✓
 
 ### VoiceNoteRecorder
 Idle: hairline btn mic + « ENREGISTRER LE REPÈRE ». Recording: ink block, pulsing red dot 10 px + mm:ss `tnum` + ARRÊTER chip. Recorded: play btn 38 ink + static waveform SVG + duration + REFAIRE link. Queued-offline: PendingNotice inline. Mic-refused: sand box, honest text fallback. Max 30 s. RN: expo-av (shipped) + Views. ✓

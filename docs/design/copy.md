@@ -2,7 +2,7 @@
 ### French Voice · 6th-grade register · every string tagged · v1.0.0
 
 Registers: **`money`** (calm, precise, reassuring) · **`selling`** (warm, familiar) · **`neutral`** (wayfinding, labels).
-Rule: no administrative French; no word a market seller wouldn't say out loud. Amounts always full, tabular, « 11 500 F ».
+Rule: no administrative French; no word a market seller wouldn't say out loud. Amounts always full, tabular, « 11 500 FCFA ».
 
 ## Chrome (all surfaces)
 
@@ -70,21 +70,21 @@ Rule: no administrative French; no word a market seller wouldn't say out loud. A
 | « LE PAIEMENT » · « COMMENT PAYER ? » | neutral |
 | « Livraison Séra — jamais cachée » | money |
 | reconcile line « 12 500 = 11 500 + 1 000 — chaque franc a sa place. » | money |
-| « TOUT PAYER MAINTENANT » — « 12 500 F maintenant, en sécurité. Rien à payer à la porte. » | money |
-| « PAYER À LA LIVRAISON » — « 1 000 F maintenant — et 11 500 F à la porte, après votre inspection. » | money |
+| « TOUT PAYER MAINTENANT » — « 12 500 FCFA maintenant, en sécurité. Rien à payer à la porte. » | money |
+| « PAYER À LA LIVRAISON » — « 1 000 FCFA maintenant — et 11 500 FCFA à la porte, après votre inspection. » | money |
 | B ineligible « Pas disponible pour cette commande. Vous pouvez tout payer maintenant, en sécurité — et toujours inspecter avant d'accepter. » | money |
 | « ÉCOUTER LA NOTE » | neutral |
 | quote « Vous inspectez le colis avant de payer le reste. » | money |
-| CTA « PAYER 12 500 F » / « PAYER 1 000 F MAINTENANT » / disabled « CHOISISSEZ POUR CONTINUER » | money |
+| CTA « PAYER 12 500 FCFA » / « PAYER 1 000 FCFA MAINTENANT » / disabled « CHOISISSEZ POUR CONTINUER » | money |
 | « ORANGE MONEY · MOOV MONEY » | neutral |
-| submitting « ENVOI SÉCURISÉ » — « Un instant. » — « Nous envoyons votre demande de paiement de 1 000 F à l'opérateur. » | money |
-| provider wait « Confirmez sur votre téléphone » — « Composez votre code secret Orange Money pour valider 1 000 F. » — « En attente de la confirmation de l'opérateur… » — « Rien n'est confirmé tant que l'opérateur n'a pas répondu. Nous ne dirons jamais le contraire. » | money |
+| submitting « ENVOI SÉCURISÉ » — « Un instant. » — « Nous envoyons votre demande de paiement de 1 000 FCFA à l'opérateur. » | money |
+| provider wait « Confirmez sur votre téléphone » — « Composez votre code secret Orange Money pour valider 1 000 FCFA. » — « En attente de la confirmation de l'opérateur… » — « Rien n'est confirmé tant que l'opérateur n'a pas répondu. Nous ne dirons jamais le contraire. » | money |
 
 ## C6 · La confirmation
 
 | String | Register |
 |---|---|
-| « Commande enregistrée. » — « Paiement de 1 000 F confirmé par l'opérateur. » | money |
+| « Commande enregistrée. » — « Paiement de 1 000 FCFA confirmé par l'opérateur. » | money |
 | next steps « Aïcha prépare votre commande » · « Séra vérifie et scelle le colis » · « Nous vous prévenons à chaque étape » | selling |
 | pending « C'est noté. » — « En attente du réseau. Votre commande est gardée sur ce téléphone — elle part dès que le réseau revient. » — chip « EN ATTENTE — JAMAIS PERDUE » | money |
 | offline « Hors ligne — rien n'est perdu. » — « Votre commande attend sur ce téléphone. Le paiement partira quand le réseau reviendra. Nous ne dirons jamais “payé” avant l'opérateur. » | money |
@@ -114,7 +114,7 @@ Rule: no administrative French; no word a market seller wouldn't say out loud. A
 | « Reste à payer, après inspection » | money |
 | « TOUT EST BON » · « UN PROBLÈME » | neutral |
 | « Les deux chemins se valent. Un refus justifié ne compte jamais contre vous. » | money |
-| leg-2 « Payez le reste, en sécurité » — « Composez votre code secret Orange Money pour valider 11 500 F. » — « Le livreur ne peut pas dire “payé” à votre place. Seul l'opérateur confirme. » | money |
+| leg-2 « Payez le reste, en sécurité » — « Composez votre code secret Orange Money pour valider 11 500 FCFA. » — « Le livreur ne peut pas dire “payé” à votre place. Seul l'opérateur confirme. » | money |
 | report « Qu'est-ce qui ne va pas ? » — « Dites-le simplement. Vous ne payez rien de plus. » | money |
 | reasons « Ce n'est pas le bon article » · « Il est abîmé » · « Il manque quelque chose » | neutral |
 | resolution « Le colis repart avec le livreur. Vous ne payez rien de plus. La commande reste protégée. » — « C'EST NOTÉ » | money |
@@ -144,7 +144,7 @@ Rule: no administrative French; no word a market seller wouldn't say out loud. A
 
 | String | Register |
 |---|---|
-| « Votre prix : 11 500 F » · chip « + 2 000 F NET » | money |
+| « Votre prix : 11 500 FCFA » · chip « + 2 000 FCFA NET » | money |
 | « ENVOYER LE LIEN » — « Le lien s'ouvre direct, avec l'aperçu du produit. » | selling |
 | « PUBLIER UNE IMAGE » — « Pour Instagram, TikTok et le Statut — le lien vit dans votre bio. » | selling |
 | « COPIER LE LIEN » / « LIEN COPIÉ » · « CODE : AÏCHA-4821 » · « écrit sur chaque carte » | neutral |
@@ -166,7 +166,7 @@ Rule: no administrative French; no word a market seller wouldn't say out loud. A
 | B4 échec « La photo n'a pas pu être prise — réessayez. » | neutral |
 | B5 « Ce que l'acheteur verra » — « Exactement ces images, exactement ces octets. Rien de retouché en route. » · « REPRENDRE » / « GARDER » · « Reprendre coûte le même geste que garder — c'est voulu. » · « La légende ci-dessus est celle que verra l'acheteur — votre nom n'y apparaît jamais. » | money/selling |
 | B6 « VOUS RECEVREZ » (héros) — « Payé après livraison validée. Aucun dépôt, jamais. » · « VOTRE PRIX » · « LA PART DE LA REVENDEUSE » — « Une part motivante fait vendre plus vite. C'est vous qui décidez. » · « Frais de service (5 %) » · reconcile « 8 500 = 10 000 − 1 000 − 500 — chaque franc a sa place. » | money |
-| B6 plancher « Le prix plancher des vêtements est 8 000 F — remontez un peu. C'est pour protéger la valeur de votre travail. » | money |
+| B6 plancher « Le prix plancher des vêtements est 8 000 FCFA — remontez un peu. C'est pour protéger la valeur de votre travail. » | money |
 | B6 v2 « Version 2 de votre offre. La v1 reste servie tant que la v2 n'est pas validée. » · « PUBLIER L'OFFRE » | money |
 | B7 files d'attente « Envoyé — en attente de confirmation. Le réseau est lent, rien n'est perdu. » · « C'est noté. En attente du réseau — votre confirmation partira toute seule. » | money |
 
@@ -174,12 +174,12 @@ Rule: no administrative French; no word a market seller wouldn't say out loud. A
 
 | String | Register |
 |---|---|
-| « VOUS GAGNEZ + 2 000 F NET » (première ligne de chaque carte) · « Prix conseillé : 11 500 F — livré par Séra » · « AJOUTER » / « AJOUTÉ ✓ » / « ÉPUISÉ » | money |
+| « VOUS GAGNEZ + 2 000 FCFA NET » (première ligne de chaque carte) · « Prix conseillé : 11 500 FCFA — livré par Séra » · « AJOUTER » / « AJOUTÉ ✓ » / « ÉPUISÉ » | money |
 | « Le net que vous voyez est déjà votre part — rien à calculer. » | money |
 | skeleton « Le catalogue arrive — même taille, même place, rien ne saute. » | neutral |
 | vide « Rien dans cette catégorie — pour l'instant. » — « Le catalogue grandit chaque semaine. Regardez une autre catégorie, ou revenez demain. » · « VOIR TOUT LE CATALOGUE » | selling |
 | hors ligne « Hors ligne : le catalogue affiché est celui d'hier soir. » | money |
-| S6 zéro « Votre première vente arrive. » — « Choisissez un produit, ajoutez votre marge, partagez votre lien. C'est tout — Séra et le paiement protégé font le reste. » · « 0 F aujourd'hui, c'est juste le point de départ. » · « CHOISIR UN PRODUIT » | selling |
+| S6 zéro « Votre première vente arrive. » — « Choisissez un produit, ajoutez votre marge, partagez votre lien. C'est tout — Séra et le paiement protégé font le reste. » · « 0 FCFA aujourd'hui, c'est juste le point de départ. » · « CHOISIR UN PRODUIT » | selling |
 | S6 « Réglé, sur votre compte » · « En attente — livraison validée » · reconcile « 6 040 = 4 040 + 2 000 — chaque franc a sa place. » · « Versement Orange Money en cours — sous 24 h. Nous vous prévenons quand c'est déposé. » · chips « RÉGLÉ » / « EN ATTENTE » | money |
 
 ## Séra R4–R6
@@ -196,4 +196,4 @@ Rule: no administrative French; no word a market seller wouldn't say out loud. A
 
 ## Le Cercle (gated — design-ahead)
 
-« PORTE FERMÉE — DESIGN-AHEAD (§7.7.1) » · « 34 clientes ont dit oui — elles choisissent, elles peuvent partir quand elles veulent, jamais plus de 2 messages par semaine. » (selling) · « Le consentement n'est pas un piège. » · recettes « PRIX DOUX » / « LIVRAISON OFFERTE » / « LA RECETTE QUARTIER » — « Une zone, un créneau : les commandes se groupent, la tournée se remplit — votre argent achète de la densité Séra. » (selling) · « Plafond : 2 000 F par commande — 80 % de (C + M). Au-delà, votre gain deviendrait négatif : la loi l'interdit. » (money) · « Au plafond, vous ne gagnez rien sur ces commandes. C'est permis — mais c'est votre choix, en pleine lumière. » (money) · « BUDGET TOTAL — DEPUIS VOS GAINS RÉGLÉS » — « L'argent en attente ne peut jamais servir — c'est la loi. » (money) · aperçu « VOUS DÉPENSEZ / VOUS GARDEZ » · « au maximum, réglés seulement » / « au moins, jamais négatif » · « Séra reçoit toujours 1 000 F par course : {part cliente} + {part campagne}. » · « LIVRAISON 100 % OFFERTE ⇒ TOUT PRÉPAYÉ » · « Une seule offre par commande. » (money) · parrainage « UN SEUL NIVEAU, POUR TOUJOURS. Pas d'arbre. Pas d'équipe. Pas de revenu sur le réseau. Ce n'est pas une fonctionnalité manquante — c'est un refus définitif. » (money) · reporting « Nous disons “attribué” — jamais “généré”. Nous ne réclamons que ce que nous pouvons prouver. » (money)
+« PORTE FERMÉE — DESIGN-AHEAD (§7.7.1) » · « 34 clientes ont dit oui — elles choisissent, elles peuvent partir quand elles veulent, jamais plus de 2 messages par semaine. » (selling) · « Le consentement n'est pas un piège. » · recettes « PRIX DOUX » / « LIVRAISON OFFERTE » / « LA RECETTE QUARTIER » — « Une zone, un créneau : les commandes se groupent, la tournée se remplit — votre argent achète de la densité Séra. » (selling) · « Plafond : 2 000 FCFA par commande — 80 % de (C + M). Au-delà, votre gain deviendrait négatif : la loi l'interdit. » (money) · « Au plafond, vous ne gagnez rien sur ces commandes. C'est permis — mais c'est votre choix, en pleine lumière. » (money) · « BUDGET TOTAL — DEPUIS VOS GAINS RÉGLÉS » — « L'argent en attente ne peut jamais servir — c'est la loi. » (money) · aperçu « VOUS DÉPENSEZ / VOUS GARDEZ » · « au maximum, réglés seulement » / « au moins, jamais négatif » · « Séra reçoit toujours 1 000 FCFA par course : {part cliente} + {part campagne}. » · « LIVRAISON 100 % OFFERTE ⇒ TOUT PRÉPAYÉ » · « Une seule offre par commande. » (money) · parrainage « UN SEUL NIVEAU, POUR TOUJOURS. Pas d'arbre. Pas d'équipe. Pas de revenu sur le réseau. Ce n'est pas une fonctionnalité manquante — c'est un refus définitif. » (money) · reporting « Nous disons “attribué” — jamais “généré”. Nous ne réclamons que ce que nous pouvons prouver. » (money)

@@ -79,7 +79,7 @@ describe("money — l'argent en majesté", () => {
     // U+202F NARROW NO-BREAK SPACE — the exact codepoint the designer specified
     expect(money.groupSeparator).toBe(' ');
     expect(money.groupSeparator.codePointAt(0)).toBe(0x202f);
-    expect(money.currencySuffix).toBe(' F');
+    expect(money.currencySuffix).toBe(' FCFA');
     expect(money.abbreviation).toBe('forbidden');
     expect(money.truncation).toBe('forbidden');
   });

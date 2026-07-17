@@ -1,14 +1,14 @@
 # PROPOSALS — semantic changes for the founder to rule on
 ### Nothing here is implemented as canon. Each is argued; you decide. · v1.0.0
 
-## 1 · A second delivery window at C4 (« Demain, 9 h – 12 h — 800 F »)
-**What the prototype shows:** two Séra quotes — today (1 000 F) and a cheaper grouped next-day window (800 F).
+## 1 · A second delivery window at C4 (« Demain, 9 h – 12 h — 800 FCFA »)
+**What the prototype shows:** two Séra quotes — today (1 000 FCFA) and a cheaper grouped next-day window (800 FCFA).
 **Why:** a grouped window buys **route density** (the same input la recette Quartier buys) and gives the buyer a real, honest choice; the cheaper number also softens sticker shock on D without hiding it.
 **Canon question:** does the Séra quote API express multiple windows? If not, C4 renders one quote and loses nothing.
 **Default if refused:** single-quote C4; the design degrades cleanly.
 
 ## 2 · `expo-haptics` (one dependency, founder approval required)
-Short haptic on: payment confirm, the three celebrations, refusal confirm. Zero frames, zero bytes of UI, makes a 40 000 F phone feel expensive. Deterministic, no data. **Ask:** approve the dependency for the three RN apps.
+Short haptic on: payment confirm, the three celebrations, refusal confirm. Zero frames, zero bytes of UI, makes a 40 000 FCFA phone feel expensive. Deterministic, no data. **Ask:** approve the dependency for the three RN apps.
 
 ## 3 · SMS mirror of the drop code
 C9 shows « Gardé aussi dans vos SMS — même sans réseau. » — the code survives a dead battery swap to a cousin's phone, app-kill, everything. Requires the payment/SMS provider to send one SMS at provider-confirmation. **Costs money per order; needs a provider contract answer.** If refused: the line is deleted; C9 keeps localStorage persistence only.
