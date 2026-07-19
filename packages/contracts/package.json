@@ -1,6 +1,6 @@
 {
   "name": "@platform/contracts",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Canonical shared contracts (shapes + events), the money waterfall (RoundingLaw v1), the four branded secrets, canonical JSON, and the docs drift-check CLI. Shapes live ONLY here; no app redefines them.",
   "license": "UNLICENSED",
   "type": "module",
@@ -36,7 +36,7 @@
     "prepare": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@platform/kernel-types": "1.0.1",
+    "@platform/kernel-types": "1.1.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {

@@ -120,6 +120,49 @@ export const ResellerListingSchema = z
 export type ResellerListing = z.infer<typeof ResellerListingSchema>;
 
 /**
+ * The four Faso Premium storefront themes — a CLOSED set (Vitrine HANDOFF §1.2:
+ * « ensemble fermé », « aucun sélecteur de couleur libre, jamais »). The theme
+ * keys are canon; the colour recipes live in the design tokens, not here.
+ */
+export const STOREFRONT_THEMES = ['laterite', 'danfani', 'indigo', 'foret'] as const;
+export const StorefrontThemeSchema = z.enum(STOREFRONT_THEMES);
+export type StorefrontTheme = z.infer<typeof StorefrontThemeSchema>;
+
+/**
+ * Storefront cover image lifecycle (Vitrine HANDOFF §3.1 · C-K4's five states).
+ * `pending` = awaiting Séra verification — the prior version stays live (§4.3).
+ * No generic "failed": `error` is the upload-refusal state with a retry path.
+ */
+export const StorefrontCoverSchema = z
+  .object({
+    status: z.enum(['none', 'uploading', 'pending', 'live', 'error']),
+    url: z.string().min(1).optional(),
+  })
+  .strict();
+export type StorefrontCover = z.infer<typeof StorefrontCoverSchema>;
+
+/** Storefront avatar (Vitrine HANDOFF §3.1): monogram (letter 1 of name on the
+ *  theme accent — nothing to upload) or a Séra-verified photo. */
+export const StorefrontAvatarSchema = z
+  .object({
+    mode: z.enum(['monogram', 'photo']),
+    url: z.string().min(1).optional(),
+  })
+  .strict();
+export type StorefrontAvatar = z.infer<typeof StorefrontAvatarSchema>;
+
+/** One storefront section (Vitrine HANDOFF §3.1): name 1–20, ordered pids.
+ *  An empty section is invisible buyer-side (§6) — emptiness is legal here. */
+export const StorefrontSectionSchema = z
+  .object({
+    id: IdSchema,
+    name: TrimmedNonEmptyString.max(20),
+    pids: z.array(IdSchema),
+  })
+  .strict();
+export type StorefrontSection = z.infer<typeof StorefrontSectionSchema>;
+
+/**
  * §5.6 Storefront. OWNER: Shop+ (§5.2 "owns Storefront & Attribution").
  * WO-5.13 (SP0.2 — "reseller activation (store name/zone/category focus)",
  * Shop-Plus-Building-Plan:34): the Seller #001 aggregate fields are added
@@ -127,6 +170,16 @@ export type ResellerListing = z.infer<typeof ResellerListingSchema>;
  * are free DISPLAY STRINGS (« Rood Woko, Ouagadougou » precedent, copy.md:157); a
  * zone enum / gazetteer and the category-floor taxonomy are FOUNDER DECISIONS and
  * do NOT enter this shape. See docs/derivations/STOREFRONT-FIELDS.md.
+ *
+ * WO-VITRINE (Vitrine HANDOFF §3.1): the seven profile fields are added
+ * ADDITIVELY, every one DEFAULTED so every pre-existing storefront parses
+ * unchanged. Grounding + the two deliberate divergences (`name` stays .max(120)
+ * while the UI enforces 3–24; `zone` stays free while the handoff names an
+ * 8-quartier enum it does not enumerate) in docs/derivations/VITRINE-STOREFRONT.md.
+ * `featuredItems` is the curatedItems primitive (ordered pid list) + the ≤2 cap;
+ * "never a sold-out item" is a DISPLAY rule (auto-retrait à l'affichage, the pin
+ * persists — §3.1) and deliberately NOT a schema constraint. `slug` stays LOCKED
+ * (never regenerated, even after rename — loi gelée 3).
  */
 export const StorefrontSchema = z
   .object({
@@ -141,6 +194,34 @@ export const StorefrontSchema = z
     category: TrimmedNonEmptyString, // WO-5.14 display string (trimmed non-empty) — still no category floor (open founder decision)
     createdAt: IsoTimestampSchema,
     updatedAt: IsoTimestampSchema,
+    // WO-VITRINE — additive, all defaulted (HANDOFF §3.1 defaults verbatim).
+    tagline: z.string().max(40).default(''), // « phrase d'accueil » 0–40, défaut ""
+    bio: z.string().max(160).default(''), // « présentation » 0–160, défaut ""
+    cover: StorefrontCoverSchema.default({ status: 'none' }), // défaut none
+    avatar: StorefrontAvatarSchema.default({ mode: 'monogram' }), // défaut monogram
+    theme: StorefrontThemeSchema.default('laterite'), // défaut 'laterite'
+    sections: z
+      .array(StorefrontSectionSchema)
+      .max(4) // « ≤ 4 » sections
+      .superRefine((sections, ctx) => {
+        // « un pid vit dans ≤ 1 section » (§3.1) — a duplicate across sections refuses.
+        const seen = new Map<string, number>();
+        sections.forEach((section, i) => {
+          for (const pid of section.pids) {
+            if (seen.has(pid)) {
+              ctx.addIssue({
+                code: 'custom',
+                message: `pid ${pid} appears in sections[${seen.get(pid)}] and sections[${i}] — a product lives in at most one section (HANDOFF §3.1)`,
+                path: [i, 'pids'],
+              });
+            } else {
+              seen.set(pid, i);
+            }
+          }
+        });
+      })
+      .default([]), // défaut []
+    featuredItems: z.array(IdSchema).max(2).default([]), // « À la une » ≤ 2 — the curatedItems primitive + the cap; défaut []
   })
   .strict();
 export type Storefront = z.infer<typeof StorefrontSchema>;

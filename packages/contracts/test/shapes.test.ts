@@ -394,6 +394,133 @@ describe('Storefront — Seller #001 aggregate fields (WO-5.13, additive)', () =
   });
 });
 
+// WO-VITRINE — the storefront profile contract (Vitrine HANDOFF §3.1). Seven
+// net-new fields, all additive + defaulted; every limit below is the §3.1 value
+// verbatim. `name`/`zone` divergences are deliberate and recorded in
+// docs/derivations/VITRINE-STOREFRONT.md — NOT retested here beyond WO-5.13.
+describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted)', () => {
+  const valid = (): Record<string, unknown> => ({
+    id: 'sf_001',
+    resellerId: 'rs_001',
+    slug: 'aicha-4821',
+    discoverable: true,
+    curatedItems: ['p1', 'p2', 'p3'],
+    name: 'Chez Aïcha Mode',
+    zone: 'Gounghin, Ouagadougou',
+    category: 'Mode',
+    createdAt: '2026-07-15T09:00:00Z',
+    updatedAt: '2026-07-15T09:00:00Z',
+  });
+
+  it('a PRE-EXISTING storefront (no profile fields) still parses — §3.1 defaults applied', () => {
+    const r = StorefrontSchema.safeParse(valid());
+    expect(r.success).toBe(true);
+    if (r.success) {
+      expect(r.data.tagline).toBe(''); // défaut ""
+      expect(r.data.bio).toBe(''); // défaut ""
+      expect(r.data.cover).toEqual({ status: 'none' }); // défaut none
+      expect(r.data.avatar).toEqual({ mode: 'monogram' }); // défaut monogram
+      expect(r.data.theme).toBe('laterite'); // défaut 'laterite'
+      expect(r.data.sections).toEqual([]); // défaut []
+      expect(r.data.featuredItems).toEqual([]); // défaut []
+    }
+  });
+
+  it('accepts a fully-personalised storefront (V2 shape: theme, cover live, 2 featured, sections)', () => {
+    const r = StorefrontSchema.safeParse({
+      ...valid(),
+      tagline: 'Le wax et le cuir, choisis à la main',
+      bio: 'Je choisis chaque pièce moi-même, pour vous.',
+      cover: { status: 'live', url: 'https://cdn/x.jpg' },
+      avatar: { mode: 'photo', url: 'https://cdn/a.jpg' },
+      theme: 'indigo',
+      sections: [
+        { id: 's1', name: 'Mode & tissus', pids: ['p2', 'p7'] },
+        { id: 's2', name: 'Sacs', pids: ['p4'] },
+      ],
+      featuredItems: ['p1', 'p5'],
+    });
+    expect(r.success).toBe(true);
+  });
+
+  it('tagline max 40 · bio max 160 (boundary accepted, boundary+1 refused)', () => {
+    expect(StorefrontSchema.safeParse({ ...valid(), tagline: 'x'.repeat(40) }).success).toBe(true);
+    expect(StorefrontSchema.safeParse({ ...valid(), tagline: 'x'.repeat(41) }).success).toBe(false);
+    expect(StorefrontSchema.safeParse({ ...valid(), bio: 'x'.repeat(160) }).success).toBe(true);
+    expect(StorefrontSchema.safeParse({ ...valid(), bio: 'x'.repeat(161) }).success).toBe(false);
+  });
+
+  it('theme is the CLOSED four-preset set — a fifth theme refuses (« aucun sélecteur libre »)', () => {
+    for (const t of ['laterite', 'danfani', 'indigo', 'foret']) {
+      expect(StorefrontSchema.safeParse({ ...valid(), theme: t }).success).toBe(true);
+    }
+    expect(StorefrontSchema.safeParse({ ...valid(), theme: 'bogolan' }).success).toBe(false);
+    expect(StorefrontSchema.safeParse({ ...valid(), theme: '#FF0000' }).success).toBe(false);
+  });
+
+  it('cover carries the five C-K4 states and refuses a generic sixth', () => {
+    for (const s of ['none', 'uploading', 'pending', 'live', 'error']) {
+      expect(StorefrontSchema.safeParse({ ...valid(), cover: { status: s } }).success).toBe(true);
+    }
+    expect(StorefrontSchema.safeParse({ ...valid(), cover: { status: 'failed' } }).success).toBe(false);
+    // .strict() inside the sub-object too
+    expect(
+      StorefrontSchema.safeParse({ ...valid(), cover: { status: 'live', url: 'https://cdn/x.jpg', width: 1206 } })
+        .success,
+    ).toBe(false);
+  });
+
+  it('avatar is monogram|photo, nothing else', () => {
+    expect(StorefrontSchema.safeParse({ ...valid(), avatar: { mode: 'photo', url: 'https://cdn/a.jpg' } }).success).toBe(true);
+    expect(StorefrontSchema.safeParse({ ...valid(), avatar: { mode: 'initials' } }).success).toBe(false);
+  });
+
+  it('featuredItems: the curatedItems primitive + the ≤2 cap (2 ok, 3 refused, order preserved)', () => {
+    const two = StorefrontSchema.safeParse({ ...valid(), featuredItems: ['p5', 'p1'] });
+    expect(two.success).toBe(true);
+    if (two.success) expect(two.data.featuredItems).toEqual(['p5', 'p1']); // ordre = ordre d'épinglage
+    expect(StorefrontSchema.safeParse({ ...valid(), featuredItems: ['a', 'b', 'c'] }).success).toBe(false);
+    // same id primitive as curatedItems: whitespace-only id refused in both
+    expect(StorefrontSchema.safeParse({ ...valid(), featuredItems: ['  '] }).success).toBe(false);
+    expect(StorefrontSchema.safeParse({ ...valid(), curatedItems: ['  '] }).success).toBe(false);
+  });
+
+  it('sections: ≤4 (4 ok, 5 refused) · name 1–20 · empty pids legal (invisible buyer-side, §6)', () => {
+    const four = [1, 2, 3, 4].map((i) => ({ id: `s${i}`, name: `Section ${i}`, pids: [] }));
+    expect(StorefrontSchema.safeParse({ ...valid(), sections: four }).success).toBe(true);
+    const five = [...four, { id: 's5', name: 'Section 5', pids: [] }];
+    expect(StorefrontSchema.safeParse({ ...valid(), sections: five }).success).toBe(false);
+    // boundary ACCEPTED too (verifier flag) — 20 ok, 21 refused
+    expect(
+      StorefrontSchema.safeParse({ ...valid(), sections: [{ id: 's1', name: 'x'.repeat(20), pids: [] }] }).success,
+    ).toBe(true);
+    expect(
+      StorefrontSchema.safeParse({ ...valid(), sections: [{ id: 's1', name: 'x'.repeat(21), pids: [] }] }).success,
+    ).toBe(false);
+    expect(
+      StorefrontSchema.safeParse({ ...valid(), sections: [{ id: 's1', name: '   ', pids: [] }] }).success,
+    ).toBe(false);
+  });
+
+  it('« un pid vit dans ≤ 1 section » — a pid in two sections REFUSES, with the section path named', () => {
+    const r = StorefrontSchema.safeParse({
+      ...valid(),
+      sections: [
+        { id: 's1', name: 'Mode', pids: ['p1', 'p2'] },
+        { id: 's2', name: 'Sacs', pids: ['p2'] },
+      ],
+    });
+    expect(r.success).toBe(false);
+    expect(JSON.stringify(r.error?.issues)).toContain('at most one section');
+    // same pid twice in the SAME section is also a duplicate across the map — refused
+    const same = StorefrontSchema.safeParse({
+      ...valid(),
+      sections: [{ id: 's1', name: 'Mode', pids: ['p1', 'p1'] }],
+    });
+    expect(same.success).toBe(false);
+  });
+});
+
 // WO-5.14 — the whitespace tightening (founder ruling 2026-07-15). Id-class and
 // name-class / display strings are trimmed non-empty: whitespace-only AND
 // surrounding-whitespace values are refused; internal whitespace is preserved.
