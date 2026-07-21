@@ -19,6 +19,7 @@ export * from './shapes/custody.js';
 export * from './shapes/settlement.js';
 export * from './shapes/moderation.js';
 export * from './events.js';
+export * from './read-model.js';
 export * from './command-id.js';
 export * from './gates/no-gated-shapes.js';
 export * from './gates/api-surface.js';
