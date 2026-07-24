@@ -272,10 +272,40 @@ export const OrderSchema = z
 export type Order = z.infer<typeof OrderSchema>;
 
 /**
+ * §5.6 AssetRef — a display reference to a product image, carried on the supply
+ * wire (SupplyProjection.assetRefs) so Shop+'s buyer surface renders images with
+ * no second display read-model. A BARE string (matches the Shop+ buyer view's
+ * `assetRefs: readonly string[]` — zero transformation), deliberately NOT the rich
+ * integrity-bearing `MediaRefSchema` used internally by `ProductAssets`.
+ *
+ * FIRST-CLASS RULE (B4.2 / SP-I03), not a comment: an asset reference MUST NEVER
+ * encode supplier identity — opaque, or `productVersionId`-keyed, only. The
+ * producer (Boutik+ offer-service) holds `ProductVersion.supplierId` and derives
+ * these refs from `ProductAssets` `MediaRef.ref` storage keys, whose natural key
+ * shape is supplier-scoped — so it could leak a supplier id into a URL VALUE
+ * without meaning to.
+ *
+ * WHERE THE RULE IS ENFORCED: at the producer's out-guard, NOT here. Canon cannot
+ * value-enforce this: `SupplyProjection` deliberately never carries `supplierId`,
+ * and `supplierId` is an unformatted `IdSchema` (no canon supplier-id pattern to
+ * match) — so a value refine here would have to INVENT a pattern. The producer
+ * holds `supplierId` and must reject any assetRef that contains it (the key-based
+ * `sweepIdentityKeys` cannot see identity embedded in a value). This type is the
+ * canonical home of the rule; the check lives where the identity is known.
+ */
+export const AssetRefSchema = z.string().min(1);
+export type AssetRef = z.infer<typeof AssetRefSchema>;
+
+/**
  * Supply-to-reseller projection — the §2.2 canonical single definition
  * (promoted from @platform/certification at v0.4.0; owner: Boutik+ → Shop+).
  * B4.2/SP-I03: the projection NEVER carries supplier identity, contact, or
- * precise pickup — the strict schema refuses any undeclared key.
+ * precise pickup — the strict schema refuses any undeclared key. It DOES carry
+ * buyer-facing DISPLAY data (SUPPLY-DISPLAY-FIELDS-1): `productName` and
+ * `assetRefs`, both REQUIRED — economics never arrive without the name and images
+ * they belong to (the partial-state the second-read-model option would have
+ * risked). Display data is not identity: the ban is on supplier identity/contact/
+ * pickup, never on the product's own name and pictures.
  */
 export const SupplyProjectionSchema = z
   .object({
@@ -284,6 +314,8 @@ export const SupplyProjectionSchema = z
     basePrice: FcfaSchema,
     resellerCommission: FcfaSchema,
     available: z.number().int().min(0),
+    productName: TrimmedNonEmptyString, // name-class, matches ProductVersionSchema.name (WO-5.14)
+    assetRefs: z.array(AssetRefSchema), // bare refs, matches CustomerProductView.assetRefs — zero transformation
   })
   .strict();
 export type SupplyProjection = z.infer<typeof SupplyProjectionSchema>;

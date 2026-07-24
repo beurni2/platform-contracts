@@ -80,6 +80,8 @@ export const referenceSupplyProjectionMock: MockAdapter = makeReferenceAdapter({
       basePrice: 10_000,
       resellerCommission: 1_000,
       available,
+      productName: 'Savon de karité', // SUPPLY-DISPLAY-FIELDS-1 — display fields now required on the wire
+      assetRefs: [`media/pv_${seed}/hero.jpg`],
     });
     return [
       { name: 'offer.published.v1', payload: payload(5) },
