@@ -68,13 +68,14 @@ CHANGED (+`productName`, +`assetRefs`; `required` 5 → 7) · 0 removed.
 `packages/supply-consumer` (5 src + 2 tests). The MAJOR bump must migrate both, or the
 skew is named:
 
-- **OZ1 / boutik `offer-service`:** on re-pin to 2.0.0, `buildSupplyProjection` must
-  populate `productName` (from `ProductVersion.name`) and `assetRefs` (from
-  `ProductAssets` display `MediaRef.ref` keys), AND add the value-side URL check to
-  `sweepIdentityKeys` / `assertServableValue` (item 4).
-- **APPS / shop `packages/supply-consumer`:** on re-pin to 2.0.0, pass `productName` +
-  `assetRefs` through to `CustomerProductView` (zero transformation on `assetRefs`);
-  update the two tests' fixtures to the 7-field shape.
+- **APPS / boutik `offer-service` (PRODUCER — APPS owns boutik-plus):** on re-pin to
+  2.0.0, `buildSupplyProjection` must populate `productName` (from `ProductVersion.name`)
+  and `assetRefs` (from `ProductAssets` display `MediaRef.ref` keys), AND add the
+  value-side URL check to `sweepIdentityKeys` / `assertServableValue` (item 4).
+- **OZ1 / shop `packages/supply-consumer` (CONSUMER — OZ1 owns shop-plus; 5 src + 2
+  tests):** on re-pin to 2.0.0, pass `productName` + `assetRefs` through to
+  `CustomerProductView` (zero transformation on `assetRefs`); update the two tests'
+  fixtures to the 7-field shape.
 - **Skew, named and time-boxed:** between the canon 2.0.0 merge and the two app
   re-pins, neither app is on 2.0.0 — they stay pinned to 1.2.0 until they migrate
   **together in one cycle**. No runtime skew exists (nothing deployed; both sides are
@@ -99,7 +100,10 @@ skew is named:
   store/service invariant, not a schema one — canon cannot enforce it in
   `ProductVersionSchema`. **Recommendation:** state product-version immutability as a
   named invariant in the Boutik+ Build-Spec (B+I-*), enforced at the producer's write
-  path. Founder's call whether to add it; flagged, not resolved.
+  path. **FOUNDER RULING (2026-07-24): ACCEPTED as recommended** — state it as a Boutik+
+  Build-Spec invariant enforced at the producer write path, NOT a canon schema refine (a
+  schema validates shape, not mutation over time). Follow-up slice (a Build-Spec doc edit,
+  its own drift-propagation), not part of this merge.
 
 ## 6. Other gaps reported (not filled)
 
