@@ -188,11 +188,18 @@ describe('SupplyProjection — canonical single definition (promoted at v0.4.0)'
     basePrice: 10_000,
     resellerCommission: 1_000,
     available: 4,
+    productName: 'Savon de karité', // display field (SUPPLY-DISPLAY-FIELDS-1)
+    assetRefs: ['media/pv_001/hero.jpg', 'media/pv_001/detail-1.jpg'],
   };
 
-  it('parses the identity-free projection', async () => {
+  it('parses the identity-free projection with its display fields', async () => {
     const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
-    expect(SupplyProjectionSchema.safeParse(valid).success).toBe(true);
+    const parsed = SupplyProjectionSchema.safeParse(valid);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.productName).toBe('Savon de karité');
+      expect(parsed.data.assetRefs).toEqual(['media/pv_001/hero.jpg', 'media/pv_001/detail-1.jpg']);
+    }
   });
 
   it.each(['supplierName', 'supplierPhone', 'pickupAddress', 'supplierContact'])(
@@ -204,6 +211,38 @@ describe('SupplyProjection — canonical single definition (promoted at v0.4.0)'
       expect(JSON.stringify(result.error?.issues)).toContain('unrecognized_keys');
     },
   );
+
+  it('display fields are REQUIRED, not optional (no economics without a name/images)', async () => {
+    const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
+    const { productName: _n, ...noName } = valid;
+    const { assetRefs: _a, ...noAssets } = valid;
+    expect(SupplyProjectionSchema.safeParse(noName).success).toBe(false);
+    expect(SupplyProjectionSchema.safeParse(noAssets).success).toBe(false);
+  });
+
+  it('productName follows the name-class (trimmed non-empty) — whitespace-only refused', async () => {
+    const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
+    expect(SupplyProjectionSchema.safeParse({ ...valid, productName: '   ' }).success).toBe(false);
+    expect(SupplyProjectionSchema.safeParse({ ...valid, productName: '' }).success).toBe(false);
+  });
+
+  it('assetRefs is a required array that may be empty (a product mid-capture has no images yet), refuses non-array + empty-string ref', async () => {
+    const { SupplyProjectionSchema, AssetRefSchema } = await import('../src/shapes/commerce.js');
+    expect(SupplyProjectionSchema.safeParse({ ...valid, assetRefs: [] }).success).toBe(true); // required-but-may-be-empty
+    expect(SupplyProjectionSchema.safeParse({ ...valid, assetRefs: 'x' }).success).toBe(false); // not an array
+    expect(SupplyProjectionSchema.safeParse({ ...valid, assetRefs: [''] }).success).toBe(false); // AssetRef .min(1)
+    expect(AssetRefSchema.safeParse('').success).toBe(false);
+    expect(AssetRefSchema.safeParse('media/pv_001/hero.jpg').success).toBe(true);
+  });
+
+  it('DOCUMENTED GAP (SUPPLY-DISPLAY-FIELDS-1 item 4): canon cannot value-detect supplier identity in an assetRef — a supplier-keyed URL PARSES here; enforcement is the producer out-guard, which holds supplierId', async () => {
+    const { AssetRefSchema } = await import('../src/shapes/commerce.js');
+    // This is NOT an endorsement — it makes the enforcement boundary a visible test
+    // fact. SupplyProjection never carries supplierId and supplierId has no canon
+    // format, so a value refine here would invent a pattern (§7). The producer,
+    // which holds ProductVersion.supplierId, must reject this before serving.
+    expect(AssetRefSchema.safeParse('https://media/suppliers/sup_123/cover.jpg').success).toBe(true);
+  });
 });
 
 describe('PackageReadinessConfirmation — readiness evidence carries only the readiness challenge', () => {

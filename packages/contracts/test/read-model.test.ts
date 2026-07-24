@@ -32,6 +32,8 @@ const validSupplyValue = {
   basePrice: 10_000,
   resellerCommission: 1_000,
   available: 5,
+  productName: 'Savon de karité', // SUPPLY-DISPLAY-FIELDS-1 (now required on SupplyProjection)
+  assetRefs: ['media/pv_1/hero.jpg'],
 };
 const validEligValue = {
   buyerRef: 'buyer_1',
