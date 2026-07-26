@@ -44,23 +44,25 @@ The existing app is Expo SDK 54 / React Native 0.81, and it divides cleanly:
 
 ---
 
-## 4. ⏳ Open decisions — founder rules; safest default named and implemented until ruled
+## 4. Decisions — all three founder-ruled 2026-07-26 (verbatim, same message)
 
-| ID | Question | Safest default (implemented + flagged) |
-|----|----------|----------------------------------------|
-| **W-D1** | **Proof provenance.** The camera-only PROOF rule is the standing control against the burned-in-price fraud class. On web: (a) the proof role alone keeps camera capture (`capture` attribute / `getUserMedia`), everything else upload-first; or (b) proof accepts uploads too, and the provenance control is knowingly dropped. | **(a)** — the fraud control outlives the platform until the founder explicitly rules it away. |
-| **W-D2** | **The native app's fate.** Park (binary keeps working; no new native work) or retire (remove). | **Park** — it is device-verified and costs nothing while the web surface catches up. |
-| **W-D3** | **Web performance budget values** (bundle size, TTI on the reference device, interaction latency). | Proposed at W1 exit in the `PERF-BUDGETS.md` pattern; no number invented before measurement. |
+| ID | Ruling | The founder's words |
+|----|--------|---------------------|
+| **W-D1** | **(b) — proof accepts uploads on the web surface.** The camera-only provenance control is knowingly dropped there, by explicit ruling over the flagged safest default. | *« allow uploads for proof too, i will only be using photo upload on this webapp and never camera capture »* |
+| **W-D2** | **Park the native app.** The binary keeps working; no new native work; shared-code changes keep the native path compiling and its tests green. Park ≠ retire. | *« park it »* |
+| **W-D3 / hosting** | **Cloudflare Pages** is the web deploy target (the CTO recommendation, ruled). Deploys are manual-dispatch, per the standing *« a deploy is a deliberate act »* ruling. Budget values still land at measurement, in the `PERF-BUDGETS.md` pattern. | *« yes use your recommendation »* |
+
+**Standing note carried with W-D1, not reopening it:** the burned-in-price control's real bite was always third-party suppliers, and those are already excluded by the harder gate — *no supplier but the founder authors until real per-supplier identity lands*. The day that identity gate opens, W-D1 is the decision to re-read first. On the parked native app the camera-only proof rule stays as built.
 
 ---
 
 ## 5. The W-slices — small, evidence-gated, in order
 
 - **W1 — Web walking skeleton.** Add the web target (`react-native-web`, `react-dom`, Expo static web output). The existing app boots in a browser and the Produits list reads the deployed offer service. *Evidence: the same list the founder verified on his phone, in a browser tab. Every native-edge claim in §2 verified or corrected here.* Out of scope: photo intake.
-- **W2 — Upload intake.** The pick seam gains its web port: file selection, bytes as `ArrayBuffer`, the existing strip + decode + review screen unchanged. Refusal and cancel states designed, not defaulted. *Evidence: an uploaded JPEG passes the strip and lands on the review screen with the guides on it.*
+- **W2 — Upload intake.** The pick seam gains its web port: file selection, bytes as `ArrayBuffer`, the existing strip + decode + review screen unchanged. **Per W-D1's ruling this seam serves ALL THREE ROLES on web, proof included** — there is no separate proof slice anymore (the former W5 is void). Refusal and cancel states designed, not defaulted. *Evidence: an uploaded JPEG passes the strip and lands on the review screen with the guides on it.*
 - **W3 — Drag-and-drop.** The designed drop container, pointer devices only, layered on the same seam as an additional entry — never the only path.
 - **W4 — Publish parity.** The five-step wizard end-to-end in a browser: upload → review → publish → appears in Produits and the supply projection. *This closes the founder's de-mock sentence on web.*
-- **W5 — Proof capture** per W-D1's ruling.
+- **W5 — Web deploy pipeline.** Cloudflare Pages (W-D3 ruling), manual dispatch only, exporting COLD (Metro caches `EXPO_PUBLIC_*` inlining — a warm export can ship stale values). Replaces the voided proof-capture slice.
 - **W6 — PWA hardening.** Offline queued states (queued = pending, never done), installability, the W-D3 budgets enforced in CI.
 
 **Sequencing note (CTO recommendation, founder may resequence with a word):** this ruling makes Boutik+ Web the active front. The Shop+ vitrine — the end of the founder's original de-mock sentence — follows after W4; it reads the same supply projection regardless of which supplier surface wrote it.
