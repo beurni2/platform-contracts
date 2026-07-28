@@ -5,6 +5,7 @@ import {
   OrderSchema,
   STOREFRONT_HEADER_STYLES,
   StorefrontHeaderStyleSchema,
+  StorefrontPhotoFocusSchema,
   StorefrontSchema,
   UserSchema,
 } from '../src/shapes/commerce.js';
@@ -591,6 +592,35 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
     expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: 'CLASSIQUE' }).success).toBe(false);
     expect(StorefrontHeaderStyleSchema.safeParse('royale').success).toBe(true);
     expect(StorefrontHeaderStyleSchema.safeParse('bogolan').success).toBe(false);
+  });
+
+  // ENTETES-C (founder-authorized 2026-07-28) — her framing, additive + optional.
+  it('a photo WITHOUT focus still parses — no framing means the style default, absent stays absent', () => {
+    const r = StorefrontSchema.safeParse({ ...valid(), cover: { status: 'live', url: 'https://cdn/x.jpg' } });
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data.cover.focus).toBeUndefined();
+  });
+
+  it('focus is a COMPLETE integer pair 0–100 on cover and avatar — bounds accepted, everything else refused', () => {
+    for (const focus of [{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 42, y: 28 }]) {
+      const cover = StorefrontSchema.safeParse({ ...valid(), cover: { status: 'live', url: 'https://cdn/x.jpg', focus } });
+      expect(cover.success).toBe(true);
+      if (cover.success) expect(cover.data.cover.focus).toEqual(focus);
+      const avatar = StorefrontSchema.safeParse({ ...valid(), avatar: { mode: 'photo', url: 'https://cdn/a.jpg', focus } });
+      expect(avatar.success).toBe(true);
+      if (avatar.success) expect(avatar.data.avatar.focus).toEqual(focus);
+    }
+    const cov = (focus: unknown) =>
+      StorefrontSchema.safeParse({ ...valid(), cover: { status: 'live', url: 'https://cdn/x.jpg', focus } }).success;
+    expect(cov({ x: 50 })).toBe(false); // a lone axis is unrepresentable
+    expect(cov({ y: 50 })).toBe(false);
+    expect(cov({ x: -1, y: 50 })).toBe(false);
+    expect(cov({ x: 50, y: 101 })).toBe(false);
+    expect(cov({ x: 50.5, y: 50 })).toBe(false); // integers only — byte-stable wire
+    expect(cov({ x: '50', y: '50' })).toBe(false);
+    expect(cov({ x: 50, y: 50, z: 50 })).toBe(false); // .strict() inside the pair
+    expect(StorefrontPhotoFocusSchema.safeParse({ x: 58, y: 30 }).success).toBe(true);
+    expect(StorefrontPhotoFocusSchema.safeParse({}).success).toBe(false);
   });
 });
 
