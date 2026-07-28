@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { computeWaterfall } from '../src/money/waterfall.js';
 import { QuoteSchema } from '../src/shapes/quote.js';
-import { OrderSchema, StorefrontSchema, UserSchema } from '../src/shapes/commerce.js';
+import {
+  OrderSchema,
+  STOREFRONT_HEADER_STYLES,
+  StorefrontHeaderStyleSchema,
+  StorefrontSchema,
+  UserSchema,
+} from '../src/shapes/commerce.js';
 import { DELIVERY_FAILURE_REASONS, DELIVERY_OUTCOME_FAMILIES, ORDER_STATUSES } from '../src/enums.js';
 import { DeliveryOutcomeSchema } from '../src/shapes/custody.js';
 import { EscrowTxnSchema, PaymentLegSchema, SellerTrustStateSchema } from '../src/shapes/settlement.js';
@@ -557,6 +563,34 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
       sections: [{ id: 's1', name: 'Mode', pids: ['p1', 'p1'] }],
     });
     expect(same.success).toBe(false);
+  });
+
+  // ENTETES-B (founder-authorized 2026-07-28) — the header style, additive + defaulted.
+  it('a PRE-EXISTING storefront (no headerStyle) still parses — défaut « classique »', () => {
+    const r = StorefrontSchema.safeParse(valid());
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data.headerStyle).toBe('classique');
+  });
+
+  it('headerStyle is the CLOSED six-header set — each key accepted, a seventh refuses (theme precedent)', () => {
+    expect(STOREFRONT_HEADER_STYLES).toEqual([
+      'classique',
+      'royale',
+      'heritage',
+      'chaleureux',
+      'cristal',
+      'dynamique',
+    ]);
+    for (const h of STOREFRONT_HEADER_STYLES) {
+      const r = StorefrontSchema.safeParse({ ...valid(), headerStyle: h });
+      expect(r.success).toBe(true);
+      if (r.success) expect(r.data.headerStyle).toBe(h);
+    }
+    expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: 'baroque' }).success).toBe(false);
+    expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: '' }).success).toBe(false);
+    expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: 'CLASSIQUE' }).success).toBe(false);
+    expect(StorefrontHeaderStyleSchema.safeParse('royale').success).toBe(true);
+    expect(StorefrontHeaderStyleSchema.safeParse('bogolan').success).toBe(false);
   });
 });
 

@@ -129,6 +129,25 @@ export const StorefrontThemeSchema = z.enum(STOREFRONT_THEMES);
 export type StorefrontTheme = z.infer<typeof StorefrontThemeSchema>;
 
 /**
+ * The six selectable boutique headers (ENTETES-B, founder-authorized
+ * 2026-07-28) — a CLOSED set on the theme precedent: no free styling, ever.
+ * `classique` is the shipped default header every pre-existing storefront
+ * keeps; the five named styles are the founder-approved designer set
+ * (« En-têtes Boutique — 5 Styles », replicated 1:1 buyer-side). Keys are
+ * canon; the visual recipes live in the buyer render, never here.
+ */
+export const STOREFRONT_HEADER_STYLES = [
+  'classique',
+  'royale',
+  'heritage',
+  'chaleureux',
+  'cristal',
+  'dynamique',
+] as const;
+export const StorefrontHeaderStyleSchema = z.enum(STOREFRONT_HEADER_STYLES);
+export type StorefrontHeaderStyle = z.infer<typeof StorefrontHeaderStyleSchema>;
+
+/**
  * Storefront cover image lifecycle (Vitrine HANDOFF §3.1 · C-K4's five states).
  * `pending` = awaiting Séra verification — the prior version stays live (§4.3).
  * No generic "failed": `error` is the upload-refusal state with a retry path.
@@ -222,6 +241,10 @@ export const StorefrontSchema = z
       })
       .default([]), // défaut []
     featuredItems: z.array(IdSchema).max(2).default([]), // « À la une » ≤ 2 — the curatedItems primitive + the cap; défaut []
+    // ENTETES-B — additive, defaulted (founder-authorized 2026-07-28): the
+    // reseller's chosen header style; every pre-existing storefront parses
+    // unchanged as 'classique'.
+    headerStyle: StorefrontHeaderStyleSchema.default('classique'),
   })
   .strict();
 export type Storefront = z.infer<typeof StorefrontSchema>;
