@@ -148,24 +148,46 @@ export const StorefrontHeaderStyleSchema = z.enum(STOREFRONT_HEADER_STYLES);
 export type StorefrontHeaderStyle = z.infer<typeof StorefrontHeaderStyleSchema>;
 
 /**
+ * ENTETES-C (founder-authorized 2026-07-28) — HER framing of a photo: the
+ * point of the image the frame keeps anchored, as CSS object-position
+ * percentages (integers 0–100 of the image's own width/height). OPTIONAL as a
+ * WHOLE on the photo shapes below: absent = the header style's contract
+ * framing, exactly as before this field existed; present = her choice, which
+ * every header obeys. A complete pair by construction — a lone axis is
+ * unrepresentable, so no renderer ever guesses half a framing.
+ */
+export const StorefrontPhotoFocusSchema = z
+  .object({
+    x: z.number().int().min(0).max(100),
+    y: z.number().int().min(0).max(100),
+  })
+  .strict();
+export type StorefrontPhotoFocus = z.infer<typeof StorefrontPhotoFocusSchema>;
+
+/**
  * Storefront cover image lifecycle (Vitrine HANDOFF §3.1 · C-K4's five states).
  * `pending` = awaiting Séra verification — the prior version stays live (§4.3).
  * No generic "failed": `error` is the upload-refusal state with a retry path.
+ * ENTETES-C: `focus` is her saved framing of THIS photo — a fresh upload starts
+ * unframed (the writer clears it; a stale framing must never crop a new photo).
  */
 export const StorefrontCoverSchema = z
   .object({
     status: z.enum(['none', 'uploading', 'pending', 'live', 'error']),
     url: z.string().min(1).optional(),
+    focus: StorefrontPhotoFocusSchema.optional(),
   })
   .strict();
 export type StorefrontCover = z.infer<typeof StorefrontCoverSchema>;
 
 /** Storefront avatar (Vitrine HANDOFF §3.1): monogram (letter 1 of name on the
- *  theme accent — nothing to upload) or a Séra-verified photo. */
+ *  theme accent — nothing to upload) or a Séra-verified photo. ENTETES-C:
+ *  `focus` as on the cover — her framing of the portrait in the medallion. */
 export const StorefrontAvatarSchema = z
   .object({
     mode: z.enum(['monogram', 'photo']),
     url: z.string().min(1).optional(),
+    focus: StorefrontPhotoFocusSchema.optional(),
   })
   .strict();
 export type StorefrontAvatar = z.infer<typeof StorefrontAvatarSchema>;
