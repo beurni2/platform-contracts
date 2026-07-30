@@ -129,12 +129,15 @@ export const StorefrontThemeSchema = z.enum(STOREFRONT_THEMES);
 export type StorefrontTheme = z.infer<typeof StorefrontThemeSchema>;
 
 /**
- * The six selectable boutique headers (ENTETES-B, founder-authorized
- * 2026-07-28) — a CLOSED set on the theme precedent: no free styling, ever.
- * `classique` is the shipped default header every pre-existing storefront
- * keeps; the five named styles are the founder-approved designer set
- * (« En-têtes Boutique — 5 Styles », replicated 1:1 buyer-side). Keys are
- * canon; the visual recipes live in the buyer render, never here.
+ * The eleven selectable boutique headers — a CLOSED set on the theme
+ * precedent: no free styling, ever. `classique` is the shipped default header
+ * every pre-existing storefront keeps; the five styles after it are the
+ * founder-approved designer set (ENTETES-B, founder-authorized 2026-07-28,
+ * « En-têtes Boutique — 5 Styles », replicated 1:1 buyer-side); the last
+ * five are the founder's Beurni Boss handoff set (ENTETES-E0,
+ * founder-authorized 2026-07-30, « En-têtes Boutique — Série 6 · Burkina
+ * Faso cinématique »). Keys are canon; the visual recipes live in the buyer
+ * render, never here.
  */
 export const STOREFRONT_HEADER_STYLES = [
   'classique',
@@ -143,6 +146,16 @@ export const STOREFRONT_HEADER_STYLES = [
   'chaleureux',
   'cristal',
   'dynamique',
+  // ENTETES-E0 (founder-authorized 2026-07-30) — the five styles of the
+  // founder's Beurni Boss handoff (« En-têtes Boutique — Série 6 · Burkina
+  // Faso cinématique »), appended additively: buyer-render styles exactly
+  // like the first five designer headers. ASCII keys are canon (`seance`,
+  // never « séance »); the visual recipes live in the buyer render.
+  'masque',
+  'harmattan',
+  'balafon',
+  'seance',
+  'cauris',
 ] as const;
 export const StorefrontHeaderStyleSchema = z.enum(STOREFRONT_HEADER_STYLES);
 export type StorefrontHeaderStyle = z.infer<typeof StorefrontHeaderStyleSchema>;

@@ -573,7 +573,9 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
     if (r.success) expect(r.data.headerStyle).toBe('classique');
   });
 
-  it('headerStyle is the CLOSED six-header set — each key accepted, a seventh refuses (theme precedent)', () => {
+  // ENTETES-E0 (founder-authorized 2026-07-30) — the Beurni Boss handoff adds
+  // five buyer-render styles, appended AFTER the six; order and names pinned.
+  it('headerStyle is the CLOSED eleven-header set — each key accepted, a twelfth refuses (theme precedent)', () => {
     expect(STOREFRONT_HEADER_STYLES).toEqual([
       'classique',
       'royale',
@@ -581,6 +583,11 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
       'chaleureux',
       'cristal',
       'dynamique',
+      'masque',
+      'harmattan',
+      'balafon',
+      'seance',
+      'cauris',
     ]);
     for (const h of STOREFRONT_HEADER_STYLES) {
       const r = StorefrontSchema.safeParse({ ...valid(), headerStyle: h });
@@ -590,7 +597,11 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
     expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: 'baroque' }).success).toBe(false);
     expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: '' }).success).toBe(false);
     expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: 'CLASSIQUE' }).success).toBe(false);
+    expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: 'MASQUE' }).success).toBe(false);
+    // ASCII keys are canon — the accented spelling is NOT a key.
+    expect(StorefrontSchema.safeParse({ ...valid(), headerStyle: 'séance' }).success).toBe(false);
     expect(StorefrontHeaderStyleSchema.safeParse('royale').success).toBe(true);
+    expect(StorefrontHeaderStyleSchema.safeParse('cauris').success).toBe(true);
     expect(StorefrontHeaderStyleSchema.safeParse('bogolan').success).toBe(false);
   });
 
