@@ -573,9 +573,11 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
     if (r.success) expect(r.data.headerStyle).toBe('classique');
   });
 
-  // ENTETES-E0 (founder-authorized 2026-07-30) — the Beurni Boss handoff adds
-  // five buyer-render styles, appended AFTER the six; order and names pinned.
-  it('headerStyle is the CLOSED eleven-header set — each key accepted, a twelfth refuses (theme precedent)', () => {
+  // ENTETES-H (founder-authorized 2026-07-31) — séries 2/3/5 append twenty
+  // buyer-render styles AFTER the eleven. ORDER AND NAMES ARE PINNED: this
+  // list is the wire contract three repos agree on, and an accidental
+  // reordering would silently repoint every stored storefront's header.
+  it('headerStyle is the CLOSED thirty-one-header set — each key accepted, an unknown one refuses (theme precedent)', () => {
     expect(STOREFRONT_HEADER_STYLES).toEqual([
       'classique',
       'royale',
@@ -588,7 +590,36 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
       'balafon',
       'seance',
       'cauris',
+      'indigo',
+      'couture',
+      'safran',
+      'grenat',
+      'kraft',
+      'audace',
+      'fleurie',
+      'prisme',
+      'pop',
+      'chrome',
+      'neon',
+      'perle',
+      'artisan',
+      'braise',
+      'graffiti',
+      'dunda',
+      'karite',
+      'bronze',
+      'calebasse',
+      'pagne',
     ]);
+    // ADDITIVE, PROVEN: the eleven that already shipped keep their exact
+    // positions, so a stored value can never come back as a different header.
+    expect(STOREFRONT_HEADER_STYLES.slice(0, 11)).toEqual([
+      'classique', 'royale', 'heritage', 'chaleureux', 'cristal', 'dynamique',
+      'masque', 'harmattan', 'balafon', 'seance', 'cauris',
+    ]);
+    expect(new Set(STOREFRONT_HEADER_STYLES).size).toBe(31);
+    // ASCII keys are canon — « karité » and « néon » must never reach the wire
+    for (const k of STOREFRONT_HEADER_STYLES) expect(k).toMatch(/^[a-z]+$/);
     for (const h of STOREFRONT_HEADER_STYLES) {
       const r = StorefrontSchema.safeParse({ ...valid(), headerStyle: h });
       expect(r.success).toBe(true);

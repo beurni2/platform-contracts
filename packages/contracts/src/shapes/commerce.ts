@@ -129,15 +129,28 @@ export const StorefrontThemeSchema = z.enum(STOREFRONT_THEMES);
 export type StorefrontTheme = z.infer<typeof StorefrontThemeSchema>;
 
 /**
- * The eleven selectable boutique headers — a CLOSED set on the theme
- * precedent: no free styling, ever. `classique` is the shipped default header
- * every pre-existing storefront keeps; the five styles after it are the
- * founder-approved designer set (ENTETES-B, founder-authorized 2026-07-28,
- * « En-têtes Boutique — 5 Styles », replicated 1:1 buyer-side); the last
- * five are the founder's Beurni Boss handoff set (ENTETES-E0,
- * founder-authorized 2026-07-30, « En-têtes Boutique — Série 6 · Burkina
- * Faso cinématique »). Keys are canon; the visual recipes live in the buyer
- * render, never here.
+ * The thirty-one selectable boutique headers — a CLOSED set on the theme
+ * precedent: no free styling, ever. Keys are canon; the visual recipes live in
+ * the buyer render, never here.
+ *
+ *  · `classique`            the shipped default every pre-existing storefront keeps
+ *  · série 1 (5)            ENTETES-B, founder-authorized 2026-07-28
+ *  · « série 6 » (5)        ENTETES-E0, founder-authorized 2026-07-30. These
+ *                           keys now DRAW the série 4 contract units
+ *                           (Prestige · Terracotta · Étendard · Douceur ·
+ *                           Tissage, ENTETES-F): the drawing was superseded,
+ *                           the KEYS were deliberately not renamed so no live
+ *                           storefront could hold a value the service refuses.
+ *                           Renaming them is owed follow-up, not a rename here.
+ *  · séries 2 · 3 · 5 (20)  ENTETES-H, founder-authorized 2026-07-31
+ *                           (« Design_brief_for_Claude_4.zip »), appended
+ *                           additively in the brief's own anchor order.
+ *
+ * ADDITIVE ONLY, AND THE ORDER OF ROLLOUT IS NOT OPTIONAL. Every key here must
+ * be accepted by the DEPLOYED storefront service before any picker offers it.
+ * Reversed, the picker hands the service a value it refuses — the exact
+ * `unknown_header_style` failure the founder hit on his own phone. Canon
+ * first, deploy second, picker last.
  */
 export const STOREFRONT_HEADER_STYLES = [
   'classique',
@@ -156,6 +169,30 @@ export const STOREFRONT_HEADER_STYLES = [
   'balafon',
   'seance',
   'cauris',
+  // ENTETES-H — série 2 « ateliers » (founder-authorized 2026-07-31).
+  'indigo',
+  'couture',
+  'safran',
+  'grenat',
+  'kraft',
+  // ENTETES-H — série 3 « vitrines » (10).
+  'audace',
+  'fleurie',
+  'prisme',
+  'pop',
+  'chrome',
+  'neon',
+  'perle',
+  'artisan',
+  'braise',
+  'graffiti',
+  // ENTETES-H — série 5 « artisanat burkinabè » (5). ASCII keys are canon
+  // (`karite`, never « karité »), exactly as `seance` was.
+  'dunda',
+  'karite',
+  'bronze',
+  'calebasse',
+  'pagne',
 ] as const;
 export const StorefrontHeaderStyleSchema = z.enum(STOREFRONT_HEADER_STYLES);
 export type StorefrontHeaderStyle = z.infer<typeof StorefrontHeaderStyleSchema>;
