@@ -206,6 +206,20 @@ export const STOREFRONT_HEADER_STYLES = [
   'billet',
   'enseigne',
   'hologramme',
+  // ENTETES-M — série 10 « féminines » (2) and série 11 « jardins » (4),
+  // founder-authorized 2026-07-31. APPENDED, like every growth before it.
+  //
+  // THE KEY IS THE BRIEF'S OWN `id=` ANCHOR, not the title a seller reads —
+  // the rule recorded at ENTETES-H and the reason « Bougainvillier » enters as
+  // `bougain`: that is what `id="bougain"` says in « En-tetes Boutique -
+  // Serie 10 ». The picker shows her « Bougainvillier » from the catalog; no
+  // one but this file ever sees the key.
+  'dentelle',
+  'bougain',
+  'flamboyant',
+  'hibiscus',
+  'papillons',
+  'guirlande',
 ] as const;
 export const StorefrontHeaderStyleSchema = z.enum(STOREFRONT_HEADER_STYLES);
 export type StorefrontHeaderStyle = z.infer<typeof StorefrontHeaderStyleSchema>;

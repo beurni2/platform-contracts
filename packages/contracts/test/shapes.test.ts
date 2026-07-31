@@ -617,6 +617,13 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
       'billet',
       'enseigne',
       'hologramme',
+      // ENTETES-M — série 10 « féminines » + série 11 « jardins ».
+      'dentelle',
+      'bougain',
+      'flamboyant',
+      'hibiscus',
+      'papillons',
+      'guirlande',
     ]);
     // ADDITIVE, PROVEN: the eleven that already shipped keep their exact
     // positions, so a stored value can never come back as a different header.
@@ -624,7 +631,7 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
       'classique', 'royale', 'heritage', 'chaleureux', 'cristal', 'dynamique',
       'masque', 'harmattan', 'balafon', 'seance', 'cauris',
     ]);
-    expect(new Set(STOREFRONT_HEADER_STYLES).size).toBe(37);
+    expect(new Set(STOREFRONT_HEADER_STYLES).size).toBe(43);
     // ASCII keys are canon — « karité » and « néon » must never reach the wire
     for (const k of STOREFRONT_HEADER_STYLES) expect(k).toMatch(/^[a-z]+$/);
     for (const h of STOREFRONT_HEADER_STYLES) {
