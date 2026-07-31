@@ -193,6 +193,19 @@ export const STOREFRONT_HEADER_STYLES = [
   'bronze',
   'calebasse',
   'pagne',
+  // ENTETES-L — série 8 « luxe » (2) and série 9 « éditions » (4), founder-
+  // authorized 2026-07-31 from « Design brief for Claude 2 / 3 ». APPENDED, as
+  // every growth of this list has been: a stored value's POSITION never moves,
+  // so no storefront can come back as a different header after the bump.
+  // ASCII keys are canon and LOWERCASE-ONLY — the enum's own guard is
+  // /^[a-z]+$/, which caught `filDor` on its way in. « Fil d'Or » is `fildor`,
+  // exactly as « karité » is `karite`.
+  'fildor',
+  'bazin',
+  'couverture',
+  'billet',
+  'enseigne',
+  'hologramme',
 ] as const;
 export const StorefrontHeaderStyleSchema = z.enum(STOREFRONT_HEADER_STYLES);
 export type StorefrontHeaderStyle = z.infer<typeof StorefrontHeaderStyleSchema>;
