@@ -39,15 +39,23 @@ capture copy-lint-positive pass node packages/i18n/dist/cli.js packages/i18n/cat
 log "gate: copy-lint — NEGATIVE FIXTURE (must fail: « Veuillez patienter », « séquestre », all four conditions)"
 capture copy-lint-negative fail node packages/i18n/dist/cli.js packages/i18n/fixtures/negative-catalog.json
 
+# THE VERSION IS READ, NOT TYPED. It was hardcoded here as 2.4.0 and the v2.5.0
+# bump missed it, exactly as that bump missed the lockfile and the docs manifest
+# — three separate hand-maintained copies of one number, three separate CI
+# failures. The root package.json is the one the export-maps gate already treats
+# as authoritative, so this reads the same source and cannot drift from it.
+CANON_VERSION="$(node -p "require('./package.json').version")"
+log "canon version under test: $CANON_VERSION"
+
 log "gate: drift-check — pristine consumer /docs copy (must pass)"
 DRIFT_CONSUMER="$(mktemp -d)/docs"
 mkdir -p "$DRIFT_CONSUMER"
 cp docs/*.md "$DRIFT_CONSUMER/"
-capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 2.4.0
+capture drift-check-positive pass node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version "$CANON_VERSION"
 
 log "gate: drift-check — TAMPERED consumer doc (must fail)"
 printf '\nrogue edit — a consumer repo drifted from canon\n' >> "$DRIFT_CONSUMER/Shop-Plus-Build-Spec.md"
-capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version 2.4.0
+capture drift-check-negative fail node packages/contracts/dist/drift-check-cli.js "$DRIFT_CONSUMER" --manifest docs.manifest.json --pinned-version "$CANON_VERSION"
 
 log "gate: RN-safe root entries — scanner over each package's '.' graph (must pass)"
 capture rn-safe-positive pass node scripts/scan-rn-safe-entry.mjs
