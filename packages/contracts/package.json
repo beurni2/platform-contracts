@@ -1,6 +1,6 @@
 {
   "name": "@platform/contracts",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Canonical shared contracts (shapes + events), the money waterfall (RoundingLaw v1), the four branded secrets, canonical JSON, and the docs drift-check CLI. Shapes live ONLY here; no app redefines them.",
   "license": "UNLICENSED",
   "type": "module",
