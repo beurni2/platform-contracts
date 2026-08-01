@@ -94,3 +94,48 @@ Deploying the consumer first empties every shop.
 
 - **Value-side identity sweep.** The SP-I03 leak sweep tests key *names*. Two free-text fields now reach the buyer wire unswept — `productName` and `category`. (`assetRefs` is not among them: it already has `assertAssetRefsIdentityFree`.) A supplier who types their phone number into a category puts it on the wire. This is the accepted `productName` precedent, not a new hole, but the surface is one field wider.
 - **§6.1 is still self-declared.** `category` can now be read from server truth; `sellerTier` cannot — canon's `SellerTrustState` is keyed by `sellerId`, and B4.2/SP-I03 keep supplier identity off this projection by design, so Shop+ structurally cannot look a tier up. The clean shape is Boutik+ answering the question on the projection as an identity-free boolean. **That is another canon field and therefore a founder decision.**
+
+---
+
+# SELLER-TIER-WIRE — `sellerTier` on `SupplyProjection` (canon v3.1.0)
+
+**Status:** canon shipped, consumers pending. **Founder authorisation:** 2026-08-01, « option2 ».
+Recorded here rather than in a new file because it closes the limit §8 of the document above left open.
+
+## Why this exists
+
+§6.1's first condition is « seller tier ≥ verified ». Shop+ could not evaluate it: canon keys
+`SellerTrustState` by `sellerId`, and B4.2 keeps supplier identity off this projection, so Shop+ has
+no key to look a tier up with. The live consequence was that the **checkout wire accepted the tier
+from the buyer's own request**, and pay-at-door worked in production only because the client
+asserted `verified`. **The condition was not merely unenforced — the claim was load-bearing.**
+
+## Why OPTIONAL, where `category` is required
+
+What absence costs differs. An absent category degrades two things, one buyer-visible: she sees a
+plausible screen with no sign anything is wrong. An absent tier degrades one: Option B is not
+offered — which is exactly what §6.1 already prescribes for an unprovable condition. So optional is
+**strictly better than the status quo in every state**, and costs no coordinated deploy where a
+wrong order empties every shop.
+
+## Why ENUM, where `category` is a free string
+
+Canon **fixes** the three tiers (§5.6 `SellerTrustState`); the category floor is an open founder
+decision. A tier canon has never heard of is a defect; a category canon has never heard of is
+normal. The enum also refuses `toString`/`__proto__` **upstream** — an unguarded object-literal
+lookup treated exactly those as real tiers and bypassed the §6.1 gate in shop-plus (fixed
+separately with `Object.hasOwn`; this is the second, independent line).
+
+## ⏳ WHAT THIS DOES NOT DECIDE — and the blocker consumers will hit
+
+**Boutik+ can only produce `provisional` today.** Every `SellerTrustState` there is created
+`provisional` and there is **no promotion path to `verified`** — two non-test tier assignments in
+the whole repo, both `provisional`. « Verification tiers evidence + progression thresholds » is an
+**open ⏳ Decision** (`Boutik-Plus-Build-Spec.md:219`), so inventing criteria is out of bounds.
+
+**Consequence for whoever wires the producer:** emitting the honest tier turns Option B **off
+everywhere** until a supplier can become verified. The founder chose the interim — a **narrow,
+explicitly-audited manual attestation** by which he states that a named pilot supplier is verified.
+That records a human decision instead of guessing a threshold, and it does not close ⏳.
+
+**Fail-closed stays the rule at every hop:** no attestation ⇒ `provisional` ⇒ §6.1 refuses.

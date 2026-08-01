@@ -5,7 +5,7 @@ import {
   UserIdSchema,
   VerifiedPhoneAliasSchema,
 } from '@platform/kernel-types';
-import { OrderStatusSchema, PaymentModeSchema, SupplyModeSchema } from '../enums.js';
+import { OrderStatusSchema, PaymentModeSchema, SellerTrustTierSchema, SupplyModeSchema } from '../enums.js';
 import { FcfaSchema, IdSchema, IsoTimestampSchema, TrimmedNonEmptyString } from './common.js';
 
 /** §5.6 User — phone is an alias, never the key. */
@@ -447,6 +447,34 @@ export type AssetRef = z.infer<typeof AssetRefSchema>;
  * product that is genuinely uninspectable. Required makes a stale producer fail
  * LOUDLY at the schema instead of quietly at the buyer's door.
  *
+ * ═══ `sellerTier` — SELLER-TIER-WIRE-1 (v3.1.0), AND WHY IT IS OPTIONAL ═══
+ *
+ * §6.1's FIRST condition is « seller tier ≥ verified ». Shop+ cannot evaluate
+ * it: canon keys `SellerTrustState` by `sellerId`, and B4.2 keeps supplier
+ * identity off this projection by design, so Shop+ has no key to look a tier up
+ * with. The consequence was live — the checkout wire accepted the tier from the
+ * BUYER'S REQUEST, and pay-at-door worked in production only because the client
+ * asserted `verified`. The condition was not merely unenforced; the claim was
+ * load-bearing.
+ *
+ * The tier is a PROPERTY of the offer, not an identity: one of three values
+ * shared by every supplier in that band, naming no one. Supplier economics
+ * (`basePrice`, `resellerCommission`) already travel here and are stripped
+ * before the buyer, so this is the weaker disclosure, not a new class.
+ *
+ * OPTIONAL, unlike `category`, and the difference is what absence COSTS. An
+ * absent category degrades two things, one of them buyer-visible — she sees a
+ * plausible screen with no sign anything is wrong. An absent tier degrades
+ * exactly one: Option B is not offered, which is precisely what §6.1 already
+ * prescribes for any condition it cannot prove. So optional is strictly better
+ * than the status quo in EVERY state — a producer that sends it gives the gate
+ * server truth; one that does not gets refused, which beats trusting the wire —
+ * and it costs no coordinated deploy where a wrong order empties every shop.
+ *
+ * IT DECIDES NOTHING ABOUT PROGRESSION. How a supplier BECOMES `verified` is
+ * ⏳ « Verification tiers evidence + progression thresholds » and stays open.
+ * This field only carries whatever tier the producer can honestly state.
+ *
  * NO TAXONOMY IS DECIDED HERE. The type is the same free `TrimmedNonEmptyString`
  * canon already uses for every category (`ProductVersionSchema.category`,
  * `StorefrontSchema.category`), on the rule written at `StorefrontSchema`: « the
@@ -464,6 +492,7 @@ export const SupplyProjectionSchema = z
     productName: TrimmedNonEmptyString, // name-class, matches ProductVersionSchema.name (WO-5.14)
     assetRefs: z.array(AssetRefSchema), // bare refs, matches CustomerProductView.assetRefs — zero transformation
     category: TrimmedNonEmptyString, // display string, matches ProductVersionSchema.category — zero transformation (CATEGORY-WIRE-1)
+    sellerTier: SellerTrustTierSchema.optional(), // §6.1 « seller tier ≥ verified », from the producer (SELLER-TIER-WIRE-1)
   })
   .strict();
 export type SupplyProjection = z.infer<typeof SupplyProjectionSchema>;

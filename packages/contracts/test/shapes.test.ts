@@ -236,6 +236,28 @@ describe('SupplyProjection — canonical single definition (promoted at v0.4.0)'
     expect(SupplyProjectionSchema.safeParse(noCategory).success).toBe(false);
   });
 
+  it('SELLER-TIER-WIRE-1 — `sellerTier` is OPTIONAL (an older producer still parses) and ENUM-CLOSED', async () => {
+    const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
+    // OPTIONAL is the whole point: a producer that predates v3.1.0 sends nothing
+    // and must still parse, so this field costs no coordinated deploy. Absent
+    // then means §6.1 cannot prove « tier >= verified » and refuses Option B —
+    // which is what §6.1 already prescribes for any unprovable condition.
+    expect(SupplyProjectionSchema.safeParse(valid).success).toBe(true);
+    for (const tier of ['provisional', 'verified', 'trusted']) {
+      expect(SupplyProjectionSchema.safeParse({ ...valid, sellerTier: tier }).success, tier).toBe(true);
+    }
+    // CLOSED, unlike `category` — and the asymmetry is deliberate. Canon FIXES
+    // the three tiers (§5.6 SellerTrustState) while the category floor is an
+    // open founder decision, so a tier canon has never heard of is a defect and
+    // a category canon has never heard of is normal. Note `toString`: an
+    // unguarded object-literal lookup treated exactly that as a real tier and
+    // bypassed the §6.1 gate in shop-plus. The schema now refuses it upstream.
+    for (const bad of ['toString', '__proto__', 'constructor', 'VERIFIED', 'pas-un-palier', '']) {
+      expect(SupplyProjectionSchema.safeParse({ ...valid, sellerTier: bad }).success, `tier '${bad}'`).toBe(false);
+    }
+    expect(SupplyProjectionSchema.safeParse({ ...valid, sellerTier: null }).success).toBe(false);
+  });
+
   it('category follows the display-string class and accepts ANY value — no taxonomy is encoded here', async () => {
     const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
     // Trimmed-non-empty, exactly like ProductVersionSchema.category.

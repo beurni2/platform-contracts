@@ -714,3 +714,23 @@ Format per entry:
 **Evidence, this repo:** `pnpm build` 5/5 · `pnpm typecheck` 8/8 · `pnpm test` 10/10 tasks · `CI=true pnpm install --frozen-lockfile` clean · `pnpm gates` **ALL GATES GREEN** (every negative fixture still fails as required, including shape-freeze against a tampered snapshot).
 
 **⚠ CONSUMERS ARE NOW BROKEN UNTIL THEY MOVE — that is the point of MAJOR.** boutik-plus `buildSupplyProjection` emits seven fields and must emit eight; shop-plus consumes. **A live offer-service is deployed emitting the old shape** (`boutik-plus/packages/observability/src/provenance.ts` records it), so deploy ordering is founder-gated: canon → boutik producer → **deploy boutik** → shop consumer. Repo CI verified separately.
+
+## 2026-08-01 — canon v3.1.0 MINOR: `sellerTier` on `SupplyProjection` (SELLER-TIER-WIRE-1)
+
+**FOUNDER RULING « option2 »** on the §7 stop recorded in shop-plus: the interim is a **narrow, explicitly-audited manual attestation**, not invented progression criteria. This is the canon half. **Consumers are NOT built yet.**
+
+**The field:** `sellerTier: SellerTrustTierSchema.optional()`. §6.1's first condition is « seller tier ≥ verified » and Shop+ had no way to evaluate it — canon keys `SellerTrustState` by `sellerId`, B4.2 keeps supplier identity off this projection, so Shop+ holds no key to look a tier up with. The live consequence: the checkout wire took the tier from the **buyer's own request**, and pay-at-door worked in production **only because the client asserted `verified`**. Not merely unenforced — the claim was load-bearing.
+
+**OPTIONAL, where `category` is REQUIRED, and the asymmetry is reasoned not lazy.** What absence costs differs: an absent category degrades two things, one of them buyer-visible (a plausible screen with nothing signalling trouble); an absent tier degrades one — Option B is not offered, which is exactly §6.1's prescription for an unprovable condition. So optional is **strictly better than the status quo in every state**, and it costs no coordinated deploy where a wrong order empties every shop. **MINOR, additive: no deploy-order hazard this time.**
+
+**ENUM, where `category` is a free string** — canon FIXES the three tiers (§5.6); the category floor is an open founder decision. It also refuses `toString`/`__proto__` **upstream**: an unguarded object-literal lookup treated exactly those as real tiers and bypassed the §6.1 gate in shop-plus this morning. That was fixed with `Object.hasOwn`; this is a second, independent line, one hop earlier.
+
+**Reference mock deliberately left WITHOUT the field.** It is a generic stand-in with no basis for asserting anyone's trust standing, and an optional field is precisely designed for a producer that states no tier. Emitting `verified` there to make demos nicer would be the invention this whole slice exists to avoid.
+
+**Six-place checklist followed:** six `package.json` + three intra-refs → 3.1.0 · snapshot regenerated **LAST** and verified to carry `sellerTier` in `properties` and **NOT** in `required` · lockfile moved and re-verified with `CI=true --frozen-lockfile` · both `docs.manifest.json` (delta is the version line ONLY — confirmed by diff; the new derivation section adds no manifest footprint, as the generator is non-recursive) · `run-gates.sh` derives its version already.
+
+**Mutation-proven:** widening the enum to a free string → **1 test red**; making the field REQUIRED → **4 tests red**. Both restored.
+
+**Evidence:** build 5/5 · typecheck 8/8 · test 10/10 tasks, **contracts 161** (↑1) · `CI=true pnpm install --frozen-lockfile` clean · `pnpm gates` **ALL GATES GREEN**.
+
+**⏳ THE BLOCKER STANDS FOR CONSUMERS, recorded in `docs/derivations/CATEGORY-WIRE.md`:** boutik-plus can only produce `provisional` (two non-test tier assignments, both provisional, no promotion path), so wiring the producer honestly turns Option B off everywhere until the founder's attestation exists. That attestation is the next slice. **Fail-closed at every hop: no attestation ⇒ `provisional` ⇒ §6.1 refuses.**
