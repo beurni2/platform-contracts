@@ -83,3 +83,89 @@ describe('no-gated-shapes gate', () => {
     ]);
   });
 });
+
+/**
+ * ═══ ORDER-PAID-WIRE-1 (canon v3.2.0) — the order.confirmed.v1 payload ═══
+ *
+ * The founder-approved cross-app preparation signal. The absences below are
+ * not style: each names a value the founder ruled MUST NOT cross this wire,
+ * and each is asserted as a REFUSAL so that loosening `.strict()` — or
+ * "helpfully" adding the field back — turns this suite red.
+ */
+describe('OrderConfirmedPayloadSchema — the paid-order wire, exactly seven fields', () => {
+  const VALID = {
+    orderId: 'order-quote-abc123',
+    productVersionId: 'pv-bazin-0001',
+    offerVersion: 'ov-1',
+    paymentMode: 'FULL_PREPAY',
+    paidAt: '2026-08-01T18:00:00.000Z',
+    zoneTo: 'Gounghin, Ouagadougou',
+    sellerBasePrice: 10_000,
+  };
+
+  it('parses the approved shape, in both payment modes', () => {
+    expect(publicApi.OrderConfirmedPayloadSchema.safeParse(VALID).success).toBe(true);
+    expect(
+      publicApi.OrderConfirmedPayloadSchema.safeParse({
+        ...VALID,
+        paymentMode: 'DELIVERY_FEE_PREPAID_PRODUCT_AT_DOOR',
+      }).success,
+    ).toBe(true);
+  });
+
+  it("REFUSES every field the founder ruled off this wire — supplier identity, buyer identity, the drop code, everyone else's money", () => {
+    const banned: Record<string, unknown>[] = [
+      { supplierId: 'sup-001' }, // Boutik+ resolves the supplier internally
+      { sellerId: 'sup-001' },
+      { buyerPhone: '+226 70 00 00 00' }, // dispatch-surface data, never fulfillment
+      { buyerName: 'Awa' },
+      { buyerRef: 'buyer-1' },
+      { buyerDropCode: '1234' }, // Ten Laws #3 — never seller-side
+      { buyerTotal: 12_500 }, // Law #1 — nothing of M, C, D toward a seller surface
+      { resellerCommission: 1_000 },
+      { resellerMarkup: 1_500 },
+      { deliveryFee: 1_000 },
+    ];
+    for (const extra of banned) {
+      const result = publicApi.OrderConfirmedPayloadSchema.safeParse({ ...VALID, ...extra });
+      expect(result.success, `${Object.keys(extra)[0]} must be UNREPRESENTABLE on this wire`).toBe(false);
+    }
+  });
+
+  it('refuses a malformed core field — empty id, unknown mode, fractional or negative francs', () => {
+    const bad: Record<string, unknown>[] = [
+      { orderId: '' },
+      { orderId: '  ord-1 ' }, // untrimmed fails the id-class primitive
+      { productVersionId: '' },
+      { paymentMode: 'CASH_ON_TRUST' },
+      { sellerBasePrice: 10_000.5 },
+      { sellerBasePrice: -1 },
+      { zoneTo: '' },
+    ];
+    for (const over of bad) {
+      const result = publicApi.OrderConfirmedPayloadSchema.safeParse({ ...VALID, ...over });
+      expect(result.success, JSON.stringify(over)).toBe(false);
+    }
+  });
+
+  it('hangs on the CANON name — order.confirmed.v1 is in the registry, and the composed PlatformEvent parses', () => {
+    // The founder approved this under the label « order.paid.v1 »; §5.7 already
+    // names the moment. Pin both facts: the canon name exists, the label that
+    // would have duplicated it does not.
+    expect(EVENT_NAMES).toContain('order.confirmed.v1');
+    expect(EVENT_NAMES as readonly string[]).not.toContain('order.paid.v1');
+    const event = publicApi.PlatformEventSchema.safeParse({
+      name: 'order.confirmed.v1',
+      envelope: {
+        command_id: 'ord-confirm-order-quote-abc123',
+        correlation_id: 'corr-order-quote-abc123',
+        aggregateVersion: 1,
+        actor: 'storefront-service:order',
+        serverTime: '2026-08-01T18:00:00.000Z',
+        version: 'v1',
+      },
+      payload: VALID,
+    });
+    expect(event.success).toBe(true);
+  });
+});

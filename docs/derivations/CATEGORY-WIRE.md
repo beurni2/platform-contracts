@@ -175,3 +175,48 @@ Three properties worth naming, because they are what make this safe rather than 
 Risk and no Risk service exists, so there is nowhere to read it from. The vault parses it strictly
 against the canonical record, which bounds the SHAPE but not the CLAIM. **This is not closed by
 SELLER-TIER-WIRE-1 and must not be read as closed.**
+
+---
+
+# ORDER-PAID-WIRE-1 — the preparation signal (canon v3.2.0)
+
+**Status:** canon shipped; producer (Shop+) and consumer (Boutik+ fulfillment intake) pending.
+**Founder authorisation:** 2026-08-01, « both approved » — the seven-field shape and the
+buyer-contact checkout fields (phone + quartier + repère; the latter is a separate slice).
+Recorded in this file because it is the same wire family: facts crossing repos on canon shapes.
+
+## The naming correction, on the record
+
+The founder approved this event under the working label « order.paid.v1 » — a label this CTO
+drafted without having re-read §5.7 first. The union already names the moment:
+`order.confirmed.v1`, and Shop+'s order state machine reaches `confirmed` exactly when the
+provider webhook confirms the checkout leg. A second name for one moment is vocabulary drift;
+the approved payload is unchanged and hangs on the canon name. The test suite pins both facts:
+`order.confirmed.v1` present, `order.paid.v1` absent.
+
+## The semantics, precisely
+
+Emitted ONCE per order, by Shop+, when the order reaches `confirmed` — provider-webhook truth,
+never the buyer's device (Ten Laws #2). Both payment modes emit: FULL_PREPAY means everything is
+paid; DELIVERY_FEE_PREPAID_PRODUCT_AT_DOOR means the delivery leg is paid and the product is due
+at the door. Preparation begins in both. Custody law untouched in both (Ten Laws #3).
+
+Transport: Shop+ → Boutik+ over an authenticated service binding (the supply wire's discipline,
+reversed direction). At-least-once; the consumer is idempotent on `orderId` and FIRST-WINS
+(`FulfillmentBook.registerPaidOrder` — a redelivery can never reset the founder's
+preparation-decision clock, already the tested behaviour).
+
+## What is deliberately unrepresentable (founder privacy rules, enforced by `.strict()` + tests)
+
+· **Supplier identity** — Boutik+ resolves supplier from `productVersionId` internally; supplier
+  identity never crosses an app wire in either direction.
+· **Buyer identity/contact and `buyerDropCode`** — dispatch-surface data (the founder's operator
+  console) and Ten Laws #3 respectively. A supplier prepares against an order reference.
+· **Everyone else's money** — only B (`sellerBasePrice`) rides, verbatim from the frozen quote.
+  No buyerTotal, no C, no M, no D.
+
+## What this does NOT decide
+
+The operator console, the ops credential, buyer-contact capture, and the 10-minute
+`acceptanceDecisionMin` re-tune (founder ruled 10; code ships 120 until the fulfillment slice
+lands) are all consumer-side slices with their own reviews.

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { FcfaSchema, IdSchema, IsoTimestampSchema, TrimmedNonEmptyString } from './shapes/common.js';
+import { PaymentModeSchema } from './enums.js';
 
 /**
  * Versioned event envelope (Execution Contract §3): every event carries
@@ -136,3 +138,72 @@ export const PlatformEventSchema = z
   })
   .strict();
 export type PlatformEvent = z.infer<typeof PlatformEventSchema>;
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * ORDER-PAID-WIRE-1 (canon v3.2.0) — the payload of `order.confirmed.v1`,
+ * THE FIRST CANONICAL PAYLOAD SCHEMA, because this one crosses repos.
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Founder-approved 2026-08-01 (« both approved »): the cross-app signal that a
+ * buyer's order is confirmed and PREPARATION SHOULD BEGIN. Producer: Shop+
+ * (the order's owner), at the moment its order reaches `confirmed` — which
+ * happens exactly when the PAYMENT PROVIDER'S WEBHOOK confirms the checkout
+ * leg, the only payment truth there is (Ten Laws #2). Never earlier, never on
+ * the buyer's word, never from her device. Consumer: Boutik+ fulfillment
+ * intake, over an authenticated service wire, delivered AT-LEAST-ONCE and
+ * absorbed idempotently on `orderId` (the intake is first-wins: a redelivery
+ * can never reset the founder's preparation-decision clock).
+ *
+ * A NAMING CORRECTION, recorded so the approval trail is honest: the founder
+ * approved this shape under the working label « order.paid.v1 ». §5.7's union
+ * above ALREADY names this moment — `order.confirmed.v1` — and a second name
+ * for one moment is precisely the vocabulary drift the union exists to
+ * prevent. The approved payload is untouched; only the label it hangs on is
+ * the canon one.
+ *
+ * ONE EVENT, BOTH PAYMENT MODES, and `paymentMode` says which promise it
+ * carries:
+ *   · FULL_PREPAY — everything is provider-confirmed; prepare and hand to
+ *     Séra.
+ *   · DELIVERY_FEE_PREPAID_PRODUCT_AT_DOOR — the DELIVERY leg is
+ *     provider-confirmed and the product is due at the buyer's door;
+ *     preparation begins the same, and custody law is untouched (the product
+ *     still transfers only after every due leg is provider-confirmed, Ten
+ *     Laws #3).
+ *
+ * ═══ WHAT IS DELIBERATELY ABSENT — the founder's privacy rules, made
+ *     UNREPRESENTABLE by `.strict()` rather than merely omitted ═══
+ *
+ *   · NO SUPPLIER ID. Boutik+ owns the product→supplier mapping and resolves
+ *     it INTERNALLY from `productVersionId`; supplier identity never rides a
+ *     cross-app wire, in either direction (the same discipline B4.2 imposes
+ *     on the supply projection).
+ *   · NO BUYER IDENTITY OR CONTACT. A supplier prepares a product for an
+ *     order reference; Séra collects. Buyer contact is DISPATCH-surface data
+ *     (the founder's operator console), never fulfillment data.
+ *   · NO `buyerDropCode`. Ten Laws #3 bans it from everything seller-side.
+ *   · NO buyer total, commission, markup or delivery fee. `sellerBasePrice`
+ *     is B — the supplier's OWN number, carried VERBATIM off the frozen
+ *     quote, never recomputed (Law #1: commission never leaks toward a
+ *     seller-facing surface; Law #2: no app computes another domain's
+ *     amounts).
+ */
+export const OrderConfirmedPayloadSchema = z
+  .object({
+    /** Shop+'s durable order id — the consumer's idempotency key. */
+    orderId: IdSchema,
+    /** The product sold. Boutik+ resolves WHICH SUPPLIER from this, internally. */
+    productVersionId: IdSchema,
+    /** The offer version the listing froze against (same field as SupplyProjection). */
+    offerVersion: z.string().min(1),
+    paymentMode: PaymentModeSchema,
+    /** Server time the order reached `confirmed` — starts the preparation-decision clock. */
+    paidAt: IsoTimestampSchema,
+    /** Delivery destination zone — dispatch planning, not an address. */
+    zoneTo: TrimmedNonEmptyString,
+    /** B, verbatim from the frozen quote. The supplier's own number, nothing else's. */
+    sellerBasePrice: FcfaSchema,
+  })
+  .strict();
+export type OrderConfirmedPayload = z.infer<typeof OrderConfirmedPayloadSchema>;

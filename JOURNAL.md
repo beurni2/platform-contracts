@@ -734,3 +734,13 @@ Format per entry:
 **Evidence:** build 5/5 · typecheck 8/8 · test 10/10 tasks, **contracts 161** (↑1) · `CI=true pnpm install --frozen-lockfile` clean · `pnpm gates` **ALL GATES GREEN**.
 
 **⏳ THE BLOCKER STANDS FOR CONSUMERS, recorded in `docs/derivations/CATEGORY-WIRE.md`:** boutik-plus can only produce `provisional` (two non-test tier assignments, both provisional, no promotion path), so wiring the producer honestly turns Option B off everywhere until the founder's attestation exists. That attestation is the next slice. **Fail-closed at every hop: no attestation ⇒ `provisional` ⇒ §6.1 refuses.**
+
+## 2026-08-01 — ORDER-PAID-WIRE-1a: canon v3.2.0, the preparation signal's payload
+
+**`OrderConfirmedPayloadSchema` — the first canonical payload schema — added to `events.ts`, hung on the EXISTING §5.7 name `order.confirmed.v1`.** Founder-approved shape (« both approved », 2026-08-01), seven fields exactly: `orderId · productVersionId · offerVersion · paymentMode · paidAt · zoneTo · sellerBasePrice`. MINOR, additive: v3.1.0 → v3.2.0, lockstep across all five packages + both intra-refs, per the v3.1.0 template.
+
+**The naming correction is on the record here and in the derivation doc:** the founder approved the shape under my working label « order.paid.v1 »; I drafted that label without re-reading §5.7, which already names the moment. The payload is his; the label is canon's. Tests pin both facts (`order.confirmed.v1` present, `order.paid.v1` absent).
+
+**The founder's privacy rules are tests, not comments:** supplier id, buyer name/phone/ref, `buyerDropCode`, buyerTotal, C, M and D are each asserted UNREPRESENTABLE — ten banned-field refusals that go red if `.strict()` is loosened or a field is "helpfully" restored.
+
+**Evidence:** contracts 165/165 (10 new) · workspace suites all green · `run-gates.sh` exit 0 ALL GATES GREEN · snapshot regenerated LAST, verified to carry the schema with exactly the seven properties at 3.2.0 · both docs manifests at 3.2.0. Fresh-context verifier: dispatched on the committed diff (mandatory for `contracts/`); release-merge waits on its verdict + the founder's word.
