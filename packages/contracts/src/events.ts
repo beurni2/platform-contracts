@@ -129,7 +129,9 @@ export const EVENT_NAMES = [
 export const EventNameSchema = z.enum(EVENT_NAMES);
 export type EventName = z.infer<typeof EventNameSchema>;
 
-/** A platform event: envelope + registered name + payload (payload schemas are app-repo/E1 work). */
+/** A platform event: envelope + registered name + payload. Payload schemas are
+ *  app-repo/E1 work EXCEPT where a payload crosses repos — those are canon,
+ *  defined below (`OrderConfirmedPayloadSchema` is the first). */
 export const PlatformEventSchema = z
   .object({
     name: EventNameSchema,
@@ -147,11 +149,15 @@ export type PlatformEvent = z.infer<typeof PlatformEventSchema>;
  *
  * Founder-approved 2026-08-01 (« both approved »): the cross-app signal that a
  * buyer's order is confirmed and PREPARATION SHOULD BEGIN. Producer: Shop+
- * (the order's owner), at the moment its order reaches `confirmed` — which
- * happens exactly when the PAYMENT PROVIDER'S WEBHOOK confirms the checkout
- * leg, the only payment truth there is (Ten Laws #2). Never earlier, never on
- * the buyer's word, never from her device. Consumer: Boutik+ fulfillment
- * intake, over an authenticated service wire, delivered AT-LEAST-ONCE and
+ * (the order's owner), at the moment its order reaches `confirmed`. PRECISELY
+ * (verifier correction — the first draft said « exactly when the webhook
+ * confirms », which is one hop short): the machine is `payment_pending → paid
+ * → confirmed`; the PROVIDER'S WEBHOOK drives `paid`, and the confirm step
+ * re-verifies the recorded provider leg before `confirmed`. So `confirmed` is
+ * impossible without provider truth at BOTH hops (Ten Laws #2) — never
+ * earlier, never on the buyer's word, never from her device — but it is the
+ * CONFIRM transition, not the webhook receipt, that emits. Consumer: Boutik+
+ * fulfillment intake, over an authenticated service wire, delivered AT-LEAST-ONCE and
  * absorbed idempotently on `orderId` (the intake is first-wins: a redelivery
  * can never reset the founder's preparation-decision clock).
  *
@@ -198,7 +204,15 @@ export const OrderConfirmedPayloadSchema = z
     /** The offer version the listing froze against (same field as SupplyProjection). */
     offerVersion: z.string().min(1),
     paymentMode: PaymentModeSchema,
-    /** Server time the order reached `confirmed` — starts the preparation-decision clock. */
+    /**
+     * Server time of the CONFIRMED transition — the emitting transition, one
+     * named instant, not the webhook receipt and not the `paid` hop (the
+     * machine is `payment_pending → paid → confirmed`; the two hops have two
+     * times, and the consumer's FIRST-WINS decision clock must start from an
+     * unambiguous one). The name is the founder-approved label; the meaning
+     * is pinned here: the moment the preparation promise became
+     * provider-backed.
+     */
     paidAt: IsoTimestampSchema,
     /** Delivery destination zone — dispatch planning, not an address. */
     zoneTo: TrimmedNonEmptyString,
@@ -207,3 +221,31 @@ export const OrderConfirmedPayloadSchema = z
   })
   .strict();
 export type OrderConfirmedPayload = z.infer<typeof OrderConfirmedPayloadSchema>;
+
+/**
+ * ═══ THE WIRE ARTIFACT ITSELF — the M1 closure (verifier MAJOR, accepted) ═══
+ *
+ * `OrderConfirmedPayloadSchema` alone is SCHEMA-LOCAL: nothing above stops a
+ * careless producer from composing a `PlatformEvent` named
+ * `order.confirmed.v1` whose `payload` is any record at all — generic
+ * `PlatformEventSchema` would accept `buyerPhone` without blinking, and the
+ * founder's privacy rules would hold only by discipline. This schema binds
+ * the NAME to the PAYLOAD in one canonical artifact, so both ends of the
+ * wire can parse the same thing: the producer parses BEFORE send, the
+ * consumer parses ON receipt, and a payload carrying anything the founder
+ * banned is refused at both ends by construction.
+ *
+ * ADDITIVE on purpose: `PlatformEventSchema` itself is untouched, because
+ * tightening it retroactively would change behaviour for every existing
+ * event composition in three repos — a MAJOR-bump decision nobody asked for.
+ * Producer/consumer slices MUST use THIS schema for this event; that
+ * requirement travels in their DoD and is pinned by the tests beside it.
+ */
+export const OrderConfirmedEventSchema = z
+  .object({
+    name: z.literal('order.confirmed.v1'),
+    envelope: EventEnvelopeSchema,
+    payload: OrderConfirmedPayloadSchema,
+  })
+  .strict();
+export type OrderConfirmedEvent = z.infer<typeof OrderConfirmedEventSchema>;

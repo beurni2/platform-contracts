@@ -196,8 +196,12 @@ the approved payload is unchanged and hangs on the canon name. The test suite pi
 
 ## The semantics, precisely
 
-Emitted ONCE per order, by Shop+, when the order reaches `confirmed` — provider-webhook truth,
-never the buyer's device (Ten Laws #2). Both payment modes emit: FULL_PREPAY means everything is
+Emitted ONCE per order, by Shop+, when the order reaches `confirmed`. Precisely (verifier
+correction): the machine is `payment_pending → paid → confirmed`; the provider webhook drives
+`paid`, and the confirm step re-verifies the recorded provider leg — so `confirmed` is impossible
+without provider truth at both hops, and it is the CONFIRM transition that emits, carrying its own
+server time as `paidAt` (one named instant, so the consumer's first-wins decision clock starts
+unambiguously). Never the buyer's device (Ten Laws #2). Both payment modes emit: FULL_PREPAY means everything is
 paid; DELIVERY_FEE_PREPAID_PRODUCT_AT_DOOR means the delivery leg is paid and the product is due
 at the door. Preparation begins in both. Custody law untouched in both (Ten Laws #3).
 
@@ -218,5 +222,7 @@ preparation-decision clock, already the tested behaviour).
 ## What this does NOT decide
 
 The operator console, the ops credential, buyer-contact capture, and the 10-minute
-`acceptanceDecisionMin` re-tune (founder ruled 10; code ships 120 until the fulfillment slice
-lands) are all consumer-side slices with their own reviews.
+`acceptanceDecisionMin` re-tune are all consumer-side slices with their own reviews. The 10-minute
+value is the founder's, verbatim and dated (2026-08-01): « after 10 mn if the another supplier get
+a product sold but still not showing any sign of preparation I will notify them offline myself ».
+Code ships 120 until the fulfillment slice lands; the re-tune cites this ruling, not a guess.

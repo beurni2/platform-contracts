@@ -169,3 +169,55 @@ describe('OrderConfirmedPayloadSchema — the paid-order wire, exactly seven fie
     expect(event.success).toBe(true);
   });
 });
+
+/**
+ * ═══ OrderConfirmedEventSchema — the M1 closure: the NAME is bound to the
+ *     PAYLOAD in one wire artifact, at both ends ═══
+ */
+describe('OrderConfirmedEventSchema — a banned field is refused at the EVENT level, not only the schema level', () => {
+  const ENVELOPE = {
+    command_id: 'ord-confirm-order-quote-abc123',
+    correlation_id: 'corr-order-quote-abc123',
+    aggregateVersion: 1,
+    actor: 'storefront-service:order',
+    serverTime: '2026-08-01T18:00:00.000Z',
+    version: 'v1',
+  };
+  const PAYLOAD = {
+    orderId: 'order-quote-abc123',
+    productVersionId: 'pv-bazin-0001',
+    offerVersion: 'ov-1',
+    paymentMode: 'FULL_PREPAY',
+    paidAt: '2026-08-01T18:00:00.000Z',
+    zoneTo: 'Gounghin, Ouagadougou',
+    sellerBasePrice: 10_000,
+  };
+
+  it('parses the canonical composition', () => {
+    expect(
+      publicApi.OrderConfirmedEventSchema.safeParse({ name: 'order.confirmed.v1', envelope: ENVELOPE, payload: PAYLOAD })
+        .success,
+    ).toBe(true);
+  });
+
+  it('THE GAP THE VERIFIER NAMED, CLOSED: generic PlatformEventSchema ACCEPTS a buyerPhone payload — the wire artifact REFUSES it', () => {
+    const leaky = {
+      name: 'order.confirmed.v1',
+      envelope: ENVELOPE,
+      payload: { ...PAYLOAD, buyerPhone: '+226 70 00 00 00' },
+    };
+    // Stated, not hidden: the generic schema cannot protect this wire. That is
+    // WHY OrderConfirmedEventSchema exists and why producer/consumer DoDs
+    // require it. If canon ever tightens PlatformEventSchema, this first
+    // assertion goes red and the comment above it comes down — deliberately.
+    expect(publicApi.PlatformEventSchema.safeParse(leaky).success).toBe(true);
+    expect(publicApi.OrderConfirmedEventSchema.safeParse(leaky).success).toBe(false);
+  });
+
+  it('refuses any OTHER registered name — the binding is to order.confirmed.v1 alone', () => {
+    expect(
+      publicApi.OrderConfirmedEventSchema.safeParse({ name: 'order.status_projection_updated.v1', envelope: ENVELOPE, payload: PAYLOAD })
+        .success,
+    ).toBe(false);
+  });
+});
