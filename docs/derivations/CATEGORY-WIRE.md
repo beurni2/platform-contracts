@@ -139,3 +139,39 @@ explicitly-audited manual attestation** by which he states that a named pilot su
 That records a human decision instead of guessing a threshold, and it does not close ⏳.
 
 **Fail-closed stays the rule at every hop:** no attestation ⇒ `provisional` ⇒ §6.1 refuses.
+
+---
+
+## Consumer status — both halves are now wired (2026-08-01)
+
+**Producer (boutik-plus).** `attested-suppliers.ts` turns the founder's `VERIFIED_SUPPLIERS`
+attestation list into `sellerTier` on the projection; `buildSupplyProjection` emits it
+conditionally and `category` verbatim. The attestation is a Worker **secret**, written by
+`offer-deploy.yml` with the deploy, so the code that reads it and the value it reads cannot arrive
+separately. **Unset is a legitimate state** and warns rather than failing the deploy: no
+attestation ⇒ every projection is `provisional` ⇒ §6.1 refuses Option B everywhere, which is the
+designed fail-closed behaviour while ⏳ stays open.
+
+**Consumer (shop-plus).** `SELLER-TIER-WIRE-1`: `payAtDoorContext` on the checkout wire now carries
+`eligibility` **and nothing else**. `sellerTier` and `category` are read from the supply projection
+the Worker resolves for itself, and a caller that sends either is **refused**
+(`400 unknown_field · payAtDoorContext.sellerTier`) rather than silently ignored — the same
+allowlist law `policy` has always been held to.
+
+Three properties worth naming, because they are what make this safe rather than merely different:
+
+1. **Absence omits, it never fills.** No supply description — unconfigured binding, unreachable
+   producer, stale projection, pre-v3.0.0 producer — omits the entire `payAtDoor` block, and the
+   vault answers the named `context_missing`. There is no partial context that could accidentally
+   satisfy a condition.
+2. **A pre-v3.1.0 producer refuses.** A projection with no `sellerTier` reaches the vault as `''`,
+   which is not a member of the tier table, so §6.1 answers `seller_tier_below_minimum`. An
+   unprovable condition is a refused condition.
+3. **Supply is read only for an Option-B request.** A supply outage costs the door mode and never
+   ordinary FULL_PREPAY checkout, and the cross-Worker fetch is not charged to the majority of
+   buyers who do not choose the door.
+
+**Still caller-supplied, and still open:** `eligibility`. §6.4 assigns `PayAtDoorEligibility` to
+Risk and no Risk service exists, so there is nowhere to read it from. The vault parses it strictly
+against the canonical record, which bounds the SHAPE but not the CLAIM. **This is not closed by
+SELLER-TIER-WIRE-1 and must not be read as closed.**
