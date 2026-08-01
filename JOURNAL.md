@@ -694,3 +694,23 @@ Format per entry:
   5. **`scripts/run-gates.sh`** — `--pinned-version` was hardcoded twice
 - **ITEM 5 IS NOW DERIVED, NOT TYPED.** `CANON_VERSION="$(node -p "require('./package.json').version")"`, reading the same source `export-maps` already treats as authoritative. **This is also the explanation for the most confusing hour of the slice:** the gates were GREEN locally while CI was RED, because the gate was asserting against a hardcoded 2.4.0 and CI against the manifest — two checks reading different numbers, agreeing only by accident. Regenerating the manifest broke the tie and turned the local gates red, which is how the fourth copy surfaced at all.
 - **AND A PROCESS FAILURE OF MINE, NOT THE REPO'S:** I reported this repo green on `92fe683` and `92c8ac6` from LOCAL tests and gates and **never looked at this repo's CI** — which was red on both, for the manifest, the whole time. Local green is not CI green, and I have written that sentence before.
+
+## 2026-08-01 — CATEGORY-WIRE-1 / canon v3.0.0 MAJOR: `category` on `SupplyProjectionSchema`
+
+**FOUNDER-APPROVED** (« Cannon field Approved build it », 2026-08-01), after the §7 report in shop-plus's JOURNAL. The field the buyer's door screen needs, and the field §6.1 needs so it stops reading a category off the wire.
+
+**THE CHANGE IS ONE LINE OF SCHEMA.** `category: TrimmedNonEmptyString` on `SupplyProjectionSchema`, byte-matching `ProductVersionSchema.category` — which has been canon since the beginning. Boutik+ products have always carried a category; this projection dropped it, so Shop+ has never seen one.
+
+**MAJOR, NOT MINOR — the precedent is exact.** `productName` + `assetRefs` were added to this same `.strict()` object as REQUIRED fields at **v2.0.0 MAJOR** (SUPPLY-DISPLAY-FIELDS-1, commit `2f0a83a`). Same object, same class of change, same required-ness ⇒ same bump class. **v2.6.0 → v3.0.0.**
+
+**WHY REQUIRED AND NOT OPTIONAL — the argument that decided it.** An optional category degrades SILENTLY in both consumers: §6.1 refuses Option B, §6.2 renders the cautious inspection row. Both are correct and both are invisible, so a producer that simply forgot would be indistinguishable from a genuinely uninspectable product. Required makes a stale producer fail LOUDLY at the schema instead of quietly at a buyer's door. Pinned by test (`display fields are REQUIRED …`, now asserting all three).
+
+**NO TAXONOMY WAS CLOSED, and a test asserts that.** Canon types every category as a free `TrimmedNonEmptyString` on the rule written at `StorefrontSchema`: « the category-floor taxonomy [is a] FOUNDER DECISION and [does] NOT enter this shape ». The new test parses `shoes`, `electronics`, `mode` and `un-truc-tout-neuf` as VALID — the schema does not get to pre-empt the founder; consumers allowlist and fail closed. The ⏳ category-floor Decision stays open.
+
+**Reference mock** emits `sealed_beauty_cosmetics` for its shea soap — a realistic VALUE so the reference chain exercises a category a consumer would recognise, annotated as a value and not a taxonomy.
+
+**THE SIX-PLACE CHECKLIST WAS FOLLOWED IN ORDER** (written down at v2.5.0 precisely because three of six were missed then): ① six `package.json` versions + the three intra-package refs ② `api-surface.snapshot.json` regenerated **LAST**, after the version bumps — verified to carry `category` in `SupplyProjectionSchema.required` ③ `pnpm-lock.yaml` moved, re-verified with `CI=true pnpm install --frozen-lockfile` (the exact command that failed at v2.5.0) ④ `docs.manifest.json` ×2 regenerated (both written by one script run, `packageVersion 3.0.0`) ⑤ `run-gates.sh` needed nothing — it derives `CANON_VERSION` from `package.json` since v2.5.0.
+
+**Evidence, this repo:** `pnpm build` 5/5 · `pnpm typecheck` 8/8 · `pnpm test` 10/10 tasks · `CI=true pnpm install --frozen-lockfile` clean · `pnpm gates` **ALL GATES GREEN** (every negative fixture still fails as required, including shape-freeze against a tampered snapshot).
+
+**⚠ CONSUMERS ARE NOW BROKEN UNTIL THEY MOVE — that is the point of MAJOR.** boutik-plus `buildSupplyProjection` emits seven fields and must emit eight; shop-plus consumes. **A live offer-service is deployed emitting the old shape** (`boutik-plus/packages/observability/src/provenance.ts` records it), so deploy ordering is founder-gated: canon → boutik producer → **deploy boutik** → shop consumer. Repo CI verified separately.

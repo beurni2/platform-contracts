@@ -82,6 +82,11 @@ export const referenceSupplyProjectionMock: MockAdapter = makeReferenceAdapter({
       available,
       productName: 'Savon de karité', // SUPPLY-DISPLAY-FIELDS-1 — display fields now required on the wire
       assetRefs: [`media/pv_${seed}/hero.jpg`],
+      // CATEGORY-WIRE-1 (v3.0.0). A VALUE, never a taxonomy: canon types every
+      // category as a free string and leaves the category floor to the founder.
+      // This one is chosen to be realistic for a shea soap so the reference
+      // chain exercises a category a consumer would actually recognise.
+      category: 'sealed_beauty_cosmetics',
     });
     return [
       { name: 'offer.published.v1', payload: payload(5) },
