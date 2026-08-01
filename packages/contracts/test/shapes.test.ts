@@ -197,6 +197,7 @@ describe('SupplyProjection — canonical single definition (promoted at v0.4.0)'
     available: 4,
     productName: 'Savon de karité', // display field (SUPPLY-DISPLAY-FIELDS-1)
     assetRefs: ['media/pv_001/hero.jpg', 'media/pv_001/detail-1.jpg'],
+    category: 'sealed_beauty_cosmetics', // display field (CATEGORY-WIRE-1, v3.0.0)
   };
 
   it('parses the identity-free projection with its display fields', async () => {
@@ -206,6 +207,7 @@ describe('SupplyProjection — canonical single definition (promoted at v0.4.0)'
     if (parsed.success) {
       expect(parsed.data.productName).toBe('Savon de karité');
       expect(parsed.data.assetRefs).toEqual(['media/pv_001/hero.jpg', 'media/pv_001/detail-1.jpg']);
+      expect(parsed.data.category).toBe('sealed_beauty_cosmetics');
     }
   });
 
@@ -219,12 +221,34 @@ describe('SupplyProjection — canonical single definition (promoted at v0.4.0)'
     },
   );
 
-  it('display fields are REQUIRED, not optional (no economics without a name/images)', async () => {
+  it('display fields are REQUIRED, not optional (no economics without a name/images/category)', async () => {
     const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
     const { productName: _n, ...noName } = valid;
     const { assetRefs: _a, ...noAssets } = valid;
+    // CATEGORY-WIRE-1: required for the same reason as the other two, plus one
+    // of its own — an OPTIONAL category degrades silently (Option B refuses and
+    // the cautious §6.2 row renders, both invisible), so a producer that forgot
+    // would be indistinguishable from a genuinely uninspectable product. This
+    // assertion is what makes a stale producer fail loudly at the schema.
+    const { category: _c, ...noCategory } = valid;
     expect(SupplyProjectionSchema.safeParse(noName).success).toBe(false);
     expect(SupplyProjectionSchema.safeParse(noAssets).success).toBe(false);
+    expect(SupplyProjectionSchema.safeParse(noCategory).success).toBe(false);
+  });
+
+  it('category follows the display-string class and accepts ANY value — no taxonomy is encoded here', async () => {
+    const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
+    // Trimmed-non-empty, exactly like ProductVersionSchema.category.
+    expect(SupplyProjectionSchema.safeParse({ ...valid, category: '   ' }).success).toBe(false);
+    expect(SupplyProjectionSchema.safeParse({ ...valid, category: '' }).success).toBe(false);
+    expect(SupplyProjectionSchema.safeParse({ ...valid, category: 42 }).success).toBe(false);
+    // AND THE POINT OF THE FIELD: canon holds no category floor (« the
+    // category-floor taxonomy [is a] FOUNDER DECISION », StorefrontSchema), so a
+    // category canon has never heard of must still PARSE. Consumers allowlist
+    // and fail closed; the schema does not get to pre-empt the founder.
+    for (const unknown of ['shoes', 'electronics', 'mode', 'un-truc-tout-neuf']) {
+      expect(SupplyProjectionSchema.safeParse({ ...valid, category: unknown }).success).toBe(true);
+    }
   });
 
   it('productName follows the name-class (trimmed non-empty) — whitespace-only refused', async () => {

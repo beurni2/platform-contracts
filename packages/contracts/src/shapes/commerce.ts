@@ -428,6 +428,31 @@ export type AssetRef = z.infer<typeof AssetRefSchema>;
  * they belong to (the partial-state the second-read-model option would have
  * risked). Display data is not identity: the ban is on supplier identity/contact/
  * pickup, never on the product's own name and pictures.
+ *
+ * ═══ `category` — CATEGORY-WIRE-1 (v3.0.0), AND WHY IT IS REQUIRED ═══
+ *
+ * `ProductVersionSchema.category` has been canon since the beginning; this
+ * projection dropped it, so Shop+ has never seen a product's category. That
+ * absence had two consequences, and the field is here to close both:
+ *   · §6.2's at-door inspection matrix has no row to pick, so every buyer sees
+ *     the conservative fallback whatever she actually bought;
+ *   · §6.1's « category inspectable » condition had nowhere to read a category
+ *     FROM, so the checkout wire accepted one from the caller — the party the
+ *     condition exists to constrain.
+ *
+ * REQUIRED, matching `productName`/`assetRefs`, and for the same reason those
+ * are: a projection that can omit it degrades SILENTLY. An absent category
+ * refuses Option B and shows the cautious inspection row — both correct, both
+ * invisible — so a producer that simply forgot would look exactly like a
+ * product that is genuinely uninspectable. Required makes a stale producer fail
+ * LOUDLY at the schema instead of quietly at the buyer's door.
+ *
+ * NO TAXONOMY IS DECIDED HERE. The type is the same free `TrimmedNonEmptyString`
+ * canon already uses for every category (`ProductVersionSchema.category`,
+ * `StorefrontSchema.category`), on the rule written at `StorefrontSchema`: « the
+ * category-floor taxonomy [is a] FOUNDER DECISION and [does] NOT enter this
+ * shape ». Consumers allowlist what they recognise and fail closed on the rest;
+ * carrying a value changes no taxonomy and closes no ⏳ Decision.
  */
 export const SupplyProjectionSchema = z
   .object({
@@ -438,6 +463,7 @@ export const SupplyProjectionSchema = z
     available: z.number().int().min(0),
     productName: TrimmedNonEmptyString, // name-class, matches ProductVersionSchema.name (WO-5.14)
     assetRefs: z.array(AssetRefSchema), // bare refs, matches CustomerProductView.assetRefs — zero transformation
+    category: TrimmedNonEmptyString, // display string, matches ProductVersionSchema.category — zero transformation (CATEGORY-WIRE-1)
   })
   .strict();
 export type SupplyProjection = z.infer<typeof SupplyProjectionSchema>;
