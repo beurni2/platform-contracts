@@ -754,3 +754,17 @@ Also taken: **M2** — my comment said emission happens « exactly when the webh
 **Carried findings, not actioned here (each its own slice):** M6 — the shape-freeze gate is structurally blind to `.strict()` (zod emits `additionalProperties:false` for strip AND strict objects; empirically verified by the verifier) — older canon schemas need a refusal-test audit. M7 — `IsoTimestampSchema` is `z.string().min(1)` and accepts non-dates; tightening is its own deliberate canon change. N3 — a shop-plus comment (`order-core.ts:474`) references a non-canon event name `payment.confirmed.v1`; fix on next shop-plus touch.
 
 **Post-fix evidence: 168/168 · gates re-run pending below · snapshot carries both new schemas.**
+
+## 2026-08-02 — canon v3.3.0 (`58e249b`): the RETURN LEG
+
+**Founder order, verbatim:** « Yes build the return signal from Boutik+ that would let her follow-up continue past "payée" ». This is the §7 contracts change I stopped and asked for; he answered, so it proceeded.
+
+**A NAMING CORRECTION, and it is the same one `order.confirmed.v1` needed.** My working label in conversation was `package.ready.v1`. That name is wrong twice: §5.7's union in ALL THREE specs already names both moments — `fulfillment.accepted.v1` and `fulfillment.ready.v1` — and `package.*` is **Séra's** namespace (`package.lost.v1`, `package.damaged.v1`), where a Boutik+ preparation fact does not belong. Had I built the label I invented, I would have introduced exactly the vocabulary drift the union exists to prevent, in the same slice where the previous correction is recorded three paragraphs above it. The re-read law caught it: I opened the union before writing.
+
+**Two moments, both provable today.** `accepted` = B+I-06's first half. `ready` = package-ready confirmed against a `sellerReadinessChallenge` (B6.2). **The wire stops there** — « en route » / « livrée » are Séra's and Séra does not exist. B+I-06 makes readiness the PRECONDITION for a pickup being requested, so readiness is emphatically not delivery.
+
+**Unrepresentable by `.strict()`, each with its own assertion** (a comment is not a gate): no supplier id — and this direction is the tempting one, because Shop+ learning supplier identity would let a reseller route around the platform; no readiness challenge (one of the four non-interchangeable secrets); no photo evidence; no `buyerDropCode` (Ten Laws #3 names readiness evidence explicitly); no money at all; no qty/variant.
+
+**Recorded rather than worked around:** canon's `IsoTimestampSchema` is `z.string().min(1)` — it does not validate timestamp FORMAT, so `at: 'hier'` parses. My first test asserted it was refused; that test was a lie and was corrected to assert what canon actually promises. What guarantees the instant is the producer's own clock. **Tightening the primitive is a canon-wide change across three repos and is the founder's call** — flagged, not taken.
+
+**Additive, proven by comparing snapshots key-by-key:** three exports added, **zero removed, zero existing exports or schemas changed**. 174/174 · gates board exit 0 at v3.3.0 (the board's own version declaration had to move too, which is what caught the incomplete bump).
