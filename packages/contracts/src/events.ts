@@ -249,3 +249,101 @@ export const OrderConfirmedEventSchema = z
   })
   .strict();
 export type OrderConfirmedEvent = z.infer<typeof OrderConfirmedEventSchema>;
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * READINESS-RETURN-1 (canon v3.3.0) — THE RETURN LEG: fulfillment progress
+ * travelling Boutik+ → Shop+, the FIRST event to cross in that direction.
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Founder-approved 2026-08-02 (« Yes build the return signal from Boutik+ that
+ * would let her follow-up continue past payée »). Until now Shop+ could prove
+ * only that a buyer's money was confirmed; preparation lived in Boutik+'s book
+ * and no wire carried it back, so a reseller's follow-up truthfully stopped at
+ * « payée ». These two events are that missing wire.
+ *
+ * A NAMING CORRECTION, recorded so the approval trail is honest, and it is the
+ * SAME correction `order.confirmed.v1` needed above: the working label in the
+ * conversation was « package.ready.v1 ». That name is wrong twice over — §5.7's
+ * union ALREADY names both moments (`fulfillment.accepted.v1`,
+ * `fulfillment.ready.v1`, listed in all three specs' §5.7), and `package.*` is
+ * SÉRA'S namespace (`package.lost.v1`, `package.damaged.v1`), where a
+ * Boutik+ preparation fact does not belong. The approved MEANING is untouched;
+ * only the labels are the canon ones.
+ *
+ * WHAT THEY MEAN, exactly, and why there are two:
+ *   · `fulfillment.accepted.v1` — the supplier took the order on. B+I-06's
+ *     first half. On a reseller's screen this is « en préparation ».
+ *   · `fulfillment.ready.v1` — the supplier confirmed PACKAGE-READY against a
+ *     `sellerReadinessChallenge` (B6.2). B+I-06: « A Séra pickup MUST NOT be
+ *     requested until fulfillment is accepted and the supplier has confirmed
+ *     package-ready. » This is the LAST fact anyone can prove today.
+ *
+ * ═══ WHERE THIS WIRE STOPS, AND WHY THAT IS NOT A GAP TO BE FILLED ═══
+ * « En route », « à la porte » and « livrée » are SÉRA's facts, and Séra does
+ * not exist yet. No consumer of these events may render a delivery state from
+ * them. Readiness is emphatically NOT delivery: B+I-06 makes readiness the
+ * PRECONDITION for a pickup even being requested.
+ *
+ * ═══ WHAT IS DELIBERATELY ABSENT — made UNREPRESENTABLE by `.strict()` ═══
+ *   · NO SUPPLIER ID, and this direction is the one that would be tempting.
+ *     Supplier identity never rides a cross-app wire in EITHER direction (the
+ *     rule `OrderConfirmedPayloadSchema` states above is not one-way). Shop+
+ *     must never be able to name, rank, or reveal a supplier — a reseller
+ *     surface that learned it could route around the platform entirely.
+ *   · NO READINESS EVIDENCE — no `photoRef`, no `readinessChallenge`. The
+ *     challenge is one of the four non-interchangeable secrets (§5.4) and
+ *     belongs to the seller↔readiness pair alone; a copy on a second app's
+ *     wire is a second place to leak it.
+ *   · NO `buyerDropCode`, ever, under Ten Laws #3 — banned from everything
+ *     seller-side, and readiness evidence is named explicitly in that ban.
+ *   · NO MONEY of any kind. Shop+ already holds the frozen quote; a franc on
+ *     this wire could only be a second, drifting copy (Law #2: no app
+ *     computes — or restates — another domain's amounts).
+ *   · NO qty/variant. Shop+ makes no decision from them, and the smallest
+ *     wire that carries the fact is the one that cannot leak the next thing.
+ */
+export const FulfillmentProgressPayloadSchema = z
+  .object({
+    /** Shop+'s durable order id — the consumer's idempotency key, and the
+     *  ONLY identifier on this wire. It is Shop+'s own id travelling home. */
+    orderId: IdSchema,
+    /**
+     * Server time of the emitting transition, as Boutik+ observed it — the
+     * acceptance instant or the package-ready instant. Boutik+'s own clock,
+     * never a supplier device's claim, for the same reason `paidAt` above is
+     * the confirming Worker's clock and not the provider's.
+     */
+    at: IsoTimestampSchema,
+  })
+  .strict();
+export type FulfillmentProgressPayload = z.infer<typeof FulfillmentProgressPayloadSchema>;
+
+/**
+ * The two wire artifacts, each binding NAME to PAYLOAD — the M1 closure the
+ * `order.confirmed.v1` verifier round established, applied from the first
+ * line here rather than retrofitted. Producer parses BEFORE send, consumer
+ * parses ON receipt; a payload carrying a supplier id, a challenge, a photo
+ * or a franc is refused at both ends by construction, not by discipline.
+ *
+ * ONE payload schema serves both names because the two facts have identical
+ * shape — the NAME is what differs, and the name is what the consumer
+ * switches on. Two identical schemas would only be two things to drift.
+ */
+export const FulfillmentAcceptedEventSchema = z
+  .object({
+    name: z.literal('fulfillment.accepted.v1'),
+    envelope: EventEnvelopeSchema,
+    payload: FulfillmentProgressPayloadSchema,
+  })
+  .strict();
+export type FulfillmentAcceptedEvent = z.infer<typeof FulfillmentAcceptedEventSchema>;
+
+export const FulfillmentReadyEventSchema = z
+  .object({
+    name: z.literal('fulfillment.ready.v1'),
+    envelope: EventEnvelopeSchema,
+    payload: FulfillmentProgressPayloadSchema,
+  })
+  .strict();
+export type FulfillmentReadyEvent = z.infer<typeof FulfillmentReadyEventSchema>;

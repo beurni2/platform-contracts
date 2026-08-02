@@ -221,3 +221,120 @@ describe('OrderConfirmedEventSchema — a banned field is refused at the EVENT l
     ).toBe(false);
   });
 });
+
+/**
+ * ═══ READINESS-RETURN-1 (canon v3.3.0) — the return leg, Boutik+ → Shop+ ═══
+ * The privacy bans in the header comment are only real if `.strict()` actually
+ * refuses each one. Every ban gets an assertion here; a comment is not a gate.
+ */
+describe('Fulfillment progress events — the return wire carries the fact and nothing else', () => {
+  const ENVELOPE = {
+    command_id: 'ful-accept-order-quote-abc123',
+    correlation_id: 'corr-order-quote-abc123',
+    aggregateVersion: 1,
+    actor: 'offer-service:fulfillment',
+    serverTime: '2026-08-02T09:00:00.000Z',
+    version: 'v1',
+  };
+  const PAYLOAD = { orderId: 'order-quote-abc123', at: '2026-08-02T09:00:00.000Z' };
+
+  it('parses the canonical composition for BOTH names', () => {
+    expect(
+      publicApi.FulfillmentAcceptedEventSchema.safeParse({
+        name: 'fulfillment.accepted.v1', envelope: ENVELOPE, payload: PAYLOAD,
+      }).success,
+    ).toBe(true);
+    expect(
+      publicApi.FulfillmentReadyEventSchema.safeParse({
+        name: 'fulfillment.ready.v1', envelope: ENVELOPE, payload: PAYLOAD,
+      }).success,
+    ).toBe(true);
+  });
+
+  it('BOTH names are registered in the canon union — no invented vocabulary', () => {
+    expect(publicApi.EventNameSchema.safeParse('fulfillment.accepted.v1').success).toBe(true);
+    expect(publicApi.EventNameSchema.safeParse('fulfillment.ready.v1').success).toBe(true);
+    // and the working label from the approval conversation is NOT a canon name
+    expect(publicApi.EventNameSchema.safeParse('package.ready.v1').success).toBe(false);
+  });
+
+  it('each name is bound to its OWN artifact — one cannot be sent under the other', () => {
+    expect(
+      publicApi.FulfillmentReadyEventSchema.safeParse({
+        name: 'fulfillment.accepted.v1', envelope: ENVELOPE, payload: PAYLOAD,
+      }).success,
+    ).toBe(false);
+    expect(
+      publicApi.FulfillmentAcceptedEventSchema.safeParse({
+        name: 'fulfillment.ready.v1', envelope: ENVELOPE, payload: PAYLOAD,
+      }).success,
+    ).toBe(false);
+  });
+
+  it('EVERY banned field is refused BY CONSTRUCTION — supplier identity, the four secrets, evidence, and money', () => {
+    const banned: Record<string, unknown>[] = [
+      { supplierId: 'sup-0001' },
+      { supplierName: 'Atelier Bazin' },
+      { readinessChallenge: 'srch-abc' },
+      { sellerReadinessChallenge: 'srch-abc' },
+      { buyerDropCode: '4821' },
+      { pickupVerificationCode: '9911' },
+      { photoRef: 'r2://readiness/abc.jpg' },
+      { sellerBasePrice: 10_000 },
+      { sellerNet: 9_500 },
+      { resellerNet: 2_000 },
+      { buyerTotal: 11_500 },
+      { qty: 1 },
+      { variant: 'pv-bazin-0001' },
+      { buyerPhone: '+226 70 00 00 00' },
+    ];
+    for (const extra of banned) {
+      const name = Object.keys(extra)[0]!;
+      for (const [schema, eventName] of [
+        [publicApi.FulfillmentAcceptedEventSchema, 'fulfillment.accepted.v1'],
+        [publicApi.FulfillmentReadyEventSchema, 'fulfillment.ready.v1'],
+      ] as const) {
+        const leaky = { name: eventName, envelope: ENVELOPE, payload: { ...PAYLOAD, ...extra } };
+        // the generic schema would wave it through — that is why these exist
+        expect(publicApi.PlatformEventSchema.safeParse(leaky).success, name).toBe(true);
+        expect(schema.safeParse(leaky).success, `${eventName} accepted a banned field: ${name}`).toBe(false);
+      }
+    }
+  });
+
+  /**
+   * NOTE, recorded rather than silently worked around: canon's
+   * `IsoTimestampSchema` is `z.string().min(1)` — it does NOT validate
+   * timestamp FORMAT (the `order.confirmed.v1` header says as much: « canon's
+   * timestamp type barely checks »). So `at: 'hier'` PARSES, and no shape-level
+   * assertion here could honestly claim otherwise. What guarantees the instant
+   * is the producer: Boutik+ stamps its own `new Date().toISOString()` and
+   * never a supplier device's claim. Tightening the primitive is a canon-wide
+   * change across three repos and is the founder's call, not this slice's.
+   */
+  it('refuses a payload missing either required field, or an empty one', () => {
+    for (const bad of [
+      { orderId: 'order-quote-abc123' },
+      { at: '2026-08-02T09:00:00.000Z' },
+      { orderId: '', at: '2026-08-02T09:00:00.000Z' },
+      { orderId: 'order-quote-abc123', at: '' },
+    ]) {
+      expect(
+        publicApi.FulfillmentReadyEventSchema.safeParse({ name: 'fulfillment.ready.v1', envelope: ENVELOPE, payload: bad })
+          .success,
+        JSON.stringify(bad),
+      ).toBe(false);
+    }
+  });
+
+  it('THE WIRE STOPS AT READINESS: no delivery vocabulary is expressible on it', () => {
+    for (const delivery of ['enRoute', 'deliveredAt', 'courierId', 'custodyState', 'handoffAuthorization']) {
+      const leaky = {
+        name: 'fulfillment.ready.v1' as const,
+        envelope: ENVELOPE,
+        payload: { ...PAYLOAD, [delivery]: 'x' },
+      };
+      expect(publicApi.FulfillmentReadyEventSchema.safeParse(leaky).success, delivery).toBe(false);
+    }
+  });
+});
