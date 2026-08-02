@@ -768,3 +768,13 @@ Also taken: **M2** — my comment said emission happens « exactly when the webh
 **Recorded rather than worked around:** canon's `IsoTimestampSchema` is `z.string().min(1)` — it does not validate timestamp FORMAT, so `at: 'hier'` parses. My first test asserted it was refused; that test was a lie and was corrected to assert what canon actually promises. What guarantees the instant is the producer's own clock. **Tightening the primitive is a canon-wide change across three repos and is the founder's call** — flagged, not taken.
 
 **Additive, proven by comparing snapshots key-by-key:** three exports added, **zero removed, zero existing exports or schemas changed**. 174/174 · gates board exit 0 at v3.3.0 (the board's own version declaration had to move too, which is what caught the incomplete bump).
+
+### The lockfile that only breaks for CONSUMERS (`bc73cca`)
+
+**Boutik+ CI failed at `pnpm install --frozen-lockfile`** on the v3.3.0 pin: `ERR_PNPM_PREPARE_PACKAGE … @platform/contracts@3.3.0 pnpm-install: 'pnpm install'`. Preparing a git-hosted package runs `pnpm install` INSIDE it, and this repo's own `pnpm-lock.yaml` still carried `specifier: 3.2.0` for the three internal `@platform/*` deps while its package.json files said 3.3.0.
+
+**No board here could have caught it.** Locally everything resolves through the workspace; the failure exists only in the CONSUMED artifact. That is the same shape as the `pnpm-workspace.yaml` override trap this repo already documents — the local view looks consistent while what a consumer actually fetches is not.
+
+**Standing addition to the version-bump ritual:** bumping any `@platform/*` version means (1) the package.json files, (2) this repo's own lockfile via `pnpm install`, (3) the board's `EXPECTED_CANON`, (4) `docs.manifest.json` via its generator — and then (5) each consumer repinned in BOTH package.json and `pnpm-workspace.yaml`, verified by `pnpm install --frozen-lockfile` from clean and by reading the installed version BY VALUE. Any bump that skips (2) is green everywhere and broken for everyone.
+
+Fixed sha `bc73cca` (lockfile only — no source, no schema, no version). Both app repos repinned to it and both now pass the exact CI install step locally.
