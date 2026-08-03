@@ -289,6 +289,36 @@ export const StorefrontAvatarSchema = z
   .strict();
 export type StorefrontAvatar = z.infer<typeof StorefrontAvatarSchema>;
 
+/**
+ * VOIX-PRODUIT (founder-authorized 2026-08-03: « build the audio line end to
+ * end », answering the §7 stop this field was blocked on) — the reseller's
+ * recorded note about ONE of her products. §5 of the design doctrine: « voice
+ * and audio are first-class UI … because many users sell and buy by voice ».
+ *
+ * TWO STATES ON THE WIRE, AND ONLY TWO. `recording` and `recorded` are phone-side
+ * UI states that never leave the device; the record that reaches a buyer is
+ * either `pending` (bytes accepted, not yet pointed at — loi 7: queued is
+ * pending, never done) or `ready` (a real, playable url). The BUYER renders a
+ * note ONLY when it is `ready`, which is why `url` may be absent while pending
+ * and why an absent url can never be mistaken for a playable one.
+ *
+ * `durationMs` IS BOUNDED BY THE SERVICE, NOT HERE (AUDIO_MAX_DURATION_MS =
+ * 60 000). The schema keeps it a non-negative integer: a canon ceiling would be
+ * a second bound to keep in step with the media service's, and the service is
+ * the one that sees the bytes. Deliberate, and the same division the video
+ * ref's byte cap already uses.
+ *
+ * DETERMINISTIC (loi 5): recorded audio, never synthesis.
+ */
+export const StorefrontVoiceNoteSchema = z
+  .object({
+    status: z.enum(['pending', 'ready']),
+    url: z.string().min(1).optional(),
+    durationMs: z.number().int().min(0),
+  })
+  .strict();
+export type StorefrontVoiceNote = z.infer<typeof StorefrontVoiceNoteSchema>;
+
 /** One storefront section (Vitrine HANDOFF §3.1): name 1–20, ordered pids.
  *  An empty section is invisible buyer-side (§6) — emptiness is legal here. */
 export const StorefrontSectionSchema = z
@@ -364,6 +394,17 @@ export const StorefrontSchema = z
     // reseller's chosen header style; every pre-existing storefront parses
     // unchanged as 'classique'.
     headerStyle: StorefrontHeaderStyleSchema.default('classique'),
+    // VOIX-PRODUIT — additive, defaulted (founder-authorized 2026-08-03): pid →
+    // her recorded note about that product. Every pre-existing storefront parses
+    // unchanged as `{}`, which is exactly « aucune note » — the state the buyer
+    // already renders honestly today.
+    //
+    // A RECORD KEYED BY PID, not an array with a pid field: a product has at
+    // most ONE current note, and a map makes a second one unrepresentable
+    // rather than merely discouraged. The key is an `IdSchema` pid; nothing
+    // here asserts the pid is IN `curatedItems`, because a note may outlive an
+    // unpin and re-pinning must not lose her recording.
+    productNotes: z.record(IdSchema, StorefrontVoiceNoteSchema).default({}),
   })
   .strict();
 export type Storefront = z.infer<typeof StorefrontSchema>;

@@ -862,3 +862,65 @@ describe('VIDEO-PRODUIT (v3.4.0) — one short product video, the founder’s ow
     expect(SupplyProjectionSchema.safeParse({ ...valid, videoRef: '' }).success).toBe(false); // a ref is never blank
   });
 });
+
+describe('VOIX-PRODUIT (v3.5.0) — her recorded note about one product', () => {
+  const sf = (): Record<string, unknown> => ({
+    id: 'sf_001',
+    resellerId: 'rs_001',
+    slug: 'chez-aicha',
+    discoverable: true,
+    curatedItems: ['lst_001'],
+    name: 'Chez Aïcha',
+    zone: 'Rood Woko, Ouagadougou',
+    category: 'Cosmétiques',
+    createdAt: '2026-07-13T09:00:00Z',
+    updatedAt: '2026-07-13T09:00:00Z',
+  });
+
+  it('ADDITIVE AND DEFAULTED — every pre-v3.5.0 storefront parses unchanged, as « aucune note »', () => {
+    // This is the whole safety claim of the field, so it is asserted on the
+    // shape that existed BEFORE it: yesterday's bytes, today's schema.
+    const r = StorefrontSchema.safeParse(sf());
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data.productNotes).toEqual({});
+  });
+
+  it('two wire states and no others — `recording`/`recorded` never leave the phone', async () => {
+    const { StorefrontVoiceNoteSchema } = await import('../src/shapes/commerce.js');
+    expect(StorefrontVoiceNoteSchema.safeParse({ status: 'pending', durationMs: 0 }).success).toBe(true);
+    expect(
+      StorefrontVoiceNoteSchema.safeParse({ status: 'ready', url: 'https://m/x.m4a', durationMs: 8_000 }).success,
+    ).toBe(true);
+    // The three phone-side states are UNREPRESENTABLE on the wire. A service
+    // that stored `recording` would be claiming a take that does not exist.
+    for (const bad of ['none', 'recording', 'recorded', 'live', '']) {
+      expect(StorefrontVoiceNoteSchema.safeParse({ status: bad, durationMs: 0 }).success, `status ${bad}`).toBe(false);
+    }
+    expect(StorefrontVoiceNoteSchema.safeParse({ status: 'ready', durationMs: 0, extra: 1 }).success).toBe(false); // strict
+  });
+
+  it('a blank url is REFUSED, so « ready » can never mean « nothing to play »', async () => {
+    const { StorefrontVoiceNoteSchema } = await import('../src/shapes/commerce.js');
+    expect(StorefrontVoiceNoteSchema.safeParse({ status: 'ready', url: '', durationMs: 5 }).success).toBe(false);
+    // durationMs is a non-negative integer — a negative or fractional
+    // millisecond is a measurement error, not a note.
+    for (const bad of [-1, 1.5, Number.NaN, '5']) {
+      expect(StorefrontVoiceNoteSchema.safeParse({ status: 'pending', durationMs: bad }).success, `d ${bad}`).toBe(false);
+    }
+  });
+
+  it('rides on the storefront keyed by pid, and a malformed note refuses THE WHOLE storefront', () => {
+    const ok = StorefrontSchema.safeParse({
+      ...sf(),
+      productNotes: { pv_001: { status: 'ready', url: 'https://m/a.m4a', durationMs: 7_400 } },
+    });
+    expect(ok.success).toBe(true);
+    if (ok.success) expect(ok.data.productNotes['pv_001']?.durationMs).toBe(7_400);
+    // The point of putting it in the schema rather than in a screen: a bad note
+    // cannot ride in beside good ones.
+    expect(
+      StorefrontSchema.safeParse({ ...sf(), productNotes: { pv_001: { status: 'ready', durationMs: -3 } } }).success,
+    ).toBe(false);
+    expect(StorefrontSchema.safeParse({ ...sf(), productNotes: { '': { status: 'pending', durationMs: 0 } } }).success).toBe(false);
+  });
+});
