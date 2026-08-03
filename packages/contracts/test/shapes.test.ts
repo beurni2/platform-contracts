@@ -807,3 +807,58 @@ describe('WO-5.14 — trimmed-non-empty (IdSchema + name/zone/category)', () => 
     }
   });
 });
+
+describe('VIDEO-PRODUIT (v3.4.0) — one short product video, the founder’s own 6-second bound', () => {
+  const mref = (ref: string) => ({ ref, sha256: 'a'.repeat(64), mimeType: 'image/jpeg' });
+  const video = { ref: 'media/pv_001/video.mp4', sha256: 'b'.repeat(64), mimeType: 'video/mp4', durationSec: 6 };
+  const assets = {
+    masterRef: mref('private/device/abc'),
+    heroSquare: mref('media/pv_001/hero-sq.jpg'),
+    heroVertical: mref('media/pv_001/hero-v.jpg'),
+    proof: mref('media/pv_001/proof.jpg'),
+    detail: [mref('media/pv_001/detail-1.jpg')],
+    hashes: ['a'.repeat(64)],
+    processingVersion: 'premium-frame.v1',
+  };
+
+  it('the bound REFUSES at parse time, everywhere the shape travels — not in one screen’s goodwill', async () => {
+    const { ProductVideoRefSchema } = await import('../src/shapes/commerce.js');
+    expect(ProductVideoRefSchema.safeParse(video).success).toBe(true);
+    expect(ProductVideoRefSchema.safeParse({ ...video, durationSec: 1 }).success).toBe(true);
+    for (const bad of [7, 0, -1, 5.5, Number.NaN]) {
+      expect(ProductVideoRefSchema.safeParse({ ...video, durationSec: bad }).success, `durationSec ${bad}`).toBe(false);
+    }
+    const { durationSec: _d, ...noDuration } = video;
+    expect(ProductVideoRefSchema.safeParse(noDuration).success).toBe(false); // an unbounded video is unrepresentable
+    expect(ProductVideoRefSchema.safeParse({ ...video, extra: 'x' }).success).toBe(false); // strict
+  });
+
+  it('ProductAssets: the video is OPTIONAL and additive — every pre-v3.4.0 product still parses', async () => {
+    const { ProductAssetsSchema } = await import('../src/shapes/commerce.js');
+    expect(ProductAssetsSchema.safeParse(assets).success).toBe(true); // yesterday’s shape, byte-for-byte
+    const withVideo = ProductAssetsSchema.safeParse({ ...assets, video });
+    expect(withVideo.success).toBe(true);
+    if (withVideo.success) expect(withVideo.data.video?.durationSec).toBe(6);
+    // …and the bound travels INSIDE the assets — a 7 s video cannot ride in.
+    expect(ProductAssetsSchema.safeParse({ ...assets, video: { ...video, durationSec: 7 } }).success).toBe(false);
+  });
+
+  it('SupplyProjection: `videoRef` is an OPTIONAL bare display ref, same class as assetRefs', async () => {
+    const { SupplyProjectionSchema } = await import('../src/shapes/commerce.js');
+    const valid = {
+      productVersionId: 'pv_001',
+      offerVersion: 'offer_001@1',
+      basePrice: 10_000,
+      resellerCommission: 1_000,
+      available: 4,
+      productName: 'Savon de karité',
+      assetRefs: ['media/pv_001/hero.jpg'],
+      category: 'sealed_beauty_cosmetics',
+    };
+    expect(SupplyProjectionSchema.safeParse(valid).success).toBe(true); // an older producer still parses
+    const withVideo = SupplyProjectionSchema.safeParse({ ...valid, videoRef: 'media/pv_001/video.mp4' });
+    expect(withVideo.success).toBe(true);
+    if (withVideo.success) expect(withVideo.data.videoRef).toBe('media/pv_001/video.mp4');
+    expect(SupplyProjectionSchema.safeParse({ ...valid, videoRef: '' }).success).toBe(false); // a ref is never blank
+  });
+});

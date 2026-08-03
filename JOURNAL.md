@@ -778,3 +778,13 @@ Also taken: **M2** — my comment said emission happens « exactly when the webh
 **Standing addition to the version-bump ritual:** bumping any `@platform/*` version means (1) the package.json files, (2) this repo's own lockfile via `pnpm install`, (3) the board's `EXPECTED_CANON`, (4) `docs.manifest.json` via its generator — and then (5) each consumer repinned in BOTH package.json and `pnpm-workspace.yaml`, verified by `pnpm install --frozen-lockfile` from clean and by reading the installed version BY VALUE. Any bump that skips (2) is green everywhere and broken for everyone.
 
 Fixed sha `bc73cca` (lockfile only — no source, no schema, no version). Both app repos repinned to it and both now pass the exact CI install step locally.
+
+## 2026-08-03 — canon v3.4.0: VIDEO-PRODUIT (founder-authorized « Go video », 2026-08-03)
+
+**The founder's order, verbatim (2026-08-02):** « I want to be able to add a short video of like 6 second max that will show on shop+ as well and when resellers select a product that has a short video and adds it on their vitrine … I want the short video to be the hero card and will start playing a preview when a client/viewer scrolls and pause on that. » Canon delta proposed with the §7 stop; founder signed off with « Go video ».
+
+**The delta, additive only:** `PRODUCT_VIDEO_MAX_SEC = 6` (the founder's own bound — not an invented number) · `ProductVideoRefSchema` = MediaRef + `durationSec` int 1..6, strict — an UNBOUNDED video is unrepresentable, the cap refuses at parse time everywhere the shape travels, like the audio note's `durationSec` (Law 5: recorded media, stored and played, never processed) · `ProductAssetsSchema.video` OPTIONAL — every pre-v3.4.0 product parses byte-for-byte · `SupplyProjectionSchema.videoRef` OPTIONAL bare display ref, same class as `assetRefs`, same first-class identity-free rule enforced at the producer's out-guard.
+
+**Version-bump ritual, all four repo-side steps:** nine `"3.3.0"` → `"3.4.0"` across the six manifests · own lockfile refreshed (`pnpm install`, 3-line diff) · docs.manifest regenerated (12 docs, packageVersion 3.4.0) · the shape-freeze snapshot updated DELIBERATELY (`UPDATE_API_SNAPSHOT=1`) after the freeze correctly refused the six-line surface change. Step (5) — consumer repins in both files, verified by value — lands with VIDEO-1c (boutik) and VIDEO-1d (shop).
+
+**Evidence:** contracts **177/177** (two honest first-run failures: the freeze refusing an undeclared surface change — the gate working — and my fixture missing the `hashes` field ProductAssets requires; both fixed for the right reasons) · **gates board exit 0, ALL GATES GREEN**, negatives still failing as required.

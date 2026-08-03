@@ -60,6 +60,23 @@ export const VariantSchema = z
   .strict();
 export type Variant = z.infer<typeof VariantSchema>;
 
+/**
+ * VIDEO-PRODUIT (canon v3.4.0, founder order 2026-08-02: « a short video of
+ * like 6 second max that will show on shop+ … the short video to be the hero
+ * card »). The founder's own bound, canon-enforced so no surface can stretch
+ * it — like the audio note's `durationSec`, this is RECORDED media (Law 5),
+ * stored and played, never processed or generated.
+ */
+export const PRODUCT_VIDEO_MAX_SEC = 6;
+
+/** One SHORT product video. `durationSec` is the DEVICE'S measured duration,
+ *  a whole-second ceiling (5.3 s records as 6): the bound refuses at parse
+ *  time everywhere the shape travels, not in one screen's goodwill. */
+export const ProductVideoRefSchema = MediaRefSchema.extend({
+  durationSec: z.number().int().positive().max(PRODUCT_VIDEO_MAX_SEC),
+}).strict();
+export type ProductVideoRef = z.infer<typeof ProductVideoRefSchema>;
+
 /** §5.6 ProductAssets — PRICE-FREE, contact-free (B+I-02); master private + immutable (B+I-08). */
 export const ProductAssetsSchema = z
   .object({
@@ -68,6 +85,9 @@ export const ProductAssetsSchema = z
     heroVertical: MediaRefSchema,
     proof: MediaRefSchema,
     detail: z.array(MediaRefSchema),
+    /** VIDEO-PRODUIT — OPTIONAL and additive: a product without one is every
+     *  product before this, byte-for-byte. */
+    video: ProductVideoRefSchema.optional(),
     hashes: z.array(z.string().min(1)),
     processingVersion: z.string().min(1),
   })
@@ -493,6 +513,13 @@ export const SupplyProjectionSchema = z
     assetRefs: z.array(AssetRefSchema), // bare refs, matches CustomerProductView.assetRefs — zero transformation
     category: TrimmedNonEmptyString, // display string, matches ProductVersionSchema.category — zero transformation (CATEGORY-WIRE-1)
     sellerTier: SellerTrustTierSchema.optional(), // §6.1 « seller tier ≥ verified », from the producer (SELLER-TIER-WIRE-1)
+    /** VIDEO-PRODUIT (v3.4.0) — the short video's bare display ref, OPTIONAL
+     *  (most products have none). Same class as `assetRefs`, same first-class
+     *  AssetRef rule: it MUST NEVER encode supplier identity, enforced at the
+     *  producer's out-guard exactly as documented on `AssetRefSchema`. The
+     *  ≤ 6 s bound lives on `ProductVideoRefSchema` at the producer; a bare
+     *  display ref carries no duration to re-check. */
+    videoRef: AssetRefSchema.optional(),
   })
   .strict();
 export type SupplyProjection = z.infer<typeof SupplyProjectionSchema>;
