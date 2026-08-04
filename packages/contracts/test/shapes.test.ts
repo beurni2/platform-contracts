@@ -3,6 +3,9 @@ import { computeWaterfall } from '../src/money/waterfall.js';
 import { QuoteSchema } from '../src/shapes/quote.js';
 import {
   OrderSchema,
+  ResellerAccessActorSchema,
+  ResellerAccessChangeSchema,
+  ResellerAccessStateSchema,
   STOREFRONT_HEADER_STYLES,
   StorefrontHeaderStyleSchema,
   StorefrontPhotoFocusSchema,
@@ -11,6 +14,7 @@ import {
 } from '../src/shapes/commerce.js';
 import { DELIVERY_FAILURE_REASONS, DELIVERY_OUTCOME_FAMILIES, ORDER_STATUSES } from '../src/enums.js';
 import { DeliveryOutcomeSchema } from '../src/shapes/custody.js';
+import { ResellerAccessChangedEventSchema } from '../src/events.js';
 import {
   EscrowTxnSchema,
   PaymentLegSchema,
@@ -999,5 +1003,61 @@ describe('§6.5 related-party (v3.6.0) — two families of signal, and the tier 
         policyVersion: 'v', decidedAt: T, commissionFcfa: 900,
       }).success,
     ).toBe(false);
+  });
+});
+
+describe('RESELLER-ACCOUNTS (v3.8.0) — the access state the founder approved, and nothing beside it', () => {
+  it('exactly three states, and « paused » is among them — the founder’s cut-off is a first-class state, not a deleted account', () => {
+    expect(ResellerAccessStateSchema.options).toEqual(['pending_access', 'active', 'paused']);
+    // no terminal/deleted state: cutting access is reversible by design, and a
+    // vanished account would orphan her storefront and her attributed orders
+    expect(ResellerAccessStateSchema.options).not.toContain('deleted');
+  });
+
+  it('the state vocabulary NEVER says « activated » — canon line 191 already owns that word for the commercial milestone', () => {
+    for (const s of ResellerAccessStateSchema.options) {
+      expect(s).not.toContain('activat');
+    }
+  });
+
+  it('a change names its actor from a CLOSED set — signup, her own admission, or the founder', () => {
+    expect(ResellerAccessActorSchema.options).toEqual(['signup', 'admission', 'founder']);
+  });
+
+  it('the change payload is strict and carries EXACTLY the four approved fields — no credential can ride it', () => {
+    const ok = ResellerAccessChangeSchema.safeParse({
+      accountId: 'rs-1234',
+      state: 'paused',
+      at: '2026-08-04T12:00:00.000Z',
+      by: 'founder',
+    });
+    expect(ok.success).toBe(true);
+    // a password hash (or anything else) on the payload is refused by shape —
+    // this is the line that keeps credentials Worker-internal forever
+    for (const extra of ['passwordHash', 'email', 'phone', 'code']) {
+      const bad = ResellerAccessChangeSchema.safeParse({
+        accountId: 'rs-1234', state: 'active', at: '2026-08-04T12:00:00.000Z', by: 'admission', [extra]: 'x',
+      });
+      expect(bad.success, extra).toBe(false);
+    }
+  });
+
+  it('the event binds name to payload — a payload the shape refuses cannot travel under this name', () => {
+    const env = {
+      command_id: 'cmd-1', correlation_id: 'corr-1', aggregateVersion: 1,
+      actor: 'shop-plus', serverTime: '2026-08-04T12:00:00.000Z', version: 'v1',
+    } as const;
+    const bon = ResellerAccessChangedEventSchema.safeParse({
+      name: 'reseller.access_changed.v1',
+      envelope: env,
+      payload: { accountId: 'rs-1', state: 'active', at: '2026-08-04T12:00:00.000Z', by: 'admission' },
+    });
+    if (!bon.success) throw new Error(JSON.stringify(bon.error.issues));
+    const mauvais = ResellerAccessChangedEventSchema.safeParse({
+      name: 'reseller.access_changed.v1',
+      envelope: env,
+      payload: { accountId: 'rs-1', state: 'banned', at: '2026-08-04T12:00:00.000Z', by: 'admission' },
+    });
+    expect(mauvais.success).toBe(false);
   });
 });

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { FcfaSchema, IdSchema, IsoTimestampSchema, TrimmedNonEmptyString } from './shapes/common.js';
 import { PaymentModeSchema } from './enums.js';
+import { ResellerAccessChangeSchema } from './shapes/commerce.js';
 
 /**
  * Versioned event envelope (Execution Contract §3): every event carries
@@ -347,3 +348,18 @@ export const FulfillmentReadyEventSchema = z
   })
   .strict();
 export type FulfillmentReadyEvent = z.infer<typeof FulfillmentReadyEventSchema>;
+
+/**
+ * RESELLER-ACCOUNTS-1 (canon v3.8.0) — `reseller.access_changed.v1`, name
+ * bound to payload exactly as `order.confirmed.v1` is, for the same reason:
+ * both ends parse the same artifact, and a payload carrying anything beyond
+ * the four approved fields is refused at both ends by construction.
+ */
+export const ResellerAccessChangedEventSchema = z
+  .object({
+    name: z.literal('reseller.access_changed.v1'),
+    envelope: EventEnvelopeSchema,
+    payload: ResellerAccessChangeSchema,
+  })
+  .strict();
+export type ResellerAccessChangedEvent = z.infer<typeof ResellerAccessChangedEventSchema>;

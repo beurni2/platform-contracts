@@ -576,3 +576,53 @@ export const DeliveryFeeQuoteSchema = z
   })
   .strict();
 export type DeliveryFeeQuote = z.infer<typeof DeliveryFeeQuoteSchema>;
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * RESELLER-ACCOUNTS-1 (canon v3.8.0) — the reseller ACCOUNT's access state.
+ * Founder-approved shape, 2026-08-04 (« go on that shape »).
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * SP0.2's account, admission-side. A reseller signs up herself (founder
+ * override, 2026-08-04: credentials are name + email + password + phone —
+ * departing from the plan's phone-alias, logged in both JOURNALs); the account
+ * exists at once but the APP stays closed until she enters the one-time access
+ * code the founder minted for her on his console.
+ *
+ * THE THREE STATES, and why there is no fourth:
+ *   pending_access — signed up, not yet admitted. Every read refuses by name.
+ *   active         — admitted. The app is fully open; nothing inside asks again.
+ *   paused         — the founder cut her off. Every read refuses by name; the
+ *                    UI never merely hides a button (a pause that only greys
+ *                    the client is not a pause).
+ * No deleted/terminal state: cutting access is reversible by design, and an
+ * account that vanished would orphan her storefront and her attributed orders.
+ *
+ * DELIBERATELY NOT the canon word « activation »: Build-Spec line 191 already
+ * defines activation as a COMMERCIAL milestone (payout-ready + agreement +
+ * listing + shared link) with its own event `reseller.activated.v1`. Admission
+ * and activation are different facts and never share a name.
+ *
+ * WHAT THIS SHAPE DOES NOT CARRY: credentials. The password hash, its salt and
+ * session material are Worker-internal storage, never a cross-app contract —
+ * a canon shape with a password field is how a hash ends up on a wire.
+ */
+export const ResellerAccessStateSchema = z.enum(['pending_access', 'active', 'paused']);
+export type ResellerAccessState = z.infer<typeof ResellerAccessStateSchema>;
+
+/** Who moved the state. `signup` mints pending_access; `admission` is her own
+ *  one-time code consuming itself; `founder` is the console's pause/resume. */
+export const ResellerAccessActorSchema = z.enum(['signup', 'admission', 'founder']);
+export type ResellerAccessActor = z.infer<typeof ResellerAccessActorSchema>;
+
+/** One access transition — the payload of `reseller.access_changed.v1` and the
+ *  audit row the account book keeps for every move it ever makes. */
+export const ResellerAccessChangeSchema = z
+  .object({
+    accountId: IdSchema,
+    state: ResellerAccessStateSchema,
+    at: IsoTimestampSchema,
+    by: ResellerAccessActorSchema,
+  })
+  .strict();
+export type ResellerAccessChange = z.infer<typeof ResellerAccessChangeSchema>;
