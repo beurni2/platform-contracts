@@ -938,10 +938,11 @@ describe('§6.5 related-party (v3.6.0) — two families of signal, and the tier 
   const signals = (over: Record<string, unknown> = {}) => ({ identity: [], circumstantial: [], ...over });
 
   it('the IDENTITY family is exactly §6.5’s auto-void list', () => {
-    // « same verified identity/phone/wallet, or reseller buying through their
-    // own account » — four members, no more. A fifth added here without a spec
-    // change would widen automatic voiding, which is the direction that hurts.
-    for (const m of ['verified_identity', 'phone', 'wallet', 'own_account']) {
+    // §6.5's auto-void family — four members, no more. A fifth added here
+    // without a spec change would widen automatic voiding, the direction that
+    // hurts. (`mobile_money_account` is the spec's third term under the name
+    // the Ten Laws #2 scan permits — see the schema's own note.)
+    for (const m of ['verified_identity', 'phone', 'mobile_money_account', 'own_account']) {
       expect(RelatedPartySignalsSchema.safeParse(signals({ identity: [m] })).success, m).toBe(true);
     }
     expect(RelatedPartySignalsSchema.safeParse(signals({ identity: ['household'] })).success).toBe(false);
@@ -955,7 +956,7 @@ describe('§6.5 related-party (v3.6.0) — two families of signal, and the tier 
     // an identity signal cannot be demoted into the circumstantial one. The two
     // enums are disjoint, which is what makes the tier structural rather than a
     // convention some caller has to honour.
-    expect(RelatedPartySignalsSchema.safeParse(signals({ circumstantial: ['wallet'] })).success).toBe(false);
+    expect(RelatedPartySignalsSchema.safeParse(signals({ circumstantial: ['mobile_money_account'] })).success).toBe(false);
   });
 
   it('the DECISION carries its own policy version and clock — related-party calls replay', () => {

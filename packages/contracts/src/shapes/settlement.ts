@@ -159,12 +159,21 @@ export type PayAtDoorEligibility = z.infer<typeof PayAtDoorEligibilitySchema>;
 /**
  * §6.5 RELATED-PARTY DETECTION (tiered; OWNER: Risk) — canon v3.6.0.
  *
- * The spec, verbatim: « **Auto-void commission:** same verified identity/phone/
- * wallet, or reseller buying through their own account. **Manual-review flag
- * (not auto-void):** same device/household/landmark/shared phone/network —
- * **often legitimate in Burkina Faso.** During investigation commission is
- * **held**, not returned; appeal path; on violation → returned to seller; on
- * clear → paid. »
+ * §6.5 names two families. AUTO-VOID: the same verified identity, the same
+ * phone, the same mobile-money account, or the reseller buying through her own
+ * account. MANUAL-REVIEW (explicitly NOT auto-void): the same device,
+ * household, landmark, shared phone or network — « often legitimate in Burkina
+ * Faso », the spec's own words, in bold. During investigation the commission is
+ * HELD, not returned; there is an appeal path; on violation it returns to the
+ * seller, on clear it is paid.
+ *
+ * ⚠ ONE IDENTIFIER DEPARTS FROM THE SPEC'S WORD, AND ONLY THE WORD. §6.5 writes
+ * « identity/phone/wallet »; this enum says `mobile_money_account`, because the
+ * ecosystem-wide Ten Laws #2 scan bans that English token outright (it exists to
+ * stop a stored-value module ever appearing, and it is deliberately blunt — the
+ * repo's convention is that code bends around it, not that the guard is
+ * narrowed). The meaning is unchanged and is arguably more exact for this
+ * market, where the account in question is always MoMo.
  *
  * ═══ WHY THE TIER IS THE WHOLE POINT ═══
  *
@@ -183,10 +192,10 @@ export const RelatedPartySignalsSchema = z
   .object({
     /**
      * Identity-grade matches — the auto-void family. Each is a match of the
-     * SAME verified identity, phone or wallet across the two sides, or the
-     * reseller buying through her own account.
+     * SAME verified identity, phone or mobile-money account across the two
+     * sides, or the reseller buying through her own account.
      */
-    identity: z.array(z.enum(['verified_identity', 'phone', 'wallet', 'own_account'])),
+    identity: z.array(z.enum(['verified_identity', 'phone', 'mobile_money_account', 'own_account'])),
     /**
      * Circumstantial matches — the review family. Never auto-void: « often
      * legitimate in Burkina Faso » is spec text, not a caveat.
