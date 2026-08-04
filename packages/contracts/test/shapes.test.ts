@@ -11,7 +11,13 @@ import {
 } from '../src/shapes/commerce.js';
 import { DELIVERY_FAILURE_REASONS, DELIVERY_OUTCOME_FAMILIES, ORDER_STATUSES } from '../src/enums.js';
 import { DeliveryOutcomeSchema } from '../src/shapes/custody.js';
-import { EscrowTxnSchema, PaymentLegSchema, SellerTrustStateSchema } from '../src/shapes/settlement.js';
+import {
+  EscrowTxnSchema,
+  PaymentLegSchema,
+  RelatedPartyDecisionSchema,
+  RelatedPartySignalsSchema,
+  SellerTrustStateSchema,
+} from '../src/shapes/settlement.js';
 import { EventNameSchema } from '../src/events.js';
 import {
   HandoffAuthorizationSchema,
@@ -922,5 +928,75 @@ describe('VOIX-PRODUIT (v3.5.0) — her recorded note about one product', () => 
       StorefrontSchema.safeParse({ ...sf(), productNotes: { pv_001: { status: 'ready', durationMs: -3 } } }).success,
     ).toBe(false);
     expect(StorefrontSchema.safeParse({ ...sf(), productNotes: { '': { status: 'pending', durationMs: 0 } } }).success).toBe(false);
+  });
+});
+
+/* ═══════════ §6.5 RELATED-PARTY (canon v3.6.0) ═══════════ */
+
+describe('§6.5 related-party (v3.6.0) — two families of signal, and the tier is unrepresentable to fake', () => {
+  const T = '2026-08-04T09:00:00.000Z';
+  const signals = (over: Record<string, unknown> = {}) => ({ identity: [], circumstantial: [], ...over });
+
+  it('the IDENTITY family is exactly §6.5’s auto-void list', () => {
+    // « same verified identity/phone/wallet, or reseller buying through their
+    // own account » — four members, no more. A fifth added here without a spec
+    // change would widen automatic voiding, which is the direction that hurts.
+    for (const m of ['verified_identity', 'phone', 'wallet', 'own_account']) {
+      expect(RelatedPartySignalsSchema.safeParse(signals({ identity: [m] })).success, m).toBe(true);
+    }
+    expect(RelatedPartySignalsSchema.safeParse(signals({ identity: ['household'] })).success).toBe(false);
+  });
+
+  it('the CIRCUMSTANTIAL family is exactly §6.5’s review list — « often legitimate in Burkina Faso »', () => {
+    for (const m of ['device', 'household', 'landmark', 'shared_phone', 'network']) {
+      expect(RelatedPartySignalsSchema.safeParse(signals({ circumstantial: [m] })).success, m).toBe(true);
+    }
+    // A circumstantial signal CANNOT be smuggled into the identity family, and
+    // an identity signal cannot be demoted into the circumstantial one. The two
+    // enums are disjoint, which is what makes the tier structural rather than a
+    // convention some caller has to honour.
+    expect(RelatedPartySignalsSchema.safeParse(signals({ circumstantial: ['wallet'] })).success).toBe(false);
+  });
+
+  it('the DECISION carries its own policy version and clock — related-party calls replay', () => {
+    const d = RelatedPartyDecisionSchema.safeParse({
+      orderId: 'ord_0001',
+      outcome: 'held_for_review',
+      signals: signals({ circumstantial: ['household'] }),
+      policyVersion: 'related-party.v1',
+      decidedAt: T,
+    });
+    expect(d.success).toBe(true);
+  });
+
+  it('the three outcomes are the spec’s, and « held » is NOT « void »', () => {
+    // §6.5: « During investigation commission is **held**, not returned ». A
+    // fourth outcome, or a merge of these two, would erase the appeal path.
+    for (const outcome of ['clear', 'held_for_review', 'auto_void']) {
+      expect(
+        RelatedPartyDecisionSchema.safeParse({
+          orderId: 'ord_0001', outcome, signals: signals(), policyVersion: 'v', decidedAt: T,
+        }).success,
+        outcome,
+      ).toBe(true);
+    }
+    for (const outcome of ['voided', 'returned', 'paid', '']) {
+      expect(
+        RelatedPartyDecisionSchema.safeParse({
+          orderId: 'ord_0001', outcome, signals: signals(), policyVersion: 'v', decidedAt: T,
+        }).success,
+        outcome,
+      ).toBe(false);
+    }
+  });
+
+  it('STRICT — an undeclared field is refused, on both shapes', () => {
+    expect(RelatedPartySignalsSchema.safeParse({ ...signals(), severity: 'high' }).success).toBe(false);
+    expect(
+      RelatedPartyDecisionSchema.safeParse({
+        orderId: 'ord_0001', outcome: 'clear', signals: signals(),
+        policyVersion: 'v', decidedAt: T, commissionFcfa: 900,
+      }).success,
+    ).toBe(false);
   });
 });

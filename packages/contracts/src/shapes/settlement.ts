@@ -156,6 +156,66 @@ export const PayAtDoorEligibilitySchema = z
   .strict();
 export type PayAtDoorEligibility = z.infer<typeof PayAtDoorEligibilitySchema>;
 
+/**
+ * §6.5 RELATED-PARTY DETECTION (tiered; OWNER: Risk) — canon v3.6.0.
+ *
+ * The spec, verbatim: « **Auto-void commission:** same verified identity/phone/
+ * wallet, or reseller buying through their own account. **Manual-review flag
+ * (not auto-void):** same device/household/landmark/shared phone/network —
+ * **often legitimate in Burkina Faso.** During investigation commission is
+ * **held**, not returned; appeal path; on violation → returned to seller; on
+ * clear → paid. »
+ *
+ * ═══ WHY THE TIER IS THE WHOLE POINT ═══
+ *
+ * Two families of signal, and treating them alike would be the defect. A shared
+ * handset, a shared landmark, one household, one neighbourhood wifi — these are
+ * ORDINARY in Burkina Faso, and auto-voiding a reseller's commission on them
+ * would punish the normal shape of life here. They flag for a human. Only an
+ * identity match — the SAME verified person, phone or wallet on both sides —
+ * voids automatically, because that is not a coincidence.
+ *
+ * THE SIGNALS ARE SPLIT INTO TWO NAMED SETS RATHER THAN ONE LIST WITH A
+ * SEVERITY FIELD. A single list plus a severity would let a caller mark a
+ * household match as identity-grade; two sets make that unrepresentable.
+ */
+export const RelatedPartySignalsSchema = z
+  .object({
+    /**
+     * Identity-grade matches — the auto-void family. Each is a match of the
+     * SAME verified identity, phone or wallet across the two sides, or the
+     * reseller buying through her own account.
+     */
+    identity: z.array(z.enum(['verified_identity', 'phone', 'wallet', 'own_account'])),
+    /**
+     * Circumstantial matches — the review family. Never auto-void: « often
+     * legitimate in Burkina Faso » is spec text, not a caveat.
+     */
+    circumstantial: z.array(z.enum(['device', 'household', 'landmark', 'shared_phone', 'network'])),
+  })
+  .strict();
+export type RelatedPartySignals = z.infer<typeof RelatedPartySignalsSchema>;
+
+/**
+ * §6.5's outcome for one order's reseller commission.
+ *
+ * `held` IS NOT `voided`, and the distinction is the buyer-facing half of the
+ * rule: « During investigation commission is **held**, not returned; appeal
+ * path; on violation → returned to seller; on clear → paid. » A review does not
+ * take her money — it pauses it, with a way back.
+ */
+export const RelatedPartyDecisionSchema = z
+  .object({
+    orderId: IdSchema,
+    outcome: z.enum(['clear', 'held_for_review', 'auto_void']),
+    signals: RelatedPartySignalsSchema,
+    /** The policy version this decision was made under — decisions replay. */
+    policyVersion: z.string().min(1),
+    decidedAt: IsoTimestampSchema,
+  })
+  .strict();
+export type RelatedPartyDecision = z.infer<typeof RelatedPartyDecisionSchema>;
+
 /** §5.6 DeliveryCost — decomposed, never a single optimistic figure (Séra §7.1). Margins may be negative. */
 export const DeliveryCostSchema = z
   .object({
