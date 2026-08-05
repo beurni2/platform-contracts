@@ -160,12 +160,18 @@ export const STOREFRONT_THEMES = [
   'danfani',
   'indigo',
   'foret',
-  // THEMES-8 — hibiscus is the founder's light pink; the other three fill the
-  // gaps the first four left (rose, teal, violet, bronze).
-  'hibiscus',
+  // THEMES-8 — frangipanier is the founder's light pink; the other three fill
+  // the gaps the first four left (rose, teal, violet, bronze).
+  //
+  // NAMES CHOSEN AGAINST THE HEADER VOCABULARY, not just against each other:
+  // `hibiscus` and `karite` were the first picks and both are already HEADER
+  // style keys, which would have put two identically-labelled cards on the one
+  // screen that shows both grids. Distinct names cost nothing here and are
+  // unfixable once a seller's shop is stored under one.
+  'frangipanier',
   'lagune',
   'aubergine',
-  'karite',
+  'sahel',
 ] as const;
 export const StorefrontThemeSchema = z.enum(STOREFRONT_THEMES);
 export type StorefrontTheme = z.infer<typeof StorefrontThemeSchema>;

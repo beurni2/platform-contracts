@@ -561,7 +561,7 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
    * picker, and that is still what the last two lines assert.
    */
   it('theme is a CLOSED curated set — an uncurated name and a raw colour both refuse (« aucun sélecteur libre »)', () => {
-    for (const t of ['laterite', 'danfani', 'indigo', 'foret', 'hibiscus', 'lagune', 'aubergine', 'karite']) {
+    for (const t of ['laterite', 'danfani', 'indigo', 'foret', 'frangipanier', 'lagune', 'aubergine', 'sahel']) {
       expect(StorefrontSchema.safeParse({ ...valid(), theme: t }).success, t).toBe(true);
     }
     expect(STOREFRONT_THEMES).toHaveLength(8);
