@@ -140,11 +140,33 @@ export const ResellerListingSchema = z
 export type ResellerListing = z.infer<typeof ResellerListingSchema>;
 
 /**
- * The four Faso Premium storefront themes — a CLOSED set (Vitrine HANDOFF §1.2:
+ * The Faso Premium storefront themes — a CLOSED set (Vitrine HANDOFF §1.2:
  * « ensemble fermé », « aucun sélecteur de couleur libre, jamais »). The theme
  * keys are canon; the colour recipes live in the design tokens, not here.
+ *
+ * CLOSED MEANS CURATED, NOT FROZEN — the same reading the header set has always
+ * had (it grew 5 → 10 → 31 under « a CLOSED set on the theme precedent »). What
+ * §1.2 forbids is a free colour picker in a seller's hands, because every preset
+ * must arrive with its contrasts already proven. It has never forbidden the
+ * founder from commissioning more presets.
+ *
+ * THEMES-8 (founder order, 2026-08-05: « add 4 more nice and beautiful habillage
+ * colors and make sure there is a light pink in it »). The four appended carry
+ * the same two proofs as the original four, computed rather than eyeballed:
+ * θ.on on θ.accent ≥ 4.5:1 and θ.deep on white ≥ 7:1.
  */
-export const STOREFRONT_THEMES = ['laterite', 'danfani', 'indigo', 'foret'] as const;
+export const STOREFRONT_THEMES = [
+  'laterite',
+  'danfani',
+  'indigo',
+  'foret',
+  // THEMES-8 — hibiscus is the founder's light pink; the other three fill the
+  // gaps the first four left (rose, teal, violet, bronze).
+  'hibiscus',
+  'lagune',
+  'aubergine',
+  'karite',
+] as const;
 export const StorefrontThemeSchema = z.enum(STOREFRONT_THEMES);
 export type StorefrontTheme = z.infer<typeof StorefrontThemeSchema>;
 

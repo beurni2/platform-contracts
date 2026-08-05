@@ -15,10 +15,10 @@ importers:
   packages/certification:
     dependencies:
       '@platform/contracts':
-        specifier: 3.8.0
+        specifier: 3.9.0
         version: link:../contracts
       '@platform/ui-tokens':
-        specifier: 3.8.0
+        specifier: 3.9.0
         version: link:../ui-tokens
       zod:
         specifier: ^4.1.5
@@ -37,7 +37,7 @@ importers:
   packages/contracts:
     dependencies:
       '@platform/kernel-types':
-        specifier: 3.8.0
+        specifier: 3.9.0
         version: link:../kernel-types
       zod:
         specifier: ^4.1.5

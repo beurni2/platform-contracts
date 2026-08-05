@@ -1,6 +1,6 @@
 {
   "name": "@platform/kernel-types",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "description": "Kernel types: phone-alias identity, no-street-address Location, offline-queue semantics, media references. Types only — no runtime services, no network code.",
   "license": "UNLICENSED",
   "type": "module",

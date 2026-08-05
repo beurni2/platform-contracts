@@ -7,6 +7,7 @@ import {
   ResellerAccessChangeSchema,
   ResellerAccessStateSchema,
   STOREFRONT_HEADER_STYLES,
+  STOREFRONT_THEMES,
   StorefrontHeaderStyleSchema,
   StorefrontPhotoFocusSchema,
   StorefrontSchema,
@@ -552,12 +553,22 @@ describe('Storefront — profile fields (WO-VITRINE, §3.1, additive + defaulted
     expect(StorefrontSchema.safeParse({ ...valid(), bio: 'x'.repeat(161) }).success).toBe(false);
   });
 
-  it('theme is the CLOSED four-preset set — a fifth theme refuses (« aucun sélecteur libre »)', () => {
-    for (const t of ['laterite', 'danfani', 'indigo', 'foret']) {
-      expect(StorefrontSchema.safeParse({ ...valid(), theme: t }).success).toBe(true);
+  /**
+   * THEMES-8 (founder order 2026-08-05) — the set grew from four presets to
+   * eight. The CLAIM this test protects never was « exactly four »: it is that
+   * the set is CLOSED, i.e. a name nobody curated and a raw colour are both
+   * refused. « Aucun sélecteur de couleur libre, jamais » is about the free
+   * picker, and that is still what the last two lines assert.
+   */
+  it('theme is a CLOSED curated set — an uncurated name and a raw colour both refuse (« aucun sélecteur libre »)', () => {
+    for (const t of ['laterite', 'danfani', 'indigo', 'foret', 'hibiscus', 'lagune', 'aubergine', 'karite']) {
+      expect(StorefrontSchema.safeParse({ ...valid(), theme: t }).success, t).toBe(true);
     }
+    expect(STOREFRONT_THEMES).toHaveLength(8);
     expect(StorefrontSchema.safeParse({ ...valid(), theme: 'bogolan' }).success).toBe(false);
     expect(StorefrontSchema.safeParse({ ...valid(), theme: '#FF0000' }).success).toBe(false);
+    // …and a seller cannot smuggle a colour in as a « theme » by any spelling
+    expect(StorefrontSchema.safeParse({ ...valid(), theme: 'rgb(255,0,0)' }).success).toBe(false);
   });
 
   it('cover carries the five C-K4 states and refuses a generic sixth', () => {
