@@ -788,3 +788,17 @@ Fixed sha `bc73cca` (lockfile only — no source, no schema, no version). Both a
 **Version-bump ritual, all four repo-side steps:** nine `"3.3.0"` → `"3.4.0"` across the six manifests · own lockfile refreshed (`pnpm install`, 3-line diff) · docs.manifest regenerated (12 docs, packageVersion 3.4.0) · the shape-freeze snapshot updated DELIBERATELY (`UPDATE_API_SNAPSHOT=1`) after the freeze correctly refused the six-line surface change. Step (5) — consumer repins in both files, verified by value — lands with VIDEO-1c (boutik) and VIDEO-1d (shop).
 
 **Evidence:** contracts **177/177** (two honest first-run failures: the freeze refusing an undeclared surface change — the gate working — and my fixture missing the `hashes` field ProductAssets requires; both fixed for the right reasons) · **gates board exit 0, ALL GATES GREEN**, negatives still failing as required.
+
+## 2026-08-05 — canon v3.9.0 fixup: `sahel` → `brique` (founder-found)
+
+**Founder, 2026-08-05:** « also change Sahel to a nice colour ». The bronze accent read olive on a real phone. **Renamed at the source, not aliased** — `STOREFRONT_THEMES` carries `brique` and no `sahel`, so no second vocabulary exists for one preset and the enum stays the single truth both apps mirror.
+
+**Why a rename was safe here, checked rather than assumed:** the canon version carrying `sahel` (v3.9.0, `6331b1b`) was never merged to `main` and never released; the only consumer pinned to it was the shop-plus feature branch, repinned in the same round. No stored storefront can hold `theme: 'sahel'`, so there is nothing to migrate. Had the value shipped, the rename would have been a breaking change requiring a migration, not a fixup.
+
+**No version bump.** The set size, the schema surface and the export map are unchanged — one member renamed inside an already-unreleased 3.9.0. The six-manifest ritual and the docs manifest stay as v3.9.0 committed in the previous round.
+
+**Recorded from the consumer side (details in shop-plus/JOURNAL.md):** the shop-plus storefront service had hand-copied the four-theme set instead of importing this enum, so every preset added here was refused at save time with `unknown_theme` while the app happily offered it. The canon lesson is the one already written beside the header set — **a closed set is only closed if consumers import it** — and it now has a test on the consumer side that walks this enum rather than a list retyped there.
+
+**Standing order recorded in §6bis of CLAUDE.md and AGENTS.md (parity, same round, all four repos):** the fresh-context verifier runs at the end of every slice, before the merge-and-deploy ask.
+
+**Evidence:** contracts **191/191** · gates board exit 0 · consumer install verified BY VALUE (3.9.0, eight keys, `brique` present, `sahel` absent).
