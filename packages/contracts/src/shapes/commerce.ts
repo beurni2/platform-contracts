@@ -161,7 +161,12 @@ export const STOREFRONT_THEMES = [
   'indigo',
   'foret',
   // THEMES-8 — frangipanier is the founder's light pink; the other three fill
-  // the gaps the first four left (rose, teal, violet, bronze).
+  // the gaps the first four left (rose, blue-turquoise, violet, terracotta).
+  //
+  // THEMES-8b (founder-found on a real phone): `sahel` was a bronze that read
+  // olive at swatch size and sat too near Latérite; it is `brique` now. Lagune
+  // moved from teal to a clear blue-turquoise for the same reason — beside
+  // Forêt it read as the same colour.
   //
   // NAMES CHOSEN AGAINST THE HEADER VOCABULARY, not just against each other:
   // `hibiscus` and `karite` were the first picks and both are already HEADER
@@ -171,7 +176,7 @@ export const STOREFRONT_THEMES = [
   'frangipanier',
   'lagune',
   'aubergine',
-  'sahel',
+  'brique',
 ] as const;
 export const StorefrontThemeSchema = z.enum(STOREFRONT_THEMES);
 export type StorefrontTheme = z.infer<typeof StorefrontThemeSchema>;
