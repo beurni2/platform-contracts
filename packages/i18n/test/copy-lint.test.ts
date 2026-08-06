@@ -212,13 +212,12 @@ describe('copy-lint — administrative register (AUDIT-B+1 F12)', () => {
   });
 
   it.each([
-    ['bad.admin.procedure', 'La procédure est lancée.'],
     ['bad.admin.regularisation', 'Merci de faire la régularisation.'],
     ['bad.admin.cijoint', 'Voir le reçu ci-joint.'],
-    ['bad.admin.formalite', 'Une formalité reste à faire.'],
     ['bad.admin.envertude', 'Payé en vertu de nos règles.'],
     ['bad.admin.lecaseheant', 'Le cas échéant, on vous rappelle.'],
     ['bad.admin.acetteffet', 'À cet effet, envoyez la photo.'],
+    ['bad.admin.requerant', 'Le requérant doit signer.'],
   ])('%s is refused as administrative register', async (key, fr) => {
     const data = await loadLintData();
     const report = lintCatalog([entry(key, fr, 'instruction')], data);
@@ -233,6 +232,16 @@ describe('copy-lint — administrative register (AUDIT-B+1 F12)', () => {
    */
   it.each([
     ['ok.instructions_plural', 'Suivez les instructions du livreur.'],
+    // ROUND-3 RETREAT — each of these was REFUSED by the first token list. A
+    // verifier found them; they are warm, 6th-grade, and « pas de formalité »
+    // is the promise this product MAKES to an informal-sector seller. The
+    // tokens came out; the escape is caught by the phrase « cours
+    // d'instruction » instead. If any of these ever reddens, the list has
+    // overreached again and the token comes out — not the copy.
+    ['ok.negation_formalite', 'Pas de formalité compliquée.'],
+    ['ok.negation_formalites', 'Sans formalités : votre boutique est prête.'],
+    ['ok.negation_procedures', 'Pas de procédures longues ici.'],
+    ['ok.instruction_singular', 'Suivez l’instruction du livreur.'],
     ['ok.dossier_label', 'Dossier'],
     ['ok.notification', 'Vous recevrez une notification.'],
     ['ok.consigne', 'Voici la consigne : emballage neutre.'],

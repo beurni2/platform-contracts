@@ -1,5 +1,5 @@
 {
-  "description": "§10.5 condition (a): banned-register tokens in customer copy — the canonical six plus the maintained administrative-formal set. Maintained data, not code. AUDIT-B+1 F12 added the administrative-PROCESS stems: the lint caught « séquestre » and a 32-word sentence, but « Dossier en cours d'instruction. » — short, cold, bureaucratic — passed every check. Each added token was measured against all shipped catalogs first (0 hits). Deliberately NOT added: « dossier » (2 honest uses as a Séra breakglass case label) and « notification » (this product sends push notifications). Failure mode 5 is bureaucratic French; banning honest French is failure mode 5's twin.",
+  "description": "§10.5 condition (a): banned-register tokens in customer copy — the canonical six plus the maintained administrative-formal set. Maintained data, not code. AUDIT-B+1 F12 added the administrative-PROCESS terms after « Dossier en cours d'instruction. » — short, cold, bureaucratic — passed every existing check. ROUND 3 RETREAT, on evidence: « formalité(s) », « procédure(s) » and bare « instruction » were REMOVED because a verifier found honest sentences they refuse — « Pas de formalité compliquée. », « Sans formalités : votre boutique est prête. », « Suivez l'instruction du livreur. ». Negation copy is exactly the promise this product makes to an informal-sector seller. The escape is caught by the PHRASE « cours d'instruction » instead. Also NOT banned: « dossier » and « notification » (honest uses in shipped catalogs). A gate that cries wolf on honest work teaches everyone to disable gates.",
   "tokens": [
     "séquestre",
     "escrow",
@@ -17,19 +17,16 @@
     "il est porté à votre connaissance",
     "préalablement",
     "ultérieurement",
-    "procédure",
-    "procédures",
     "régularisation",
     "ci-joint",
     "ci-jointe",
-    "formalité",
-    "formalités",
     "requérant",
     "requérante",
-    "instruction",
     "en vertu de",
     "le cas échéant",
     "à cet effet",
-    "il y a lieu de"
+    "il y a lieu de",
+    "cours d'instruction",
+    "cours d’instruction"
   ]
 }
