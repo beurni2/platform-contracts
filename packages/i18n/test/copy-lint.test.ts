@@ -175,3 +175,74 @@ describe('copy-lint internals', () => {
     expect(CatalogSchema.safeParse(bad).success).toBe(false);
   });
 });
+
+/**
+ * AUDIT-B+1 F12 — THE LINT ENFORCED LENGTH AND TOKEN LISTS, NOT TONE.
+ *
+ * Measured by the audit: « séquestre » was killed, a 32-word administrative
+ * sentence was killed, marketing hype in a money string was killed — but
+ * « Dossier en cours d'instruction. » SURVIVED. Short, cold, bureaucratic:
+ * exactly failure mode 5 (« Bureaucratic, cold, Parisian-administrative French
+ * anywhere a user reads »), and every existing check waved it through.
+ *
+ * The fix is DATA, not code: administrative-PROCESS stems join the maintained
+ * banned-register list.
+ *
+ * ── THE HALF THAT MATTERS AS MUCH: NOT BREAKING HONEST FRENCH ──────────────
+ * This is the same trap that cost this project a session on the F2 vocabulary
+ * gates — French administrative words are also ordinary French words. So every
+ * candidate was measured against ALL 1691 shipped strings in the seven
+ * catalogs of the three apps BEFORE being added, and two were REJECTED on
+ * evidence rather than taste:
+ *   · « dossier »      — 2 honest uses (Séra's breakglass case label).
+ *   · « notification » — this product sends push notifications.
+ * A gate that cries wolf on honest work teaches everyone to disable gates.
+ */
+describe('copy-lint — administrative register (AUDIT-B+1 F12)', () => {
+  const entry = (key: string, fr: string, screenClass: string, register = 'neutral') =>
+    ({ key, fr, register, screenClass }) as never;
+
+  it('the audit’s exact escape « Dossier en cours d’instruction. » is now REFUSED', async () => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry('bad.admin.instruction', 'Dossier en cours d’instruction.', 'status')], data);
+    expect(report.ok, 'the sentence that defeated the lint still passes').toBe(false);
+    expect(
+      report.violations.some((v) => v.condition === 'banned_register_token' && v.message.includes('instruction')),
+    ).toBe(true);
+  });
+
+  it.each([
+    ['bad.admin.procedure', 'La procédure est lancée.'],
+    ['bad.admin.regularisation', 'Merci de faire la régularisation.'],
+    ['bad.admin.cijoint', 'Voir le reçu ci-joint.'],
+    ['bad.admin.formalite', 'Une formalité reste à faire.'],
+    ['bad.admin.envertude', 'Payé en vertu de nos règles.'],
+    ['bad.admin.lecaseheant', 'Le cas échéant, on vous rappelle.'],
+    ['bad.admin.acetteffet', 'À cet effet, envoyez la photo.'],
+  ])('%s is refused as administrative register', async (key, fr) => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry(key, fr, 'instruction')], data);
+    expect(report.violations.some((v) => v.condition === 'banned_register_token'), fr).toBe(true);
+  });
+
+  /**
+   * THE CONTROL, and the reason the list stops where it does. Each of these is
+   * ordinary, warm, shippable French that a bureaucratic-word ban would have
+   * broken. If one of these ever goes red, the list has overreached and the
+   * offending token must come back out — not the copy.
+   */
+  it.each([
+    ['ok.instructions_plural', 'Suivez les instructions du livreur.'],
+    ['ok.dossier_label', 'Dossier'],
+    ['ok.notification', 'Vous recevrez une notification.'],
+    ['ok.consigne', 'Voici la consigne : emballage neutre.'],
+    ['ok.warm', 'Votre argent arrive sous 24 h.'],
+  ])('%s stays LEGAL — honest French is never the target', async (key, fr) => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry(key, fr, 'instruction')], data);
+    expect(
+      report.violations.filter((v) => v.condition === 'banned_register_token'),
+      `« ${fr} » is honest French and the lint refused it — the token list overreached`,
+    ).toEqual([]);
+  });
+});
