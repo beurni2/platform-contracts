@@ -804,3 +804,9 @@ Fixed sha `bc73cca` (lockfile only — no source, no schema, no version). Both a
 **Standing order recorded in §6bis of CLAUDE.md and AGENTS.md (parity, same round, all four repos):** the fresh-context verifier runs at the end of every slice, before the merge-and-deploy ask.
 
 **Evidence:** contracts **191/191** · gates board exit 0 · consumer install verified BY VALUE (eight keys, `brique` present, `sahel` absent) · `git merge-base --is-ancestor 6331b1b origin/main` ⇒ 0, which is the check the first draft of this entry skipped.
+
+## 2026-08-08 · canon v3.11.0 — the Location pin is OPTIONAL (founder ruling: « proceed with your recommendations »)
+- §7 was asked and answered: the founder approved making `LocationSchema.pin` optional. The required pin forced a paste-from-maps step into every hand-composed delivery task while both shells' display law (SE0.3, landmark-first) never leads with it and the rider app never reads it; no honest client-side default exists, and a fabricated coordinate reaching a rider unchallenged is worse than an absence. When PRESENT the pin must still be a real `{lat, lng}` pair; globe bounds remain the door's job (Séra `/ops/task`).
+- **The ritual, as v3.10.0 fixed it:** version 3.11.0 across the six manifests + inter-package pins (ascii kept unescaped — the first rewrite mangled « × » into \u escapes and was corrected before commit), API snapshot regenerated DELIBERATELY (UPDATE_API_SNAPSHOT=1 — the one line is Location's pin turning optional), both docs manifests regenerated (12 docs, packageVersion 3.11.0), lockfile refreshed.
+- **Evidence:** all packages green — ui-tokens 19 · kernel-types 6 (+1: absence parses, a malformed present pin still refuses) · i18n 31 · contracts 191 · certification 20.
+- **Consumers re-pin next:** sera (worker door accepts absent pin), boutik-plus (confier pin field becomes facultatif), shop-plus (identity re-pin, no behavior change).

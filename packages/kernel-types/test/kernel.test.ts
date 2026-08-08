@@ -16,6 +16,14 @@ describe('kernel Location — no street address, ever', () => {
     expect(LocationSchema.safeParse(valid).success).toBe(true);
   });
 
+  it('v3.11.0 (founder ruling 2026-08-08): the pin is OPTIONAL — absence is representable, a fake is not required', () => {
+    const { pin: _pin, ...sansPin } = valid;
+    expect(LocationSchema.safeParse(sansPin).success).toBe(true);
+    // When PRESENT it must still be a real coordinate pair.
+    expect(LocationSchema.safeParse({ ...valid, pin: { lat: 'douze', lng: -1.5 } }).success).toBe(false);
+    expect(LocationSchema.safeParse({ ...valid, pin: { lat: 12.37 } }).success).toBe(false);
+  });
+
   it('rejects a streetAddress field (strict shape)', () => {
     const withStreet = { ...valid, streetAddress: '12 rue de la Paix' };
     expect(LocationSchema.safeParse(withStreet).success).toBe(false);
