@@ -9,6 +9,19 @@ Format per entry:
 
 ---
 
+## 2026-08-10 · STANDING ORDER — the screen is DRIVEN, never only read · LAW
+**Founder:** « Make it a law from now on every build and fix should uses this tool for tests before merge and deploy ask. »
+
+Written into `§6bis` of `CLAUDE.md` and `AGENTS.md` in **all four repos**, byte-identical (`b0c23c14`) — the parity rule of §6.
+
+**What it says, in short:** any build or fix touching a user-facing screen ends with a RENDU-RÉEL walk — mount the real screen, press the real controls, assert the person reaches the next step — before merge and deploy are asked for. Every new screen gets a walk in the same slice that builds it, and **every screen bug the founder reports gets its walk written FIRST, red, before the fix.** Its bound is absolute: it may never claim anything about appearance.
+
+**⚠ WHAT THIS REPO OWES.** The reference implementation is the Séra rider app (`apps/rider-app/test/rendu.tsx` + `rendu-course.test.tsx` + `rendu-harness.test.ts` + `test/doubles/`). **No harness exists in this repo yet.** The order is explicit: the first slice that touches a screen here BUILDS the equivalent, or says plainly in the report that it did not and why. Silently falling back to source scans is the thing the order forbids.
+
+**The slice sequence is now:** tests + typecheck + gate board green → **the screen walk** → the end-to-end seam test against the real service → the ONE fresh-context verifier pass → commit + push → report, then WAIT.
+
+---
+
 ## 2026-07-09 · E0 bootstrap · done
 - Arranged the founder-supplied kickoff set: `e0-kickoff/docs/` → `/docs` (7 canon documents), `CLAUDE.md`/`AGENTS.md`/`JOURNAL.md` → repo root, four work orders → `/WORK-ORDERS/`, `e0-kickoff/` (incl. its README) deleted. Commit `f72dba5` "chore(e0): bootstrap canon, charter, work orders", pushed to `main`.
 - Canon completeness check: Execution Contract + 3 Build Specs + 3 Building Plans all present in `/docs`. North Stars + prototype not yet supplied — expected per WO-0 §B6 ("…when the founder supplies them"); the manifest covers the seven present documents.
