@@ -810,3 +810,6 @@ Fixed sha `bc73cca` (lockfile only — no source, no schema, no version). Both a
 - **The ritual, as v3.10.0 fixed it:** version 3.11.0 across the six manifests + inter-package pins (ascii kept unescaped — the first rewrite mangled « × » into \u escapes and was corrected before commit), API snapshot regenerated DELIBERATELY (UPDATE_API_SNAPSHOT=1 — the one line is Location's pin turning optional), both docs manifests regenerated (12 docs, packageVersion 3.11.0), lockfile refreshed.
 - **Evidence:** all packages green — ui-tokens 19 · kernel-types 6 (+1: absence parses, a malformed present pin still refuses) · i18n 31 · contracts 191 · certification 20.
 - **Consumers re-pin next:** sera (worker door accepts absent pin), boutik-plus (confier pin field becomes facultatif), shop-plus (identity re-pin, no behavior change).
+
+## 2026-08-10 · FOUNDER STANDING ORDER — ask before merging and deploying
+- « ask for approval before merging and deploying. » Recorded in §6bis of CLAUDE.md and AGENTS.md (kept in parity, same commit). Build → commit → push the branch stays autonomous; the fast-forward of `main` and every deploy workflow now wait for his word. The BOUTIK-SUIVI slice is the first held under it: green, verified, pushed to the branch, unmerged and undeployed.
