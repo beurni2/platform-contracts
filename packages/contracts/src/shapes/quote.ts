@@ -50,6 +50,31 @@ export const QuoteSchema = z
       .object({
         settlementPolicyVersion: z.string().min(1),
         inspectionPolicyVersion: z.string().min(1),
+        /**
+         * WHICH §6.1 PAY-AT-DOOR POLICY ADMITTED THIS QUOTE (founder
+         * authorisation, 2026-08-12).
+         *
+         * Present on Option-B quotes, absent on FULL_PREPAY — a prepaid quote
+         * passes through no door gate, and a version stamped on it would name a
+         * decision that was never taken.
+         *
+         * WHY IT IS ON THE QUOTE AT ALL: §6.1's conditions are FOUNDER-TUNABLE,
+         * and the 2026-08-12 override opened three of them. The eligibility
+         * decision has always carried the version it was decided under, and the
+         * issuer has always dropped it on the ELIGIBLE path — so an admitted
+         * door order recorded nothing about the rules that admitted it. A
+         * dispute months later could not tell an order admitted under the
+         * 25 000 FCFA / verified-seller policy from one admitted under
+         * `v2-ouvert-a-tous`, and a re-tightening could not be dated. That is
+         * the audit trail the sentinels were kept for; this is where it lands.
+         *
+         * OPTIONAL, DELIBERATELY. The shape is `.strict()` and every quote
+         * issued before this key existed is still canon — making it required
+         * would retroactively invalidate them. « Every door quote carries it »
+         * is enforced by test at the issuer, which is where the rule belongs;
+         * the schema's job is only to say the key is legal and non-empty.
+         */
+        payAtDoorPolicyVersion: z.string().min(1).optional(),
       })
       .strict(),
     expiry: IsoTimestampSchema,

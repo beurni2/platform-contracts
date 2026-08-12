@@ -68,6 +68,38 @@ describe('Quote — the frozen shape', () => {
     expect(QuoteSchema.safeParse(validQuote()).success).toBe(true);
   });
 
+  /* ── payAtDoorPolicyVersion — the §6.1 audit trail (founder, 2026-08-12) ── */
+  it('a door quote may name the §6.1 policy that admitted it', () => {
+    const q = validQuote();
+    const withVersion = {
+      ...q,
+      policyVersions: { ...q.policyVersions, payAtDoorPolicyVersion: 'option-b-policy.v2-ouvert-a-tous' },
+    };
+    const parsed = QuoteSchema.safeParse(withVersion);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.policyVersions.payAtDoorPolicyVersion).toBe('option-b-policy.v2-ouvert-a-tous');
+    }
+  });
+
+  it('it is OPTIONAL — every quote issued before the key existed is still canon', () => {
+    expect(QuoteSchema.safeParse(validQuote()).success).toBe(true);
+  });
+
+  it('an EMPTY version is refused — a blank name is worse than no name, it looks recorded', () => {
+    const q = validQuote();
+    expect(
+      QuoteSchema.safeParse({ ...q, policyVersions: { ...q.policyVersions, payAtDoorPolicyVersion: '' } }).success,
+    ).toBe(false);
+  });
+
+  it('the block stays STRICT — a fourth, undeclared policy key is still a parse failure', () => {
+    const q = validQuote();
+    expect(
+      QuoteSchema.safeParse({ ...q, policyVersions: { ...q.policyVersions, inventedPolicyVersion: 'x' } }).success,
+    ).toBe(false);
+  });
+
   it('accepts the optional Cercle reconciliation anchors (campaignId / campaignBenefit)', () => {
     const q = {
       ...validQuote(),
