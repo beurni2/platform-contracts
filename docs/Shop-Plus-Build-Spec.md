@@ -146,7 +146,12 @@ Both options shown; **Option A labeled « recommandé »**. Before choosing, buy
 - **A « Tout payer maintenant — recommandé » —** « Votre paiement est protégé auprès de notre partenaire de paiement jusqu'à la confirmation de votre livraison. Le vendeur n'est payé qu'après validation. »
 - **B « Payer le produit à la livraison » —** « Payez seulement les frais de livraison ({D} FCFA) maintenant. À l'arrivée du livreur, vérifiez votre article, puis payez le montant du produit de manière sécurisée **avant de le recevoir**. » + warning « Frais de livraison non remboursables si vous annulez ou êtes absent(e). »
 **« séquestre »/"escrow" MUST NOT appear** in customer copy. A one-line replay before payment (« Vous payez X FCFA maintenant et Y FCFA à la livraison — d'accord ? »); per-option **audio note**; lock/scooter icons. Comprehension-tested with first-time buyers.
-**Option-B gate (evaluated at quote):** seller tier ≥ verified · category inspectable · order ≤ price cap (pilot ~25,000 FCFA) · network-reliable zone · `PayAtDoorEligibility.state = allowed`.
+**Option-B gate (evaluated at quote) — FOUNDER OVERRIDE 2026-08-12, all product-side conditions OPEN:** « for pay at the door I do not want any gate at all, make it open to any product from any supplier. » Given after being shown the five conditions below verbatim, and repeated when the risk was restated. The five conditions REMAIN the structure of the decision and each still names its own refusal; what changed is the value each is measured against, so a re-tightening is a policy edit with an audit trail rather than a code change. Every eligibility answer names the `version` it was decided under (`option-b-policy.v2-ouvert-a-tous`).
+- ~~seller tier ≥ verified~~ → **no tier required** (`minSellerTier: 'aucun'`). Any supplier, attested or not.
+- ~~category inspectable~~ → **every category** (`inspectableCategories: 'toutes'`), including categories §6.2 names no row for. See the §6.2 note below.
+- ~~order ≤ price cap (pilot ~25,000 FCFA)~~ → **no ceiling** (`priceCapFcfa: 'aucun'`).
+- network-reliable zone → **every zone**, per the earlier founder ruling of 2026-08-01.
+- `PayAtDoorEligibility.state = allowed` — **UNCHANGED, the one condition still enforced.** It refuses nobody today (no refusal is yet recorded anywhere) and it is the only rule that could ever stop a buyer who repeatedly refuses at the door. Left in place deliberately and flagged to the founder rather than dropped silently.
 
 ### 6.2 Category inspection matrix (buyer-facing outcome; policy owned by Séra/Evidence, versioned)
 | Category | Allowed at door | Valid rejection | Buyer-risk (not valid) |
@@ -157,6 +162,8 @@ Both options shown; **Option A labeled « recommandé »**. Before choosing, buy
 | Electronics/complex | **EXCLUDED from MVP** | — | — |
 | Counterfeit allegation | rider **records only** | human review adjudicates | — |
 **Opened-then-refused:** if outer packaging was opened and buyer refuses **without seller fault** → **buyer-fault**; categories where opening destroys resale **require payment before the inner packaging is opened**. Custody rules and dwell target (2–4 min) per Séra spec.
+
+> **§6.2 AFTER THE 2026-08-12 OVERRIDE.** This matrix still governs **what the buyer's at-door checklist SAYS and what counts as a valid rejection** — that is unchanged and it is what the rider and the evidence path read. It no longer decides **whether the door is offered**: the founder opened every category, so a product in a row this table excludes (electronics/complex) or names no row for at all can now be bought at the door. The risk that motivated the exclusion is unchanged and was stated to him: a buyer cannot meaningfully inspect an electronic item at the door, and an opened box that is then refused cannot be resold — that loss falls on the supplier and on the platform. Rows with no entry give the buyer the **cautious** checklist, never invented inspection rights.
 
 ### 6.3 Settlement finality (by category)
 **At-door acceptance = finality** for all MVP categories; the buyer enters the **drop code last, after** any door payment is provider-confirmed; **same/next-day payout**. Change-of-mind after acceptance is **not guaranteed** (goodwill only). Narrow latent defects → **platform-funded goodwill, never supplier clawback**. Post-split returns are structurally prevented in the MVP.
