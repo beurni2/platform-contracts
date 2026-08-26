@@ -1,6 +1,6 @@
 {
   "name": "@platform/ui-tokens",
-  "version": "3.12.0",
+  "version": "3.13.0",
   "description": "Design tokens — color, type scale, radius, geometry, motion. Faso Premium (v2, four app accents) at the root; Grand Teint (v1) preserved at ./legacy for the transition window. Tokens only; no components.",
   "license": "UNLICENSED",
   "type": "module",
