@@ -2,8 +2,8 @@
  * RoundingLaw v1 — FOUNDER-CONFIRMED 2026-07-09 (closes the WO-0 §B2 ⏳).
  *
  * The law:
- *   sellerPlatformFee   = floor(0.05 × B)
- *   resellerPlatformFee = floor(0.20 × (C + M))
+ *   sellerPlatformFee   = floor(rate × B)
+ *   resellerPlatformFee = floor(rate × (C + M))
  *   sellerNet           = B − C − sellerPlatformFee
  *   resellerNet         = (C + M) − resellerPlatformFee
  *   platformProductFeeRevenue = sellerPlatformFee + resellerPlatformFee
@@ -17,11 +17,22 @@
  * never the platform.
  *
  * This is the single place a founder change to the rounding rule touches.
+ *
+ * ═══ FRAIS-ZERO (FOUNDER ORDER 2026-08-25) — BOTH RATES ARE ZERO, FOR NOW ═══
+ * « For now remove all charging fees system everywhere, I haven't found the
+ * proper fees charge design yet. » The RATES go to 0/100 — the law, the fee
+ * fields, the nets-by-subtraction and every reconciliation identity stay
+ * standing, so his future fee design is a pair of numerators, not a
+ * re-architecture. At zero: sellerNet = B − C, resellerNet = C + M,
+ * platformProductFeeRevenue = 0. Delivery (D) is untouched — it is the
+ * rider's service price, not a platform charge. The 5 %/20 % in the specs
+ * remain his recorded target design; this is the operational override,
+ * journalled in every repo.
  */
 export const ROUNDING_LAW_VERSION = 'v1' as const;
 
-export const SELLER_PLATFORM_FEE = { numerator: 5, denominator: 100 } as const; // 5% of B
-export const RESELLER_PLATFORM_FEE = { numerator: 20, denominator: 100 } as const; // 20% of (C + M)
+export const SELLER_PLATFORM_FEE = { numerator: 0, denominator: 100 } as const; // FRAIS-ZERO (was 5% of B)
+export const RESELLER_PLATFORM_FEE = { numerator: 0, denominator: 100 } as const; // FRAIS-ZERO (was 20% of (C + M))
 
 export function assertIntegerFcfa(value: number, field: string): void {
   if (!Number.isSafeInteger(value)) {
@@ -45,13 +56,13 @@ function floorFraction(base: number, numerator: number, denominator: number): nu
   return Math.floor(scaled / denominator);
 }
 
-/** sellerPlatformFee = floor(0.05 × B) — RoundingLaw v1 */
+/** sellerPlatformFee = floor(rate × B) — RoundingLaw v1 (rate 0 since FRAIS-ZERO) */
 export function sellerPlatformFee(sellerBasePrice: number): number {
   assertIntegerFcfa(sellerBasePrice, 'sellerBasePrice (B)');
   return floorFraction(sellerBasePrice, SELLER_PLATFORM_FEE.numerator, SELLER_PLATFORM_FEE.denominator);
 }
 
-/** resellerPlatformFee = floor(0.20 × (C + M)) — RoundingLaw v1 */
+/** resellerPlatformFee = floor(rate × (C + M)) — RoundingLaw v1 (rate 0 since FRAIS-ZERO) */
 export function resellerPlatformFee(sellerFundedCommission: number, resellerMarkup: number): number {
   assertIntegerFcfa(sellerFundedCommission, 'sellerFundedCommission (C)');
   assertIntegerFcfa(resellerMarkup, 'resellerMarkup (M)');

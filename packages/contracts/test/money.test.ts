@@ -9,6 +9,8 @@ import {
   ROUNDING_LAW_VERSION,
   resellerPlatformFee,
   sellerPlatformFee,
+  SELLER_PLATFORM_FEE,
+  RESELLER_PLATFORM_FEE,
 } from '../src/money/rounding-law.js';
 
 describe('RoundingLaw v1 (founder-confirmed 2026-07-09)', () => {
@@ -16,16 +18,15 @@ describe('RoundingLaw v1 (founder-confirmed 2026-07-09)', () => {
     expect(ROUNDING_LAW_VERSION).toBe('v1');
   });
 
-  it('rounds ONLY the two fees, with floor: the fraction of a franc stays with the participant', () => {
-    // 5% of 19 = 0.95 → fee 0; the whole 19 F stays with the seller side.
+  it('FRAIS-ZERO (founder order 2026-08-25): both rates are 0 — every fee is 0 F on every input', () => {
+    // « For now remove all charging fees system everywhere. » The law and its
+    // floor stay; the numerators are 0, so the whole amount stays with the
+    // participant on EVERY input, divisible or not.
     expect(sellerPlatformFee(19)).toBe(0);
-    // 5% of 10,001 = 500.05 → fee 500.
-    expect(sellerPlatformFee(10_001)).toBe(500);
-    // 20% of 1,111 = 222.2 → fee 222.
-    expect(resellerPlatformFee(333, 778)).toBe(222);
-    // Exact multiples round nothing.
-    expect(sellerPlatformFee(10_000)).toBe(500);
-    expect(resellerPlatformFee(1_000, 1_500)).toBe(500);
+    expect(sellerPlatformFee(10_001)).toBe(0);
+    expect(resellerPlatformFee(333, 778)).toBe(0);
+    expect(sellerPlatformFee(10_000)).toBe(0);
+    expect(resellerPlatformFee(1_000, 1_500)).toBe(0);
   });
 
   it('rejects non-integer and negative FCFA inputs', () => {
@@ -45,7 +46,7 @@ describe('RoundingLaw v1 (founder-confirmed 2026-07-09)', () => {
 });
 
 describe('computeWaterfall — §5.4 worked baseline (asserted literally)', () => {
-  it('B 10,000 · C 1,000 · M 1,500 · D 1,000 → 11,500 · 12,500 · 8,500 · 2,000 · 1,000', () => {
+  it('B 10,000 · C 1,000 · M 1,500 · D 1,000 → 11,500 · 12,500 · 9,000 · 2,500 · 0 (FRAIS-ZERO)', () => {
     const q = computeWaterfall({
       sellerBasePrice: 10_000,
       sellerFundedCommission: 1_000,
@@ -55,13 +56,13 @@ describe('computeWaterfall — §5.4 worked baseline (asserted literally)', () =
     });
     expect(q.productSubtotal).toBe(11_500);
     expect(q.buyerTotal).toBe(12_500);
-    expect(q.sellerPlatformFee).toBe(500);
-    expect(q.sellerNet).toBe(8_500);
+    expect(q.sellerPlatformFee).toBe(0);
+    expect(q.sellerNet).toBe(9_000);
     expect(q.resellerGrossEarnings).toBe(2_500);
-    expect(q.resellerPlatformFee).toBe(500);
-    expect(q.resellerNet).toBe(2_000);
-    expect(q.platformProductFeeRevenue).toBe(1_000);
-    // 8,500 + 2,000 + 1,000 = 11,500 ✓
+    expect(q.resellerPlatformFee).toBe(0);
+    expect(q.resellerNet).toBe(2_500);
+    expect(q.platformProductFeeRevenue).toBe(0);
+    // 9,000 + 2,500 + 0 = 11,500 ✓ (FRAIS-ZERO)
     expect(q.sellerNet + q.resellerNet + q.platformProductFeeRevenue).toBe(q.productSubtotal);
     // FULL_PREPAY legs (§5.5)
     expect(q.amountPaidAtCheckout).toBe(12_500);
@@ -71,7 +72,7 @@ describe('computeWaterfall — §5.4 worked baseline (asserted literally)', () =
 });
 
 describe('computeWaterfall — founder non-divisible regression case (asserted exactly)', () => {
-  it('B 10,001 · C 333 · M 778 · D 600 → fees 500 · 222, sellerNet 9,168, resellerNet 889, platform 722, subtotal 10,779, buyerTotal 11,379', () => {
+  it('B 10,001 · C 333 · M 778 · D 600 → fees 0 · 0, sellerNet 9,668, resellerNet 1,111, platform 0 (FRAIS-ZERO on the non-divisible case)', () => {
     const q = computeWaterfall({
       sellerBasePrice: 10_001,
       sellerFundedCommission: 333,
@@ -79,11 +80,11 @@ describe('computeWaterfall — founder non-divisible regression case (asserted e
       deliveryFee: 600,
       paymentMode: 'DELIVERY_FEE_PREPAID_PRODUCT_AT_DOOR',
     });
-    expect(q.sellerPlatformFee).toBe(500);
-    expect(q.resellerPlatformFee).toBe(222);
-    expect(q.sellerNet).toBe(9_168);
-    expect(q.resellerNet).toBe(889);
-    expect(q.platformProductFeeRevenue).toBe(722);
+    expect(q.sellerPlatformFee).toBe(0);
+    expect(q.resellerPlatformFee).toBe(0);
+    expect(q.sellerNet).toBe(9_668);
+    expect(q.resellerNet).toBe(1_111);
+    expect(q.platformProductFeeRevenue).toBe(0);
     expect(q.productSubtotal).toBe(10_779);
     expect(q.buyerTotal).toBe(11_379);
     // Option B legs (§5.5): amountPaidAtCheckout = D, amountDueAtDelivery = productSubtotal.
@@ -142,15 +143,26 @@ describe('reconciliation property — ∀ integer FCFA inputs in realistic range
     );
   });
 
-  it('floor law: 20·sellerFee ≤ B < 20·(sellerFee+1) and 5·resellerFee ≤ C+M < 5·(resellerFee+1)', () => {
+  it('floor law, rate-general: den·fee ≤ base·num < den·(fee+1) — at the FRAIS-ZERO rates every fee is exactly 0', () => {
+    // The old form (20·sellerFee ≤ B, 5·resellerFee ≤ C+M) was the rate-5%/20%
+    // specialisation; this is the same floor law written from the constants
+    // themselves, so it holds at ANY future rate the founder sets — including
+    // today's 0, where it degenerates to fee === 0 on every input.
     fc.assert(
       fc.property(realisticInputs, (input) => {
         const q = computeWaterfall(input);
-        expect(20 * q.sellerPlatformFee).toBeLessThanOrEqual(input.sellerBasePrice);
-        expect(input.sellerBasePrice).toBeLessThan(20 * (q.sellerPlatformFee + 1));
+        const sNum = SELLER_PLATFORM_FEE.numerator;
+        const sDen = SELLER_PLATFORM_FEE.denominator;
+        expect(sDen * q.sellerPlatformFee).toBeLessThanOrEqual(input.sellerBasePrice * sNum);
+        expect(input.sellerBasePrice * sNum).toBeLessThan(sDen * (q.sellerPlatformFee + 1));
         const cm = input.sellerFundedCommission + input.resellerMarkup;
-        expect(5 * q.resellerPlatformFee).toBeLessThanOrEqual(cm);
-        expect(cm).toBeLessThan(5 * (q.resellerPlatformFee + 1));
+        const rNum = RESELLER_PLATFORM_FEE.numerator;
+        const rDen = RESELLER_PLATFORM_FEE.denominator;
+        expect(rDen * q.resellerPlatformFee).toBeLessThanOrEqual(cm * rNum);
+        expect(cm * rNum).toBeLessThan(rDen * (q.resellerPlatformFee + 1));
+        // FRAIS-ZERO (founder order 2026-08-25): both numerators are 0 today.
+        expect(q.sellerPlatformFee).toBe(0);
+        expect(q.resellerPlatformFee).toBe(0);
       }),
       { numRuns: 2_000 },
     );
