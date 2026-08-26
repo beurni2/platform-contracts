@@ -9,7 +9,9 @@ Format per entry:
 
 ---
 
-## 2026-08-25 · FRAIS-ZERO-1 — both platform fee rates go to 0; the law stays standing · IN REVIEW
+## 2026-08-25 · FRAIS-ZERO-1 — both platform fee rates go to 0; the law stays standing · DONE
+
+**MERGED (founder: « Merge and deploy », 2026-08-26).** `main` fast-forwarded to `add52f9`. Two CI-only catch-ups landed during the merge, neither touching package content: `35a21ea` (the workspace lockfile's intra-family specifiers had stayed at 3.12.0 — a COLD frozen prepare of the git tarball refused the mismatch and broke every consumer's frozen install; local installs are never frozen, which is why every local board was green) and `add52f9` (the repo-root docs.manifest.json copy still said 3.12.0; ci diffs both copies). ci run 127 green on `add52f9`. Consumers repinned to `35a21ea` and verified the way CI runs it (`CI=true pnpm install --frozen-lockfile`).
 
 **Founder, 2026-08-25: « For now remove all charging fees system everywhere, I haven't found the proper fees charge design yet. »** Asked how, he chose **« Zero the rates »** — and **« Delivery stays »** (D is the rider's service price, not a platform charge). Canon build `053763f`, lockstep bump `0846780` → **v3.13.0**.
 
