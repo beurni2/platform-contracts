@@ -23,6 +23,8 @@ Format per entry:
 
 **Mutations, anchor-verified, each red:** seller numerator 0→5 → 5 tests red · reseller numerator 0→20 → 5 tests red. Both restored.
 
+**The ONE fresh-context verifier (the order + his chosen shape, the four repos' diffs, the DoD; it re-derived the arithmetic and ran the money tests itself — contracts 11/11, reseller-money 8/8, supplier-app money 39/39): SHIP — one MEDIUM and four LOWs, handled once, none in this repo's diff.** The MEDIUM (a boutik demo relevé still carrying o7's 5 %-era net) and two LOWs (a stale rate-narrating comment; kernel-types package.json pins lagging the override) were fixed in the consumer repos (boutik `ea17bc9`, shop `a41abc8`, sera `1f57007`). One LOW was local-only hygiene (this repo's gitignored dist/ still held numerator 5 — rebuilt; it ships nowhere, consumers rebuild via prepare). One LOW was a scope note, accepted: the boutik/sera /docs mirror catch-up (the 2026-08-12 pay-at-door text) is not fee content but is what the 3.13.0 drift-check requires. Confirmed clean everywhere: no live fee computation survives outside canon, no pin re-types a formula, every fixture reconciles to the franc, D untouched, the leak scans keep counted teeth, every negative fixture still fails in its negative dimension only.
+
 ---
 
 ## 2026-08-10 · STANDING ORDER — the screen is DRIVEN, never only read · LAW
