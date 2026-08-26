@@ -9,6 +9,22 @@ Format per entry:
 
 ---
 
+## 2026-08-25 · FRAIS-ZERO-1 — both platform fee rates go to 0; the law stays standing · IN REVIEW
+
+**Founder, 2026-08-25: « For now remove all charging fees system everywhere, I haven't found the proper fees charge design yet. »** Asked how, he chose **« Zero the rates »** — and **« Delivery stays »** (D is the rider's service price, not a platform charge). Canon build `053763f`, lockstep bump `0846780` → **v3.13.0**.
+
+**ONE HOME, TWO NUMERATORS.** `SELLER_PLATFORM_FEE` 5→0 and `RESELLER_PLATFORM_FEE` 20→0 in `rounding-law.ts` — the only place a founder change to the rates touches. `computeWaterfall`, the fee FIELDS, the nets-by-subtraction and `assertQuoteReconciles` are byte-untouched: at rate 0 the identities hold algebraically (sellerNet = B − C · resellerNet = C + M · platformProductFeeRevenue = 0), so his future fee design is a pair of numerators, not a re-architecture. The 5 %/20 % in the spec documents remain his recorded TARGET design; this is the operational override. ROUNDING_LAW_VERSION stays v1 (the law did not change — its inputs did).
+
+**Money tests moved with the rates, none weakened:** the §5.4 baseline pins 9 000/2 500/0, the non-divisible regression pins 9 668/1 111/0 (nothing to round at rate 0), and the floor-law property was REWRITTEN RATE-GENERAL — `den·fee ≤ base·num < den·(fee+1)` from the constants themselves, so it holds at any future rate and degenerates to fee ≡ 0 today. The negative fixtures (independent-multiplication, absorbed-fee) still throw. 195/195 + the four sibling packages green; api-surface snapshot regenerated with the deliberate version bump; docs.manifest.json packageVersion 3.13.0.
+
+**The lockstep bump (`0846780`) is why v3.13.0 exists as a commit of its own:** certification's exact-version deps ("3.12.0") stopped matching inside pnpm's git-tarball prepare and fell to a registry 404 — ALL five packages bump together (the a418ca4 precedent), intra-family deps stay exact.
+
+**Consumers repinned (each on its own branch, in review):** shop-plus `d1e1676` · boutik-plus `daa81a5` · sera `e116c94` — in every case the pnpm-workspace.yaml override (THE real pin) moved together with the package.json pins. **The platform repo is untouched by this order, deliberately:** it consumes contracts for non-money shapes only, computes no fee, and the Protection Fund is capitalized offline, never fee-funded — there is no fee system there to remove.
+
+**Mutations, anchor-verified, each red:** seller numerator 0→5 → 5 tests red · reseller numerator 0→20 → 5 tests red. Both restored.
+
+---
+
 ## 2026-08-10 · STANDING ORDER — the screen is DRIVEN, never only read · LAW
 **Founder:** « Make it a law from now on every build and fix should uses this tool for tests before merge and deploy ask. »
 
