@@ -15,7 +15,9 @@ Format per entry:
 
 **Evidence:** turbo test **10/10 --force** (shape-freeze green after the sanctioned re-stamp; its two negative fixtures still red as required) · typecheck **8/8 --force** · `run-gates.sh` **ALL GATES GREEN**. The board CAUGHT a latent lag while getting there: the repo-root package.json still said 3.12.0 (left behind by the 3.13.0 bump) and the root-versioned drift/export-maps gates refused 3.13.1 until it rode along — fixed in the same commit (`95c3ce4`), named in its message. CI-frozen consumption verified the way CI runs it: a clean copy under `CI=true pnpm install --frozen-lockfile` passes (the FRAIS-ZERO lockfile lesson, applied before pushing this time).
 
-**Consumers:** shop-plus repins to `95c3ce4` in its GEO-CARTE-PRO-1 slice (its journal). Boutik-plus and sera keep their older pins with internally consistent mirrors (their drift gates compare mirror ↔ THEIR pinned manifest); they catch up on their next canon touch — named residue.
+**Consumers:** shop-plus repins in its GEO-CARTE-PRO-1 slice (its journal). Boutik-plus and sera keep their older pins with internally consistent mirrors (their drift gates compare mirror ↔ THEIR pinned manifest); they catch up on their next canon touch — named residue.
+
+**The ONE fresh-context verifier (shared with the shop-plus half): NO BLOCKER, NO MAJOR; one MINOR on this repo, fixed once (`b384da9`).** My re-serialization had rewritten five package descriptions into \\uXXXX escapes — undone, values identical, the cumulative manifest diff now the version lines alone. It confirmed structurally (blob-level JSON diff) that the api-surface snapshot moved in `packageVersion` alone and PERF-BUDGETS.md in the one signed value + its own amendment record; its note that the root-version catch-up deserved naming is met by `95c3ce4`'s message and the entry above. Shop-plus consumes `b384da9`.
 
 ---
 
