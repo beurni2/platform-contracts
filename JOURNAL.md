@@ -9,6 +9,16 @@ Format per entry:
 
 ---
 
+## 2026-08-31 · GEO-CARTE-PRO-1 (canon half) — PERF-BUDGETS Amendment 1.1: buyer-surface payload 300 KB → 320 KB · IN REVIEW
+
+**Founder-signed « 320 » (2026-08-31), per the doc's own Enforcement terms (« founder sign-off for any loosening »).** The D17 ceiling stood 99.9 % consumed (306 796 B of 307 200) when shop-plus's GEO-CARTE-PRO map face (2 624 B compressed) could no longer fit; the ask, the numbers and the trims that could not close the gap are journalled in shop-plus (GEO-CARTE-PRO-1). This repo's change is docs-only: the amendment recorded in PERF-BUDGETS.md itself (Version 1.1, the one signed value moved, the JS sub-budget's parenthetical follows to « inside the 320 KB »), family version 3.13.0 → **3.13.1**, both docs.manifest.json copies regenerated (packageVersion 3.13.1), the api-surface snapshot re-stamped through its own UPDATE_API_SNAPSHOT road — **the version field is the snapshot's only diff; no contract shape moved**.
+
+**Evidence:** turbo test **10/10 --force** (shape-freeze green after the sanctioned re-stamp; its two negative fixtures still red as required) · typecheck **8/8 --force** · `run-gates.sh` **ALL GATES GREEN**. The board CAUGHT a latent lag while getting there: the repo-root package.json still said 3.12.0 (left behind by the 3.13.0 bump) and the root-versioned drift/export-maps gates refused 3.13.1 until it rode along — fixed in the same commit (`95c3ce4`), named in its message. CI-frozen consumption verified the way CI runs it: a clean copy under `CI=true pnpm install --frozen-lockfile` passes (the FRAIS-ZERO lockfile lesson, applied before pushing this time).
+
+**Consumers:** shop-plus repins to `95c3ce4` in its GEO-CARTE-PRO-1 slice (its journal). Boutik-plus and sera keep their older pins with internally consistent mirrors (their drift gates compare mirror ↔ THEIR pinned manifest); they catch up on their next canon touch — named residue.
+
+---
+
 ## 2026-08-25 · FRAIS-ZERO-1 — both platform fee rates go to 0; the law stays standing · DONE
 
 **MERGED (founder: « Merge and deploy », 2026-08-26).** `main` fast-forwarded to `add52f9`. Two CI-only catch-ups landed during the merge, neither touching package content: `35a21ea` (the workspace lockfile's intra-family specifiers had stayed at 3.12.0 — a COLD frozen prepare of the git tarball refused the mismatch and broke every consumer's frozen install; local installs are never frozen, which is why every local board was green) and `add52f9` (the repo-root docs.manifest.json copy still said 3.12.0; ci diffs both copies). ci run 127 green on `add52f9`. Consumers repinned to `35a21ea` and verified the way CI runs it (`CI=true pnpm install --frozen-lockfile`).
