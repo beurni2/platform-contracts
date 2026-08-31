@@ -1,7 +1,7 @@
 {
   "name": "@platform/kernel-types",
   "version": "3.13.1",
-  "description": "Kernel types: phone-alias identity, no-street-address Location, offline-queue semantics, media references. Types only \u2014 no runtime services, no network code.",
+  "description": "Kernel types: phone-alias identity, no-street-address Location, offline-queue semantics, media references. Types only — no runtime services, no network code.",
   "license": "UNLICENSED",
   "type": "module",
   "main": "./dist/index.js",
