@@ -9,7 +9,9 @@ Format per entry:
 
 ---
 
-## 2026-08-31 · GEO-CARTE-PRO-1 (canon half) — PERF-BUDGETS Amendment 1.1: buyer-surface payload 300 KB → 320 KB · IN REVIEW
+## 2026-08-31 · GEO-CARTE-PRO-1 (canon half) — PERF-BUDGETS Amendment 1.1: buyer-surface payload 300 KB → 320 KB · DONE
+
+**MERGED (founder: « Go », 2026-08-31).** `main` fast-forwarded `3065ec9..4c99762` — **ci run 129 green** (and canon main's previous head had a pre-existing red at run 128, the FRAIS-ZERO journal stamp; this push is what returned main's ci to green). Shop-plus consumes `b384da9` live: its storefront-deploy 76 rebuilt the Worker on 3.13.1.
 
 **Founder-signed « 320 » (2026-08-31), per the doc's own Enforcement terms (« founder sign-off for any loosening »).** The D17 ceiling stood 99.9 % consumed (306 796 B of 307 200) when shop-plus's GEO-CARTE-PRO map face (2 624 B compressed) could no longer fit; the ask, the numbers and the trims that could not close the gap are journalled in shop-plus (GEO-CARTE-PRO-1). This repo's change is docs-only: the amendment recorded in PERF-BUDGETS.md itself (Version 1.1, the one signed value moved, the JS sub-budget's parenthetical follows to « inside the 320 KB »), family version 3.13.0 → **3.13.1**, both docs.manifest.json copies regenerated (packageVersion 3.13.1), the api-surface snapshot re-stamped through its own UPDATE_API_SNAPSHOT road — **the version field is the snapshot's only diff; no contract shape moved**.
 
