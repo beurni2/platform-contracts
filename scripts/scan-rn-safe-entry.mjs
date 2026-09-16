@@ -6,7 +6,7 @@
 // @platform/* siblings are followed into their own dist; other externals
 // must be on the RN-compatible allowlist.
 //
-//   node scripts/scan-rn-safe-entry.mjs                 # scan all four packages
+//   node scripts/scan-rn-safe-entry.mjs                 # scan every RN-consumed package
 //   node scripts/scan-rn-safe-entry.mjs --package-dir X # scan one package root (fixtures)
 import { builtinModules } from 'node:module';
 import { readFileSync, existsSync } from 'node:fs';
