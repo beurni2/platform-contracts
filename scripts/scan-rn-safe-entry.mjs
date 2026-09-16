@@ -115,7 +115,7 @@ const args = process.argv.slice(2);
 const packageDirs =
   args[0] === '--package-dir'
     ? [resolve(args[1])]
-    : ['contracts', 'kernel-types', 'i18n', 'ui-tokens'].map((p) => join(repoRoot, 'packages', p));
+    : ['contracts', 'kernel-types', 'i18n', 'ui-tokens', 'taxonomy'].map((p) => join(repoRoot, 'packages', p));
 
 let failed = false;
 for (const dir of packageDirs) {

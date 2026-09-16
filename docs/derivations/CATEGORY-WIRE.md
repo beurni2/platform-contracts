@@ -226,3 +226,13 @@ The operator console, the ops credential, buyer-contact capture, and the 10-minu
 value is the founder's, verbatim and dated (2026-08-01): « after 10 mn if the another supplier get
 a product sold but still not showing any sign of preparation I will notify them offline myself ».
 Code ships 120 until the fulfillment slice lands; the re-tune cites this ruling, not a guess.
+
+## 7. Since v3.14.0 — the shelves are DATA, in `@platform/taxonomy`
+
+§5 stands: the wire's `category` is still a free `TrimmedNonEmptyString`, and the
+⏳ category-floor Decision (whether the wire ever enforces a list) is still open.
+What moved is the LIST ITSELF: Boutik+'s wizard shelves (RAYONS-1) and Shop+'s
+pickers (RAYONS-CANON-1) had two byte-exact copies of it in two repos; from
+v3.14.0 both import `RAYONS` from `@platform/taxonomy` (TAXONOMY-DATA.md). A
+category label is a wire value, so the list is edited here with a canon MINOR,
+never in an app.

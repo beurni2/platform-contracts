@@ -1,7 +1,7 @@
 {
-  "name": "@platform/ui-tokens",
+  "name": "@platform/taxonomy",
   "version": "3.14.0",
-  "description": "Design tokens — color, type scale, radius, geometry, motion. Faso Premium (v2, four app accents) at the root; Grand Teint (v1) preserved at ./legacy for the transition window. Tokens only; no components.",
+  "description": "The product taxonomy — the shelves (rayons) and their categories, as DATA: the ONE list Boutik+'s listing wizard publishes from and Shop+'s pickers offer. Labels are the wire values verbatim (canon `category` stays a free TrimmedNonEmptyString; this package is the floor's data, never an allowlist).",
   "license": "UNLICENSED",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,10 +10,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./legacy": {
-      "types": "./dist/legacy/index.d.ts",
-      "import": "./dist/legacy/index.js"
     },
     "./dist/*": "./dist/*",
     "./package.json": "./package.json"

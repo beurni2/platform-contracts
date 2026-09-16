@@ -14,10 +14,11 @@ const EXPECTED_NODE_ONLY_SUBPATHS = {
   '@platform/kernel-types': [],
   '@platform/ui-tokens': [],
   '@platform/certification': [],
+  '@platform/taxonomy': [],
 };
 
 let failed = false;
-for (const dir of ['contracts', 'kernel-types', 'i18n', 'ui-tokens', 'certification']) {
+for (const dir of ['contracts', 'kernel-types', 'i18n', 'ui-tokens', 'certification', 'taxonomy']) {
   const packageDir = join(repoRoot, 'packages', dir);
   const pkg = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
   const problems = [];

@@ -51,9 +51,15 @@ a `./dist/*` passthrough keeps any legacy deep import working.
   "@platform/contracts":    "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/contracts",
   "@platform/kernel-types": "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/kernel-types",
   "@platform/i18n":         "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/i18n",
-  "@platform/ui-tokens":    "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/ui-tokens"
+  "@platform/ui-tokens":    "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/ui-tokens",
+  "@platform/taxonomy":     "git+https://github.com/beurni2/platform-contracts.git#<RELEASE_SHA>&path:packages/taxonomy"
 }
 ```
+
+`@platform/taxonomy` (since v3.14.0) is pure data — the shelves and their
+categories — with no intra-family dependency, so it needs no override entry;
+the pin in `package.json` is the whole pin. It is consumed by boutik-plus (the
+listing wizard) and shop-plus (the reseller app's pickers); sera does not read it.
 
 `<RELEASE_SHA>` is the **release commit sha** announced per canon release —
 pins use the sha (founder tag ruling). Current example: the v0.3.0 release is
@@ -71,6 +77,7 @@ onlyBuiltDependencies:
   - "@platform/i18n"
   - "@platform/ui-tokens"
   - "@platform/certification"
+  - "@platform/taxonomy"
 
 # Inter-package version-deps exist on no registry: @platform/contracts →
 # kernel-types, and @platform/certification (≥0.3.0) → contracts AND
