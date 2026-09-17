@@ -1,17 +1,17 @@
 {
-  "packageVersion": "3.15.0",
+  "packageVersion": "3.16.0",
   "files": {
     "Boutik-Plus-Build-Spec.md": "7d061bf639bc0daf13b1d548735a43c7c32fc23e1af5043b66e237f5f902d053",
     "Boutik-Plus-Building-Plan.md": "e8d2ae5167392358292577c313247083b99330c7f0eda5e704f027764163de04",
     "Boutik-Plus-Web-North-Star.md": "2b6427c0fabbe7d81d1ab67c73f49dc05034a331b36f8099761bdd6d5b4b19ae",
     "DESIGN-LANGUAGE.md": "ffc33937ca10c3c04cb675fdc9bde26c958432f98e32f7898787bcb9dcbd1bb0",
-    "ECOSYSTEM-MASTER-REFERENCE.md": "885e1e74cc4fe3d89499e47e97ed25e0d9d2dd4682d9848ec1284e394d9f08e6",
+    "ECOSYSTEM-MASTER-REFERENCE.md": "aaf21aa7f46f4f6e7e7bfbb422d4e7417ac3cf594a6ee43874e6699c309857a1",
     "Ecosystem-Engineering-Execution-Contract.md": "ed2bb1127f802a508f438c6db456eababe902ff5d37d9ad5514f7f102519099e",
     "GRAND-TEINT.md": "9e22a111276db6b7eaf7fcb181fa529c08adf12bdc3db028ec2b2e2f78a01369",
     "PERF-BUDGETS.md": "6a7858385ce41783ff0b413310ec36230468f929306030ec7ed2a5b182bdba19",
     "Sera-Build-Spec.md": "d46c229184dbe86e49295aee8a1d4dfdb4f1b2f45171fc959dcb5424a66aff23",
     "Sera-Building-Plan.md": "79aa45d6df817e54a8edb8122e6eed1c148b320423aae3501c3432cbee37b0cf",
-    "Shop-Plus-Build-Spec.md": "e1239d01fdb963153821b9f70e5dcce15986f4a726c1ea3404cae0259ec7ef74",
+    "Shop-Plus-Build-Spec.md": "17257d81a54d276cb45fa3f2a9940750fdc7e3f363defd9f0595cca374301170",
     "Shop-Plus-Building-Plan.md": "e20252727736b5235e60de5c9e0628b36124cefac37c79991c3a97b046fb86b3"
   }
 }
