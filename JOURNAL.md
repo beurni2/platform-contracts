@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-17 · LIEN-PROCHE-CANON-1 (canon half) — canon 3.16.0: §6.5 amended on the founder's three rulings — a voided commission stays with the platform (never the seller), same phone = identity, a paused reseller sells nothing (lockstep MINOR, docs only, zero shape change) · BUILT ON THE BRANCH, awaiting the founder's word
+## 2026-09-17 · LIEN-PROCHE-CANON-1 (canon half) — canon 3.16.0: §6.5 amended on the founder's three rulings — a voided commission stays with the platform (never the seller), same phone = identity, a paused reseller sells nothing (lockstep MINOR, docs only, zero shape change) · MERGED 2026-09-17 on the founder's « Go »
+
+**MERGED (founder: « Go », 2026-09-17).** `main` fast-forwarded `a090040 → d1aa361` (ancestry verified with `merge-base --is-ancestor` before the push). **ci run 135 green on `d1aa361`** — read on the runs list, not assumed. No deploy exists for this repo: canon 3.16.0 reaches shop-plus through its pin (repinned in PAUSE-VENTE-1, merged the same day, its Worker redeployed on 3.16.0 — storefront-deploy 102, service-canon-drift 363 attempt 2 green); boutik-plus and sera keep 3.15.0 until their next canon touch. **A release ref of record:** consumers pin `d1aa3612927e117b17654eda3cdb7aec206b09d0` for canon 3.16.0.
 
 **Founder rulings 2026-09-17 (verbatim), answering the three open points of shop-plus's RELATED-PARTY-1 report:** « 1 - I want the commission to be held on an account that I control, and the seller shouldn't know anything about this since his only preoccupation is only getting the product sold. 2. Keep this way. 3 paused resellers can not sell anything until they are reactivated ». Point 1 contradicted the written §6.5 (« on violation → returned to seller »); point 2 keeps the built reading (an identical phone number on both sides is the identity signal, no shared-phone softening); point 3 named a rule no document carried. A §7 stop answered by him — the canon is amended to say what he decided, so the re-read law finds his words in the spec and not only in a journal.
 
