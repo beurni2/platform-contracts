@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-17 · DECOUVERTE-RETIREE-1 (canon half) — canon 3.15.0: SP-I05 amended, there is NO cross-reseller discovery (lockstep MINOR, docs only, zero shape change) · BUILT ON THE BRANCH, awaiting the founder's word to merge
+## 2026-09-17 · DECOUVERTE-RETIREE-1 (canon half) — canon 3.15.0: SP-I05 amended, there is NO cross-reseller discovery (lockstep MINOR, docs only, zero shape change) · MERGED 2026-09-17 on the founder's « go »
+
+**MERGED (founder: « go », 2026-09-17).** `main` fast-forwarded `42dd6d9 → 289db98` (ancestry verified with `merge-base --is-ancestor` before the push). **ci run 133 green on `289db98`** — read on the runs list, not assumed. No deploy exists for this repo: canon 3.15.0 reaches the three apps through their pins, all three repinned to `289db98` in the same slice (sera `c25ca04`, boutik-plus `b5deb08`, shop-plus `bea953b`, each merged and green in its own journal). **A release ref of record:** consumers pin `289db98af8a9ac4db6950847bc730fd4a13b7fb7` for canon 3.15.0.
 
 **Founder ruling 2026-09-17 (verbatim intent):** « shop+ app is only for resellers app only and not for buyers included, i do not want buyers to have the ability to search other resellers cause this will cause a conflict between resellers, like one reseller brings one buyer and that buyer buys the product from another reseller because the difference of the mark up price » — then « go ahead with your recommendation » on the amendment below. A §7 stop, answered by him: the spec's buyer surface (« Découvrir · Rechercher », `store_index`, SP5.1/SP5.2) contradicted his product truth.
 
