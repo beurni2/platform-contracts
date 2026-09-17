@@ -39,7 +39,9 @@ Attribution**." Shop+ owns this shape — extending it here is in-domain.
 | `updatedAt` | `IsoTimestampSchema` | Same primitive; the aggregate tracks last mutation. |
 
 `discoverable` (already present) corroborated by **Build-Spec:35** "Ma vitrine
-(Partager, **discoverable toggle**)". *(The WO cited Building-Plan:201 for the toggle;
+(Partager, **discoverable toggle**)". *(2026-09-17: the toggle and the directory are
+retired — SP-I05 amended, no cross-reseller discovery. The field stays on the wire,
+unchanged, as the published / en-ligne fact a real publish sets.)* *(The WO cited Building-Plan:201 for the toggle;
 that line is blank/out-of-range in the current Building-Plan — the substantive anchor
 is Build-Spec:35. Non-load-bearing: the field already exists.)*
 
