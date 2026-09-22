@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-22 · PAYER-TOUT-1 (canon half) — canon 3.17.0: the founder's ruling on paying the boutique panier at once, one order per article, recorded in the Shop+ spec (lockstep MINOR, docs only, zero shape change) · BUILT ON THE BRANCH, awaiting the founder's word
+## 2026-09-22 · PAYER-TOUT-1 (canon half) — canon 3.17.0: the founder's ruling on paying the boutique panier at once, one order per article, recorded in the Shop+ spec (lockstep MINOR, docs only, zero shape change) · MERGED 2026-09-22 on the founder's « Go »
+
+**MERGED (founder: « Go », 2026-09-22).** `main` fast-forwarded `ced788d → d2481a5` (ancestry verified with `merge-base --is-ancestor` before the push). **ci 137 green on `d2481a5`**. No deploy exists for this repo: canon 3.17.0 reaches shop-plus through its pin `73da927` (merged the same hour; its Worker redeployed on 3.17.0 — storefront-deploy 105, service-canon-drift 377 green). Boutik+ and Séra keep 3.16.0 until their next canon touch (a Shop-only amendment). **Release ref of record:** consumers pin `73da9277650bc6ed8f9f6f80b5c7043dc95c397b` for 3.17.0.
 
 **Founder ruling 2026-09-22 (verbatim):** « I want buyers to be able to buy and pay bagged/added to cart items at the same time », then « 1 then 2 » on the two options he was shown — option 1 first: ONE payment for the panier, each article still its own order (quote, delivery fee, package, rider, custody, refund); option 2 (one package and one delivery fee per supplier) after option 1 has run. A §7 stop answered by him: SP9's « no combined cart » read, until today, as « each article checks out alone »; the canon now says what he decided, so the re-read law finds his words in the spec.
 
