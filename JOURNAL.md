@@ -13,6 +13,8 @@ Format per entry:
 
 **Boards:** build 6/6 · typecheck 9/9 · test 12/12 · run-gates ALL GATES GREEN (exit 0).
 
+**The Shop+ half** (shop-plus, same branch): the build `2b9c057` and the verifier's findings handled once `9add664`, repinned to this commit; its evidence, mutations and verifier verdict are in the shop-plus JOURNAL entry of the same date. Nothing in this repo changed after `73da927`.
+
 ## 2026-09-17 · LIEN-PROCHE-CANON-1 (canon half) — canon 3.16.0: §6.5 amended on the founder's three rulings — a voided commission stays with the platform (never the seller), same phone = identity, a paused reseller sells nothing (lockstep MINOR, docs only, zero shape change) · MERGED 2026-09-17 on the founder's « Go »
 
 **MERGED (founder: « Go », 2026-09-17).** `main` fast-forwarded `a090040 → d1aa361` (ancestry verified with `merge-base --is-ancestor` before the push). **ci run 135 green on `d1aa361`** — read on the runs list, not assumed. No deploy exists for this repo: canon 3.16.0 reaches shop-plus through its pin (repinned in PAUSE-VENTE-1, merged the same day, its Worker redeployed on 3.16.0 — storefront-deploy 102, service-canon-drift 363 attempt 2 green); boutik-plus and sera keep 3.15.0 until their next canon touch. **A release ref of record:** consumers pin `d1aa3612927e117b17654eda3cdb7aec206b09d0` for canon 3.16.0.
