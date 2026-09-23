@@ -48,6 +48,10 @@ export const EVENT_NAMES = [
   'checkout.quote_created.v1',
   'payment.checkout_leg_confirmed.v1',
   'payment.door_leg_confirmed.v1',
+  // REMBOURSEMENT-1 (founder ruling 2026-09-23, Shop+ E3 on the sandbox
+  // rails): the provider's REFUND truth, the one refund name the specs list
+  // (Shop+ §5 events). Its payload is Shop+-owned, like the two above.
+  'payment.refund_confirmed.v1',
   'fulfillment.accepted.v1',
   'fulfillment.ready.v1',
   'fulfillment.rejected.v1',
@@ -119,9 +123,10 @@ export const EVENT_NAMES = [
   'buyer.eligibility_changed.v1',
   // Ops (Contract E2 exit: "the defined recovery state + a reconciliation
   // alert"; §6 Standards: "DLQ + stuck-saga detection · reconciliation
-  // alerts"). Added v0.5.0 — derivations: E2-taxonomy.md §5. The specs list
-  // NO refund/reversal event names (the refund/earning-reversal saga is E3,
-  // shop plan l.23) — none are invented here.
+  // alerts"). Added v0.5.0 — derivations: E2-taxonomy.md §5. Of the E3
+  // refund/earning-reversal saga (shop plan l.23) the specs list ONE name
+  // since 3.18.0 — `payment.refund_confirmed.v1`, above, with the provider
+  // events; no reversal name exists and none is invented here.
   'reconciliation.alert.v1',
   'saga.stuck.v1',
   'dlq.parked.v1',

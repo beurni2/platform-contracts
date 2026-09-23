@@ -1,6 +1,6 @@
 {
   "name": "@platform/taxonomy",
-  "version": "3.17.0",
+  "version": "3.18.0",
   "description": "The product taxonomy — the shelves (rayons) and their categories, as DATA: the ONE list Boutik+'s listing wizard publishes from and Shop+'s pickers offer. Labels are the wire values verbatim (canon `category` stays a free TrimmedNonEmptyString; this package is the floor's data, never an allowlist).",
   "license": "UNLICENSED",
   "type": "module",

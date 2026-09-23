@@ -229,6 +229,10 @@ describe('E2 failure-state taxonomy (canon at v0.5.0 — every name derived, E2-
     }
     expect(EventNameSchema.safeParse('refund.initiated.v1').success).toBe(false);
   });
+
+  it('the ONE refund name the Shop+ spec lists is registered (3.18.0, founder ruling 2026-09-23)', () => {
+    expect(EventNameSchema.safeParse('payment.refund_confirmed.v1').success).toBe(true);
+  });
 });
 
 describe('SupplyProjection — canonical single definition (promoted at v0.4.0)', () => {
