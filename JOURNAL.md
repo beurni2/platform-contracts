@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-23 · FRAIS-PARTAGES-1 + REMBOURSEMENT-1 (canon half) — canon 3.18.0: the founder's rulings on a grouped collection's fee and on refunding a refused delivery, recorded in the Shop+ spec; ONE event name registered (`payment.refund_confirmed.v1`) · BUILT ON THE BRANCH, awaiting the founder's word
+## 2026-09-23 · FRAIS-PARTAGES-1 + REMBOURSEMENT-1 (canon half) — canon 3.18.0: the founder's rulings on a grouped collection's fee and on refunding a refused delivery, recorded in the Shop+ spec; ONE event name registered (`payment.refund_confirmed.v1`) · MERGED 2026-09-23 on the founder's « Go »
+
+**MERGED (founder: « Go », 2026-09-23).** `main` fast-forwarded `d92d472 → 1553055` (ancestry verified before the push). **ci 139 green on `1553055`**. No deploy exists for this repo: canon 3.18.0 reaches shop-plus through its pin `1918793` (merged the same hour; its Worker redeployed on 3.18.0 — storefront-deploy 106, service-canon-drift 379 green on attempt 2). Boutik+ and Séra keep their pins (a Shop-only amendment). **Release ref of record:** consumers pin `19187932221a8deeeabe22d0420e6d3ce3568b9b` for 3.18.0.
 
 **Founder ruling 2026-09-23 (verbatim):** « Proceed with the 2 still open », then — after the §7 stop that laid out option 2 (one package per supplier, gated to E6) and the aggregator items — « Proceed with your recommendations »: « 2 yes » (a: record the collection's provider fee on each order in proportion to its amount, to the franc; b: refund a paid order on the test rails, including one article out of a grouped payment, the buyer getting every franc of it and the platform paying any refund fee), « 1 yes » (a–d, option 2, built after), order 2a → 2b → 1.
 
