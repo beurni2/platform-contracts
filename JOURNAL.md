@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-23 · REMBOURSEMENT-2 (canon half) — canon 3.19.0: the founder's order on a supplier's refusal of a paid order and on refunds that cannot finish by themselves, recorded in the Shop+ spec (§7 SP6) · docs only, zero shape change · ON THE BRANCH, awaiting the founder's word
+## 2026-09-23 · REMBOURSEMENT-2 (canon half) — canon 3.19.0: the founder's order on a supplier's refusal of a paid order and on refunds that cannot finish by themselves, recorded in the Shop+ spec (§7 SP6) · docs only, zero shape change · MERGED 2026-09-23 on the founder's « go »
+
+**MERGED (founder: « go, then build option 1 », 2026-09-23).** `main` fast-forwarded `d366c3a → 94f7f3e` (ancestry verified with `merge-base --is-ancestor` before the push); **ci 141 green**; `40d65c7` is the 3.19.0 release ref of record. Its apps deployed on the same word: Shop+ storefront-deploy 107 (live Worker speaks 3.19.0), Boutik+ offer-deploy 38 · web-deploy 74 · fournisseur-web-deploy 17 — details in each app's JOURNAL.md.
 
 **Founder order (2026-09-23).** « go for … this : Still open: If a supplier refuses an order that is already paid, no refund starts yet … There is no alert for you when a refund gets stuck or the provider refuses it … For a moment in one rare case, the order already says « refunded » before the door refund comes back. »
 
