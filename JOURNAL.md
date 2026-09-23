@@ -3,6 +3,12 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-23 · PICKUP-REFUS (founder « 1 ») — a parcel refused at pickup is final and refunds the buyer at once · canon text unchanged (it already said so) · journal only
+
+**Founder order and ruling (2026-09-23).** « when the rider refuses a parcel at pickup (wrong item, damage), nobody tells Shop+, so the buyer isn't refunded. Fix this » — then « 1 »: refund at once; the « fix it and come back » road closed for good. This SUPERSEDES boutik-plus WO-2.6 ruling ② (2026-07-10, « The corrective-flow reading is RATIFIED … `correctionDeadline` … `refund_required` »), which had never entered the canon. The canon stands exactly as written: Sera-Build-Spec §6.1 « rider refuses custody, buyer refunded (never fund-gated), order fails pre-round-trip »; Sera-Building-Plan SE4.2 and Boutik-Plus B+7 / B6.3 « no round-trip ». No shape, event or waterfall change: the fact rides `delivery.refused.v1`, whose payload the canon leaves to the apps (sera `b779596` + `8819766`, shop-plus `bf05828`).
+
+**What this repo must carry (verifier MAJOR 3 — named, not built).** `assembly/src/live-certifiables.ts:251` still drives `spine.openNewVerificationCycle` — the corrective round-trip Séra removed in this build — to vary event versions with a refused-then-accepted order. It compiles only because the assembly pins Séra at `6213d41`. At the next Séra pin bump that certifiable must be rewritten: the order it builds is now impossible by design, so the Contract §3 variance must come from another source.
+
 ## 2026-09-23 · RETOUR-CHANGEMENT-AVIS (canon half) — canon 3.21.0: a change of mind on ONE article of a package, at its door, is final at once, its delivery-fee share retained · docs only · MERGED 2026-09-23 on the founder's « Go »
 
 **MERGED (founder: « Go », 2026-09-23).** `main` fast-forwarded `436a4f8 → b473834` (ancestry verified with `merge-base --is-ancestor` before the push); **ci 145 green**. `595ed0a` is the 3.21.0 release ref of record — Séra pins it, and both Séra deploys read it back from their live Workers. Shop+ and Boutik+ stay on 3.20.0 (nothing in them changes).
