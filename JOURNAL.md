@@ -3,6 +3,25 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-23 · COLIS-FOURNISSEUR-1 (canon half) — canon 3.20.0: one package and one delivery fee per supplier inside a grouped payment — the founder's decisions a–d recorded in four docs, and the ADDITIVE shapes the three apps needed (the fee split, the grouping question and answer, the package on order.confirmed.v1) · ON THE BRANCH, awaiting the founder's word
+
+**Founder order (2026-09-23).** Options put to him after REMBOURSEMENT-2; four decisions answered « Proceed with your recommendations »: (a) a package = one supplier, one buyer, one address — the rider still makes one stop; (b) one delivery fee per package, set by Séra, split evenly to the franc, leftover on the first order, she reads « 1 livraison »; (c) at the door she may refuse one article and keep the rest, the refused one returning sealed on its own and refunded under the usual rules; (d) one door payment for the products she keeps. Then « go, then build option 1 ». **§7 note:** this touches `contracts/` shapes; « build option 1 », given after the shape changes were named to him as part of option 1, is recorded as his approval of THESE additive changes — and the report says so.
+
+**What changed (`ac64d43`).**
+- `money/package-fee.ts` — `splitPackageDeliveryFee(fee, n)`: `floor(fee/n)` each, the leftover franc(s) on the FIRST order, integer-FCFA asserted, 1 ≤ n ≤ `PACKAGE_ORDERS_MAX` (10); `PACKAGE_ORDERS_MIN` = 2. The shares always sum to the fee Séra stated, so each order's Quote still reconciles on its own (B + M + D per order).
+- `shapes/package.ts` — `PackageGroupingRequestSchema` (2–10 distinct product ids, strict), `PackageGroupingAnswerSchema` (groups of ids, strict — no field can carry a supplier), `isGroupingOf` (every asked id in exactly one group, nothing else), `OrderPackageSchema` (`packageId` + 2–10 distinct order ids).
+- `events.ts` — `order.confirmed.v1` gains an optional `package`, refined: it must list the order. Additive; an event without it parses as before.
+- Docs (founder rulings quoted in place): Shop-Plus-Build-Spec §7 SP6 (the package rule, Option B's one door payment for kept articles, decision register ✅), Sera-Build-Spec SE3 + Sera-Building-Plan (one package, several orders — still one job; carrying several packages stays off until E6; an explicit override of « one rider, one package » for this case only), ECOSYSTEM-MASTER-REFERENCE, Boutik-Plus-Building-Plan B6.2 (one « prêt » per package, one confirmation per order under it).
+- Lockstep 3.19.0 → 3.20.0 (seven manifests), docs manifests regenerated, lockfile specifiers, api-surface snapshot re-stamped with the new exports.
+
+**Evidence.** `test/package.test.ts`: the split (even, leftover first, sums exact, bounds, non-integer refused), the grouping (exact cover only; an extra, a missing, a doubled id refused; a supplier field refused by strictness), `order.confirmed.v1` with a package that does not list the order refused. Contracts 205/205.
+- **Boards** on `ac64d43` (frozen install first): build 6/6 · typecheck 9/9 · test 12/12 (contracts 205/205) · run-gates ALL GATES GREEN.
+- **Mutations** (anchor matched once before / zero after, restored byte-checked): 2/2 killed — the leftover franc on the LAST order · a grouping of other products believed.
+
+**Consumers.** sera (`f19225b`), boutik-plus (`54973d6`) and shop-plus (`cd7c525`) repin to `ac64d43` in the same build.
+
+**Verifier:** the ONE pass for COLIS-FOURNISSEUR-1 was given this diff with the three app diffs — its verdict is in shop-plus JOURNAL.md under the same date. In short: 1 BLOCKER, 5 MAJOR, 3 MINOR across the build, none in this repo's code — the split, the grouping shapes and `order.confirmed.v1.package` held as written. The blocker (a pay-at-door package's one door payment never reached custody) was fixed in Séra and Shop+ without a canon change: the door confirmation's payload is Shop+-owned (events.ts: « Its payload is Shop+-owned »), so the provider's echoed `parts` rides it with no shape change here. Every finding and how it was handled is in shop-plus JOURNAL.md under the same date.
+
 ## 2026-09-23 · REMBOURSEMENT-2 (canon half) — canon 3.19.0: the founder's order on a supplier's refusal of a paid order and on refunds that cannot finish by themselves, recorded in the Shop+ spec (§7 SP6) · docs only, zero shape change · MERGED 2026-09-23 on the founder's « go »
 
 **MERGED (founder: « go, then build option 1 », 2026-09-23).** `main` fast-forwarded `d366c3a → 94f7f3e` (ancestry verified with `merge-base --is-ancestor` before the push); **ci 141 green**; `40d65c7` is the 3.19.0 release ref of record. Its apps deployed on the same word: Shop+ storefront-deploy 107 (live Worker speaks 3.19.0), Boutik+ offer-deploy 38 · web-deploy 74 · fournisseur-web-deploy 17 — details in each app's JOURNAL.md.
