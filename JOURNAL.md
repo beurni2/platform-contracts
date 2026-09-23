@@ -3,6 +3,18 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-23 · REMBOURSEMENT-2 (canon half) — canon 3.19.0: the founder's order on a supplier's refusal of a paid order and on refunds that cannot finish by themselves, recorded in the Shop+ spec (§7 SP6) · docs only, zero shape change · ON THE BRANCH, awaiting the founder's word
+
+**Founder order (2026-09-23).** « go for … this : Still open: If a supplier refuses an order that is already paid, no refund starts yet … There is no alert for you when a refund gets stuck or the provider refuses it … For a moment in one rare case, the order already says « refunded » before the door refund comes back. »
+
+**What changed (`40d65c7`).** Shop-Plus-Build-Spec §7 SP6, after the refund rule: « A paid order its supplier refuses is refunded in full the same way (`fulfillment.rejected.v1`, Boutik+ B6.1 « Accept/reject »; founder ruling 2026-09-23 — seller fault, the Protection Fund's, never her refund's gate): the supplier may refuse only before he confirms « prêt » (after it, the rider's pickup check is the refusal), and her tracking says the article is not available — never that a parcel came back. A door payment the provider confirms after the order reads `refunded` is refunded too, under its own key, and the order reads `paid` again until that refund is confirmed: the label never runs ahead of the money. A refund that cannot finish by itself is told to the founder, on his console (founder ruling 2026-09-23): the provider declining it by name, or a refusal fact that cannot be read (`reconciliation.alert.v1`); a refund asked and not confirmed past the stuck limit (`saga.stuck.v1`). » Grounded in ECOSYSTEM-MASTER-REFERENCE (« Supplier never confirms readiness … Order cancelled + buyer refunded … Protection Fund (seller fault) ») and Boutik-Plus-Building-Plan B6.1. The order state machine is app-repo work (enums.ts), so `refunded → paid` on a late door payment conflicts with nothing here. **No contracts change:** `fulfillment.rejected.v1`, `reconciliation.alert.v1` and `saga.stuck.v1` were already listed; the refusal's payload is the existing `FulfillmentProgressPayloadSchema`. Lockstep 3.18.0 → 3.19.0 (seven manifests), docs manifests regenerated, lockfile specifiers, api-surface snapshot `packageVersion` only.
+
+**Boards.** build 6/6 · typecheck 9/9 · test 12/12 · run-gates ALL GATES GREEN (frozen install first).
+
+**Consumers.** shop-plus repins to `40d65c7` in the same build (installed version read back 3.19.0 in every workspace that resolves it). boutik-plus and sera stay on their pins: the amendment is Shop-only docs.
+
+**Verifier:** the ONE pass for REMBOURSEMENT-2 was given this diff with the Shop+ and Boutik+ diffs — its verdict is in shop-plus JOURNAL.md under the same date.
+
 ## 2026-09-23 · FRAIS-PARTAGES-1 + REMBOURSEMENT-1 (canon half) — canon 3.18.0: the founder's rulings on a grouped collection's fee and on refunding a refused delivery, recorded in the Shop+ spec; ONE event name registered (`payment.refund_confirmed.v1`) · MERGED 2026-09-23 on the founder's « Go »
 
 **MERGED (founder: « Go », 2026-09-23).** `main` fast-forwarded `d92d472 → 1553055` (ancestry verified before the push). **ci 139 green on `1553055`**. No deploy exists for this repo: canon 3.18.0 reaches shop-plus through its pin `1918793` (merged the same hour; its Worker redeployed on 3.18.0 — storefront-deploy 106, service-canon-drift 379 green on attempt 2). Boutik+ and Séra keep their pins (a Shop-only amendment). **Release ref of record:** consumers pin `19187932221a8deeeabe22d0420e6d3ce3568b9b` for 3.18.0.
