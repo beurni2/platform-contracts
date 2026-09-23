@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-23 · RETOUR-CHANGEMENT-AVIS (canon half) — canon 3.21.0: a change of mind on ONE article of a package, at its door, is final at once, its delivery-fee share retained · docs only · ON THE BRANCH, awaiting the founder's word
+## 2026-09-23 · RETOUR-CHANGEMENT-AVIS (canon half) — canon 3.21.0: a change of mind on ONE article of a package, at its door, is final at once, its delivery-fee share retained · docs only · MERGED 2026-09-23 on the founder's « Go »
+
+**MERGED (founder: « Go », 2026-09-23).** `main` fast-forwarded `436a4f8 → b473834` (ancestry verified with `merge-base --is-ancestor` before the push); **ci 145 green**. `595ed0a` is the 3.21.0 release ref of record — Séra pins it, and both Séra deploys read it back from their live Workers. Shop+ and Boutik+ stay on 3.20.0 (nothing in them changes).
 
 **Founder ruling (2026-09-23).** « when she gives an article back because she changed her mind i keep the delivery fee », then « 1 »: final at once for one article of a package; the window stays for a buyer who cannot pay.
 
