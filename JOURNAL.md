@@ -13,6 +13,8 @@ Format per entry:
 
 **Boards:** build 6/6 · typecheck 9/9 · test 12/12 · run-gates ALL GATES GREEN (exit 0).
 
+**The Shop+ half:** shop-plus `e08f7bb` (build, repinned to `1918793`) + `ee6880d` · `b6638ae` · `00983c3` (pins and the verifier's fixes) + `65bf48e` (its journal) — its board green, 43/43 mutations killed. The ONE fresh-context verifier read this canon diff with it: canon 3.18.0 met (one event name added, no shape change; shop-plus's pins, lockfile labels and spec copy consistent — `docs/` hash-checked 12/12 against this manifest). Its two blockers and one major were on the Shop+ pay-at-the-door road and were fixed there; nothing in this repo changed after it.
+
 ## 2026-09-22 · PAYER-TOUT-1 (canon half) — canon 3.17.0: the founder's ruling on paying the boutique panier at once, one order per article, recorded in the Shop+ spec (lockstep MINOR, docs only, zero shape change) · MERGED 2026-09-22 on the founder's « Go »
 
 **MERGED (founder: « Go », 2026-09-22).** `main` fast-forwarded `ced788d → d2481a5` (ancestry verified with `merge-base --is-ancestor` before the push). **ci 137 green on `d2481a5`**. No deploy exists for this repo: canon 3.17.0 reaches shop-plus through its pin `73da927` (merged the same hour; its Worker redeployed on 3.17.0 — storefront-deploy 105, service-canon-drift 377 green). Boutik+ and Séra keep 3.16.0 until their next canon touch (a Shop-only amendment). **Release ref of record:** consumers pin `73da9277650bc6ed8f9f6f80b5c7043dc95c397b` for 3.17.0.
