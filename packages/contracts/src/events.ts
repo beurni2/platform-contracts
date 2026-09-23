@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { FcfaSchema, IdSchema, IsoTimestampSchema, TrimmedNonEmptyString } from './shapes/common.js';
 import { PaymentModeSchema } from './enums.js';
 import { ResellerAccessChangeSchema } from './shapes/commerce.js';
+import { OrderPackageSchema } from './shapes/package.js';
 
 /**
  * Versioned event envelope (Execution Contract §3): every event carries
@@ -224,8 +225,18 @@ export const OrderConfirmedPayloadSchema = z
     zoneTo: TrimmedNonEmptyString,
     /** B, verbatim from the frozen quote. The supplier's own number, nothing else's. */
     sellerBasePrice: FcfaSchema,
+    /**
+     * COLIS-FOURNISSEUR-1 — present only when this order travels in a package
+     * with other orders of the same supplier, for the same buyer: the supplier
+     * prepares them as ONE package. Order ids only — no buyer, no amount.
+     */
+    package: OrderPackageSchema.optional(),
   })
-  .strict();
+  .strict()
+  .refine((p) => p.package === undefined || p.package.orderIds.includes(p.orderId), {
+    message: 'an order travels in a package that lists it',
+    path: ['package'],
+  });
 export type OrderConfirmedPayload = z.infer<typeof OrderConfirmedPayloadSchema>;
 
 /**
