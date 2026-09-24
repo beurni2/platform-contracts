@@ -3,7 +3,21 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-24 · canon 3.22.0 (`7d22bd9`) — COMPTE-CLIENTE: a buyer account is offered at her boutique's door, never required · docs only · ON THE BRANCH, awaiting the founder's word
+## 2026-09-24 · canon 3.23.0 (`abc9f9c`) — COMPTE-CLIENTE-2: her way back through a code the founder gives by calling her number, « Mes commandes », leaving, and her account on the payment pages · docs only · ON THE BRANCH, awaiting the founder's word
+
+**Founder order (2026-09-24).** « Go, and fix the ones still open » — on the COMPTE-CLIENTE report.
+
+**Why the canon moved.** 3.22.0 gave her an account with no road back (a forgotten password, a number someone else took) and kept the account off the product and payment pages. The fixes needed words the canon did not have: who may touch her account (the founder, and only to mint a code for a NUMBER), how long a code lives, what deleting means, and that her account now fills the checkout's phone field and lists her orders while the order itself still never reads it. Recorded in Shop-Plus-Build-Spec §7 SP6 (« Account, second ruling ») and §2 (the founder's one door, learning nothing about her). **Safest default, flagged:** automatic SMS/WhatsApp codes need a provider (an external commitment, his call) — the canon records the founder-minted code given by calling the number, and the provider question goes to him.
+
+**Canon silence, flagged (the verifier's MAJOR 1, handled in Shop+ `e7177ca`).** 3.23.0 does not say what a recovered account keeps. The founder cannot tell « she forgot » from « a stranger took her number » or « a recycled SIM » on the call, and the old order list carries the read tokens that open tracking and the drop code — so Shop+ applies the safest default: **the number starts clean** (her names asked again; the previous names, email and order list gone). Not written into the canon: it is his to confirm or change (e.g. two kinds of code, « forgot » keeping her data).
+
+**No shape, event or money-waterfall change.** Lockstep 3.22.0 → 3.23.0, both docs manifests regenerated, lockfile labels, snapshot packageVersion re-stamped (nothing else in the snapshot moved). Shop+ repinned to `abc9f9c` in `bb4f8fe`; Séra (3.21.0) and Boutik+ (3.20.0) keep their pins — their docs copies match their own pinned manifests. Boutik+'s console card calls the Shop+ door this ruling names, and no Boutik+ canon text changed.
+
+**Evidence.** Canon board on `abc9f9c`: `pnpm install --frozen-lockfile && pnpm build && pnpm typecheck && pnpm test && pnpm gates` → **ALL GATES GREEN**, exit 0. The Shop+ build and the Boutik+ console card that implement the ruling are journalled in their repos under the same date.
+
+## 2026-09-24 · canon 3.22.0 (`7d22bd9`) — COMPTE-CLIENTE: a buyer account is offered at her boutique's door, never required · docs only · MERGED 2026-09-24 on the founder's « go »
+
+**MERGED (founder: « Go, and fix the ones still open », 2026-09-24).** `main` fast-forwarded to `7e185c1` (docs and journal only; nothing to deploy). The Shop+ build that implements it is live — see its journal.
 
 **Founder order (2026-09-24).** « I want buyers to be able as well to have their own account … show a screen asking the buyer to sign in or sign up … or continue as guest … make sure for buyer who got an account has a profile section where his infos are there and safe ».
 
