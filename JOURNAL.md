@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-24 · canon 3.23.0 (`abc9f9c`) — COMPTE-CLIENTE-2: her way back through a code the founder gives by calling her number, « Mes commandes », leaving, and her account on the payment pages · docs only · ON THE BRANCH, awaiting the founder's word
+## 2026-09-24 · canon 3.23.0 (`abc9f9c`) — COMPTE-CLIENTE-2: her way back through a code the founder gives by calling her number, « Mes commandes », leaving, and her account on the payment pages · docs only · MERGED 2026-09-24 on the founder's « Go »
+
+**MERGED (founder: « Go », 2026-09-24).** `main` fast-forwarded `7e185c1 → 359161f` (docs and journal only; nothing to deploy). The Shop+ Worker now speaks 3.23.0 (storefront-deploy 112, release `4a6007f`) and the Boutik+ console is live — see their journals.
 
 **Founder order (2026-09-24).** « Go, and fix the ones still open » — on the COMPTE-CLIENTE report.
 
