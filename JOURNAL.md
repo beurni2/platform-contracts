@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-24 · canon 3.22.0 (`7d22bd9`) — COMPTE-CLIENTE: a buyer account is offered at her boutique's door, never required · docs only · ON THE BRANCH, awaiting the founder's word
+
+**Founder order (2026-09-24).** « I want buyers to be able as well to have their own account … show a screen asking the buyer to sign in or sign up … or continue as guest … make sure for buyer who got an account has a profile section where his infos are there and safe ».
+
+**Why the canon moved.** Part 6 said the client PWA has « no account » and she is « the only participant with no account ». The order keeps « No account wall. She can buy without ever creating anything. » true — continuing without an account is one of the three doors — and makes the account an OFFER. Recorded, not interpreted: Shop-Plus-Build-Spec §1 (offered, never required; the three doors; a guest buys exactly as before), §2 (her own account, readable and editable by her alone), §7 SP6 (what it holds, what she may change — never her phone — how it is kept, and that no order/quote/liste/price/delivery reads or requires it); ECOSYSTEM-MASTER-REFERENCE Part 6 (four lines amended in place, each dated).
+
+**No shape, event or money-waterfall change.** Lockstep 3.21.0 → 3.22.0, both docs manifests regenerated, lockfile labels, snapshot packageVersion re-stamped (nothing else in the snapshot moved). Shop+ repinned to `7d22bd9` in `fbb32da`; Séra (3.21.0) and Boutik+ (3.20.0) keep their pins — their docs copies match their own pinned manifests, and nothing in them builds on this ruling.
+
+**Evidence.** Canon board on `7d22bd9`: `pnpm install --frozen-lockfile && pnpm build && pnpm typecheck && pnpm test && pnpm gates` → **ALL GATES GREEN**, exit 0. The Shop+ build that implements the ruling is journalled in shop-plus under the same date.
+
 ## 2026-09-23 · PICKUP-REFUS (founder « 1 ») — a parcel refused at pickup is final and refunds the buyer at once · canon text unchanged (it already said so) · journal only · MERGED 2026-09-24 on the founder's « go »
 
 **MERGED (founder: « go », 2026-09-24).** `main` fast-forwarded `8224efa → f767241` (journal only); ci 147 green. The Séra and Shop+ halves are live — see their journals.
