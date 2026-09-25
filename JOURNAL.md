@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-25 · canon 3.25.0 (`aba11c1`) — MON-COMPTE-SEULE: nothing a phone kept while no one was signed in joins an account · docs only · on the branch, awaiting the founder's word
+
+**Founder ruling (2026-09-25).** Told the live shared-phone rule (« what someone saves while signed in stays in her own account; only what was saved while nobody was signed in joins the next person who signs in »), he answered: « what was saved while nobody was signed in should not joins the next person who signs in. »
+
+**Why the canon moved.** 3.24.0's SP6 « Account, third ruling » said « signing in on a phone joins what that phone already kept ». His ruling reverses that clause: her account keeps only what she keeps or likes while signed in; what a phone kept while no one was signed in joins no account, neither hers nor whoever signs in next. One sentence of `Shop-Plus-Build-Spec.md` §7 SP6; nothing else in the canon named the join.
+
+**No shape, event or money-waterfall change.** Lockstep 3.24.0 → 3.25.0, both docs manifests regenerated, lockfile labels, snapshot packageVersion re-stamped. Shop+ repinned to `aba11c1` in its MON-COMPTE-SEULE commit; Séra and Boutik+ keep their pins (no text of theirs changed).
+
+**Evidence.** Canon board on `aba11c1`: `pnpm install --frozen-lockfile && pnpm build && pnpm typecheck && pnpm test && pnpm gates` → **ALL GATES GREEN**, exit 0.
+
 ## 2026-09-25 · canon 3.24.0 (`635be1b`) — MON-COMPTE-PLUS: her panier and her hearts in « Mon compte », by boutique, never a price · docs only · MERGED 2026-09-25 on the founder's « Go »
 
 **MERGED (founder: « Go », 2026-09-25).** `main` fast-forwarded `359161f → 4b8be8f` (docs and journal only; ci 151 green). The Shop+ Worker now speaks 3.24.0 (storefront-deploy 113, service-canon-drift 398 green) — see its journal.
