@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-25 · canon 3.25.0 (`aba11c1`) — MON-COMPTE-SEULE: nothing a phone kept while no one was signed in joins an account · docs only · on the branch, awaiting the founder's word
+## 2026-09-25 · canon 3.25.0 (`aba11c1`) — MON-COMPTE-SEULE: nothing a phone kept while no one was signed in joins an account · docs only · MERGED 2026-09-25 on the founder's « Go, leave »
+
+**MERGED (founder: « Go, leave », 2026-09-25).** `main` fast-forwarded `4b8be8f → 6f446a4` (docs and journal only; ci 152 green). The Shop+ Worker now speaks 3.25.0 (storefront-deploy 114, service-canon-drift 401 green) — see its journal.
 
 **Founder ruling (2026-09-25).** Told the live shared-phone rule (« what someone saves while signed in stays in her own account; only what was saved while nobody was signed in joins the next person who signs in »), he answered: « what was saved while nobody was signed in should not joins the next person who signs in. »
 
