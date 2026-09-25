@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-25 · canon 3.24.0 (`635be1b`) — MON-COMPTE-PLUS: her panier and her hearts in « Mon compte », by boutique, never a price · docs only · on the branch, awaiting the founder's word
+
+**Founder order (2026-09-25).** « For buyers who created an account, in their mon compte, I want them to be able to see the products they added to their cart from different resellers, and be able to see products they liked. » Asked how and where, he chose « By boutique, no prices » (one section per boutique under its own name and « Vendeuse vérifiée », photo and name per article, « Voir chez … » back into that boutique, never a price) and « In her account » (kept with her account, it follows her to any phone).
+
+**Why the canon moved (a §7 stop, answered by his two choices).** SP-I05 (3.15.0) forbids cross-reseller discovery on any buyer surface, and the §11 gate enforces it; the panier and the hearts were phone-only. Both his asks crossed that text: one screen listing articles from several boutiques, and her account keeping them. Recorded as SP-I05's « Her own account is not discovery » ruling (her own lists, boutiques she entered through their own links, grouped under each boutique's name, photo and name, never a price, newest first, no ranking or search, each boutique opening only its own vitrine — an arrival like any, §4.1; never two resellers' prices on one screen), SP6's « Account, third ruling » (a boutique and a product each, never a price or a name, at most fifty per list — the bound of « Mes commandes » —, joined at sign-in, removed when she removes, erased with the account and on recovery; nothing about an order, quote, price or delivery reads them; no reseller, supplier or Séra sees them), the §11 gate wording (« her own « Mon compte » lists … are not discovery ») and a §12 ✅ line. `ECOSYSTEM-MASTER-REFERENCE.md` carries the same note.
+
+**No shape, event or money-waterfall change.** Lockstep 3.23.0 → 3.24.0, both docs manifests regenerated, lockfile labels, snapshot packageVersion re-stamped (nothing else in the snapshot moved). Shop+ repinned to `635be1b` in `165b78c`; Séra and Boutik+ keep their pins (no text of theirs changed).
+
+**Evidence.** Canon board on the 3.24.0 tree: `pnpm gates` → **ALL GATES GREEN**, exit 0. The Shop+ build that implements the ruling is journalled in its repo under the same date.
+
 ## 2026-09-24 · canon 3.23.0 (`abc9f9c`) — COMPTE-CLIENTE-2: her way back through a code the founder gives by calling her number, « Mes commandes », leaving, and her account on the payment pages · docs only · MERGED 2026-09-24 on the founder's « Go »
 
 **MERGED (founder: « Go », 2026-09-24).** `main` fast-forwarded `7e185c1 → 359161f` (docs and journal only; nothing to deploy). The Shop+ Worker now speaks 3.23.0 (storefront-deploy 112, release `4a6007f`) and the Boutik+ console is live — see their journals.
