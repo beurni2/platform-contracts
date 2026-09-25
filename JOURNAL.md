@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-25 · canon 3.24.0 (`635be1b`) — MON-COMPTE-PLUS: her panier and her hearts in « Mon compte », by boutique, never a price · docs only · on the branch, awaiting the founder's word
+## 2026-09-25 · canon 3.24.0 (`635be1b`) — MON-COMPTE-PLUS: her panier and her hearts in « Mon compte », by boutique, never a price · docs only · MERGED 2026-09-25 on the founder's « Go »
+
+**MERGED (founder: « Go », 2026-09-25).** `main` fast-forwarded `359161f → 4b8be8f` (docs and journal only; ci 151 green). The Shop+ Worker now speaks 3.24.0 (storefront-deploy 113, service-canon-drift 398 green) — see its journal.
 
 **Founder order (2026-09-25).** « For buyers who created an account, in their mon compte, I want them to be able to see the products they added to their cart from different resellers, and be able to see products they liked. » Asked how and where, he chose « By boutique, no prices » (one section per boutique under its own name and « Vendeuse vérifiée », photo and name per article, « Voir chez … » back into that boutique, never a price) and « In her account » (kept with her account, it follows her to any phone).
 
