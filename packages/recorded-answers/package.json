@@ -1,0 +1,30 @@
+{
+  "name": "@platform/recorded-answers",
+  "version": "3.25.0",
+  "description": "The answers Shop+ and Séra really give on the doors another app stands in for in its tests — recorded by each producer's own workerd suite, checked on both sides (Execution Contract §3). Test tooling only: pure data and pure functions, no dependency, never part of any app's runtime graph.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepare": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

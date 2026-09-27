@@ -1,0 +1,119 @@
+import { describe, expect, it } from 'vitest';
+import {
+  ENREGISTREMENTS,
+  comparer,
+  correspond,
+  formeConnue,
+  formeDe,
+  porteDe,
+  refusDuSubstitut,
+  squeletteDe,
+  texteDeForme,
+  type Porte,
+} from '../src/index.js';
+
+/**
+ * REPONSES-ENREGISTREES-1 — the form of an answer, and the two checks built on
+ * it. What a form keeps (status, keys, value types, vocabulary words) and what
+ * it lets vary (ids, amounts, names, times) is pinned here, because a form
+ * that kept too little would let a kinder stand-in through, and one that kept
+ * too much would refuse every honest one.
+ */
+
+const refus = { ok: false, reason: 'not_found' };
+const liste = { ok: true, orders: [{ orderId: 'o-1', total: 12_000, note: null }] };
+
+describe('the form of an answer', () => {
+  it('keeps the status, the keys, the value types and the vocabulary words — never the values', () => {
+    expect(correspond(squeletteDe(liste), { ok: true, orders: [{ orderId: 'o-9', total: 1, note: null }] })).toBe(true);
+    expect(correspond(squeletteDe(refus), { ok: false, reason: 'not_found' })).toBe(true);
+  });
+
+  it('a different reason word, a missing key, an added key, a changed type is a different form', () => {
+    const s = squeletteDe(refus);
+    expect(correspond(s, { ok: false, reason: 'refusee' })).toBe(false);
+    expect(correspond(s, { ok: false })).toBe(false);
+    expect(correspond(s, { ok: false, reason: 'not_found', extra: 1 })).toBe(false);
+    expect(correspond(squeletteDe(liste), { ok: true, orders: [{ orderId: 7, total: 1, note: null }] })).toBe(false);
+    expect(correspond(squeletteDe(liste), { ok: true, orders: [{ orderId: 'o', total: 1, note: 'x' }] })).toBe(false);
+  });
+
+  it('a vocabulary word only matches under a vocabulary key, and a free string never matches under one', () => {
+    expect(squeletteDe({ status: 'recorded' })).toEqual({ t: 'objet', cles: { status: { t: 'mot', v: 'recorded' } } });
+    expect(correspond({ t: 'mot', v: 'x' }, 'x')).toBe(false); // no key: not a vocabulary field
+    expect(correspond({ t: 'objet', cles: { reason: { t: 'string' } } }, { reason: 'anything' })).toBe(false);
+  });
+
+  it('lists: every element must be one of the recorded element forms; an empty list fits any', () => {
+    const s = squeletteDe({ rows: [{ kind: 'a' }, { kind: 'b' }] });
+    expect(correspond(s, { rows: [{ kind: 'b' }, { kind: 'a' }, { kind: 'a' }] })).toBe(true);
+    expect(correspond(s, { rows: [] })).toBe(true);
+    expect(correspond(s, { rows: [{ kind: 'c' }] })).toBe(false);
+    expect(correspond(squeletteDe({ rows: [] }), { rows: [{ kind: 'a' }] }), 'only an empty list was ever seen').toBe(false);
+  });
+
+  it('the canonical text is stable across key order and element order, and tells forms apart', () => {
+    const a = formeDe(200, { b: 1, a: [{ kind: 'x' }, { kind: 'y' }] });
+    const b = formeDe(200, { a: [{ kind: 'y' }, { kind: 'x' }, { kind: 'x' }], b: 2 });
+    expect(texteDeForme(a)).toBe(texteDeForme(b));
+    expect(texteDeForme(formeDe(404, refus))).not.toBe(texteDeForme(formeDe(409, refus)));
+  });
+
+  it('the status is part of the form', () => {
+    expect(formeConnue([formeDe(404, refus)], 404, refus)).toBe(true);
+    expect(formeConnue([formeDe(404, refus)], 409, refus)).toBe(false);
+  });
+});
+
+const PORTES: readonly Porte[] = [
+  { producteur: 'shop-plus', methode: 'POST', chemin: '/checkout/dispatch/:orderId/refusal', formes: [formeDe(200, { ok: true }), formeDe(404, refus)] },
+  { producteur: 'sera', methode: 'GET', chemin: '/ops/board', formes: [formeDe(200, liste)] },
+];
+
+describe('the door a request is for', () => {
+  it('matches the method and every fixed segment; a `:name` segment matches any one segment', () => {
+    expect(porteDe(PORTES, 'post', '/checkout/dispatch/ord-7/refusal')?.chemin).toBe('/checkout/dispatch/:orderId/refusal');
+    expect(porteDe(PORTES, 'GET', '/checkout/dispatch/ord-7/refusal')).toBeUndefined();
+    expect(porteDe(PORTES, 'POST', '/checkout/dispatch/ord-7')).toBeUndefined();
+    expect(porteDe(PORTES, 'POST', '/checkout/dispatch/a/b/refusal')).toBeUndefined();
+    expect(porteDe(PORTES, 'GET', '/ops/board/')?.producteur).toBe('sera');
+  });
+});
+
+describe('THE CONSUMER’S CHECK — a stand-in may only say what the real door says', () => {
+  it('a recorded form passes; an unrecorded one is refused, naming the door and the answer', () => {
+    expect(refusDuSubstitut(PORTES, 'POST', '/checkout/dispatch/o/refusal', 404, refus)).toBeNull();
+    const why = refusDuSubstitut(PORTES, 'POST', '/checkout/dispatch/o/refusal', 409, { ok: false, reason: 'deja' });
+    expect(why).toContain('shop-plus POST /checkout/dispatch/:orderId/refusal never answers 409');
+  });
+
+  it('a door nobody recorded is not this check’s business, nor is a 5xx (the network’s, not the door’s)', () => {
+    expect(refusDuSubstitut(PORTES, 'GET', '/ailleurs', 200, { any: 1 })).toBeNull();
+    expect(refusDuSubstitut(PORTES, 'GET', '/ops/board', 503, 'down')).toBeNull();
+    expect(refusDuSubstitut(PORTES, 'GET', '/ops/board', 499, 'x')).not.toBeNull();
+  });
+});
+
+describe('THE PRODUCER’S CHECK — the recording is the door, both ways', () => {
+  it('names forms recorded but never produced, and forms produced but never recorded', () => {
+    const porte = PORTES[0]!;
+    expect(comparer(porte, [formeDe(200, { ok: true }), formeDe(404, refus)])).toEqual({ manquantes: [], inconnues: [] });
+    const r = comparer(porte, [formeDe(200, { ok: true }), formeDe(409, refus)]);
+    expect(r.manquantes).toEqual([texteDeForme(formeDe(404, refus))]);
+    expect(r.inconnues).toEqual([texteDeForme(formeDe(409, refus))]);
+  });
+});
+
+describe('ENREGISTREMENTS — the data itself', () => {
+  it('no door twice, every door has at least one form, no form twice on a door, every path absolute', () => {
+    const cles = ENREGISTREMENTS.map((p) => `${p.producteur} ${p.methode} ${p.chemin}`);
+    expect(new Set(cles).size).toBe(cles.length);
+    for (const p of ENREGISTREMENTS) {
+      expect(p.chemin.startsWith('/'), p.chemin).toBe(true);
+      expect(p.methode).toBe(p.methode.toUpperCase());
+      expect(p.formes.length, `${p.chemin} has no form`).toBeGreaterThan(0);
+      const t = p.formes.map(texteDeForme);
+      expect(new Set(t).size, `${p.chemin} records a form twice`).toBe(t.length);
+    }
+  });
+});
