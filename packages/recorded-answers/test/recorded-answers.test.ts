@@ -53,6 +53,20 @@ describe('the form of an answer', () => {
     expect(correspond(squeletteDe({ rows: [] }), { rows: [{ kind: 'a' }] }), 'only an empty list was ever seen').toBe(false);
   });
 
+  it('a list keyed by ids: its keys are data, its values judged like rows — and only under a named field', () => {
+    const s = squeletteDe({ manifestes: { 'rider-a': { status: 'active' }, 'rider-b': { status: 'active' } } });
+    expect(correspond(s, { manifestes: { 'rider-zz': { status: 'active' } } })).toBe(true);
+    expect(correspond(s, { manifestes: {} })).toBe(true);
+    expect(correspond(s, { manifestes: { 'rider-zz': { status: 'closed' } } })).toBe(false);
+    expect(correspond(squeletteDe({ finDeService: {} }), { finDeService: { r: { at: 'x' } } }), 'only an empty one was seen').toBe(false);
+    // an ordinary object keeps its keys as the form
+    expect(correspond(squeletteDe({ board: { a: 1 } }), { board: { b: 1 } })).toBe(false);
+    const a = formeDe(200, { manifestes: { r1: { status: 'active' } } });
+    const b = formeDe(200, { manifestes: { r2: { status: 'closed' } } });
+    expect(fusionner([a, b])).toHaveLength(1);
+    expect(formeConnue(fusionner([a, b]), 200, { manifestes: { x: { status: 'closed' }, y: { status: 'active' } } })).toBe(true);
+  });
+
   it('the canonical text is stable across key order and element order, and tells forms apart', () => {
     const a = formeDe(200, { b: 1, a: [{ kind: 'x' }, { kind: 'y' }] });
     const b = formeDe(200, { a: [{ kind: 'y' }, { kind: 'x' }, { kind: 'x' }], b: 2 });
@@ -84,6 +98,17 @@ describe('fusionner — a list is judged row by row', () => {
     expect(fusionner([formeDe(200, refus), formeDe(404, refus)])).toHaveLength(2);
     expect(fusionner([formeDe(200, { ok: true }), formeDe(200, { ok: true, next: 'c' })])).toHaveLength(2);
     expect(fusionner([formeDe(409, refus), formeDe(409, { ok: false, reason: 'refusee' })])).toHaveLength(2);
+  });
+
+  it('rows are pooled by their place across answers of one status whatever keys sit beside the list — never across statuses', () => {
+    const page = formeDe(200, { ok: true, lignes: [{ state: 'paused' }], next: 'c' });
+    const derniere = formeDe(200, { ok: true, lignes: [{ state: 'active' }] });
+    const f = fusionner([page, derniere]);
+    expect(f).toHaveLength(2);
+    expect(formeConnue(f, 200, { ok: true, lignes: [{ state: 'active' }, { state: 'paused' }] }), 'a paused line on a last page').toBe(true);
+    expect(formeConnue(f, 200, { ok: true, lignes: [{ state: 'closed' }] })).toBe(false);
+    const autre = fusionner([formeDe(200, { lignes: [{ state: 'active' }] }), formeDe(409, { lignes: [{ state: 'paused' }] })]);
+    expect(formeConnue(autre, 200, { lignes: [{ state: 'paused' }] })).toBe(false);
   });
 
   it('is stable: merging merged forms changes nothing', () => {
