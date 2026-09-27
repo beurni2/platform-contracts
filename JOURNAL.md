@@ -3,6 +3,17 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-27 · `@platform/recorded-answers` (REPONSES-ENREGISTREES-1, Boutik+ AUDIT-B+2 F-82) — the answers Shop+ and Séra really give, as test data · a new test-only package, NO canon version change · ON THE BRANCH, awaiting the founder's word (not merged)
+
+**Founder order (2026-09-27).** « all three » — item 12: « Recorded stand-ins …: yes, the lighter way. Shop+ takes the shared test package, so there is no rules-version jump. That proves our copies behave like the real ones. » Built as its own package rather than inside `@platform/certification`: certification moves with the canon version, and he asked for no version jump. Its version field reads 3.25.0 only because every package here is versioned in lockstep (the export-map gate requires it); nothing in `@platform/contracts` moved.
+
+**Governing text.** Execution Contract §3 « Producer/consumer conformance tests run in CI. … both the live producer and the mock MUST pass the same conformance suite. »
+
+- **What it is (84b466c, 683e401, ced1371, 00e228f, 8c02203).** Pure data and pure functions, no dependency, never in any app's runtime graph. `forme.ts`: the FORM of an answer — status, keys, value types, and the literal words of decision fields (`ok, reason, error, status, state, etat, verdict, kind, raison, rung, recorded, field`); lists and lists keyed by ids (`colisEnCourse, manifestes, finDeService, reglement`) judged row by row, a door's rows pooled by their place per status (`fusionner`). `portes.ts`: the consumer's check (`refusDuSubstitut`: a door with no recording refused; 5xx left out unless its body names a `reason`) and the producer's (`comparer`: a form judged by whether it ADDS anything to the other side, so a new row the real door starts giving is listed, never failed — the verifier's MINOR 3, fixed in 8c02203). `enregistrements.ts`: 13 doors, their forms written by the producers' record runs (Shop+ 7 doors / 30 forms, Séra 6 doors / 29 forms), never by hand.
+- **Its bound, stated in the file:** it proves a stand-in never says what the real door never says; it does NOT prove the stand-in picks the answer the real door would pick for that request.
+- **Proof.** 19 unit tests (the form's edges, keyed lists, row pooling across statuses refused, the producer's merge, the data's own shape). Mutations on it 10 / 10 KILLED (P5 survived first: its test used a field whose values are not in the form; 00e228f uses a decision word; three more on 8c02203's changes). `check-export-maps` lists the package. **Board: ALL GATES GREEN** (final run, at 8c02203: recorded-answers 19, contracts 205).
+- **Consumers.** Boutik+ supplier app (walk harness), Shop+ storefront service and Séra logistics service (producer checks), all pinned at `8c02203` as devDependencies. The ONE verifier of items 10–12 (Boutik+'s journal) found two minors here, both fixed in 8c02203.
+
 ## 2026-09-25 · canon 3.25.0 (`aba11c1`) — MON-COMPTE-SEULE: nothing a phone kept while no one was signed in joins an account · docs only · MERGED 2026-09-25 on the founder's « Go, leave »
 
 **MERGED (founder: « Go, leave », 2026-09-25).** `main` fast-forwarded `4b8be8f → 6f446a4` (docs and journal only; ci 152 green). The Shop+ Worker now speaks 3.25.0 (storefront-deploy 114, service-canon-drift 401 green) — see its journal.
