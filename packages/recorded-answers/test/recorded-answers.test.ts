@@ -153,8 +153,8 @@ describe('THE CONSUMER’S CHECK — a stand-in may only say what the real door 
 
 describe('THE PRODUCER’S CHECK — the recording is the door, both ways', () => {
   it('merges both sides first: rows seen apart match a recording that holds them together', () => {
-    const porte: Porte = { producteur: 'sera', methode: 'GET', chemin: '/b', formes: fusionner([formeDe(200, { rows: [{ k: 'a' }] }), formeDe(200, { rows: [{ k: 'b' }] })]) };
-    expect(comparer(porte, [formeDe(200, { rows: [{ k: 'b' }] }), formeDe(200, { rows: [{ k: 'a' }] })])).toEqual({ manquantes: [], inconnues: [] });
+    const porte: Porte = { producteur: 'sera', methode: 'GET', chemin: '/b', formes: fusionner([formeDe(200, { rows: [{ kind: 'a' }] }), formeDe(200, { rows: [{ kind: 'b' }] })]) };
+    expect(comparer(porte, [formeDe(200, { rows: [{ kind: 'b' }] }), formeDe(200, { rows: [{ kind: 'a' }] })])).toEqual({ manquantes: [], inconnues: [] });
   });
 
   it('names forms recorded but never produced, and forms produced but never recorded', () => {
