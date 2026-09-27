@@ -1,4 +1,4 @@
-import { formeConnue, texteDeForme, type Forme } from './forme.js';
+import { formeConnue, fusionner, texteDeForme, type Forme } from './forme.js';
 
 /**
  * A DOOR one app stands in for in its tests: who produces it, the method, the
@@ -38,11 +38,12 @@ export function refusDuSubstitut(portes: readonly Porte[], methode: string, path
  * THE PRODUCER'S CHECK — the forms its real door gave in its own suite,
  * against the recording: `manquantes` were recorded but not produced (a form
  * nobody proved), `inconnues` were produced but not recorded (a stand-in may
- * not use them yet). Both empty = the recording is the door.
+ * not use them yet). Both sides are merged first (`fusionner`). Both empty =
+ * the recording is the door.
  */
 export function comparer(porte: Porte, observees: readonly Forme[]): { manquantes: string[]; inconnues: string[] } {
-  const vus = new Set(observees.map(texteDeForme));
-  const enregistres = new Set(porte.formes.map(texteDeForme));
+  const vus = new Set(fusionner(observees).map(texteDeForme));
+  const enregistres = new Set(fusionner(porte.formes).map(texteDeForme));
   return {
     manquantes: [...enregistres].filter((f) => !vus.has(f)).sort(),
     inconnues: [...vus].filter((f) => !enregistres.has(f)).sort(),

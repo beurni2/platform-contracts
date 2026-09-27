@@ -5,6 +5,7 @@ import {
   correspond,
   formeConnue,
   formeDe,
+  fusionner,
   porteDe,
   refusDuSubstitut,
   squeletteDe,
@@ -65,6 +66,32 @@ describe('the form of an answer', () => {
   });
 });
 
+describe('fusionner — a list is judged row by row', () => {
+  it('two answers of the same shape whose lists held different rows become one form holding both row forms', () => {
+    const a = formeDe(200, { ok: true, rows: [{ kind: 'queued' }] });
+    const b = formeDe(200, { ok: true, rows: [{ kind: 'rider' }] });
+    const [f, ...reste] = fusionner([a, b]);
+    expect(reste).toEqual([]);
+    expect(formeConnue([f!], 200, { ok: true, rows: [{ kind: 'rider' }, { kind: 'queued' }] })).toBe(true);
+    expect(formeConnue([a, b], 200, { ok: true, rows: [{ kind: 'rider' }, { kind: 'queued' }] }), 'unmerged, the mix is refused').toBe(false);
+  });
+
+  it('merges rows inside rows too, and never merges outside a list: a status, a key or a word still separates', () => {
+    const a = formeDe(200, { rows: [{ id: 'x', tags: [{ kind: 'a' }] }] });
+    const b = formeDe(200, { rows: [{ id: 'y', tags: [{ kind: 'b' }] }] });
+    expect(fusionner([a, b])).toHaveLength(1);
+    expect(formeConnue(fusionner([a, b]), 200, { rows: [{ id: 'z', tags: [{ kind: 'b' }, { kind: 'a' }] }] })).toBe(true);
+    expect(fusionner([formeDe(200, refus), formeDe(404, refus)])).toHaveLength(2);
+    expect(fusionner([formeDe(200, { ok: true }), formeDe(200, { ok: true, next: 'c' })])).toHaveLength(2);
+    expect(fusionner([formeDe(409, refus), formeDe(409, { ok: false, reason: 'refusee' })])).toHaveLength(2);
+  });
+
+  it('is stable: merging merged forms changes nothing', () => {
+    const f = fusionner([formeDe(200, liste), formeDe(200, { ok: true, orders: [] }), formeDe(404, refus)]);
+    expect(fusionner(f).map(texteDeForme)).toEqual(f.map(texteDeForme));
+  });
+});
+
 const PORTES: readonly Porte[] = [
   { producteur: 'shop-plus', methode: 'POST', chemin: '/checkout/dispatch/:orderId/refusal', formes: [formeDe(200, { ok: true }), formeDe(404, refus)] },
   { producteur: 'sera', methode: 'GET', chemin: '/ops/board', formes: [formeDe(200, liste)] },
@@ -87,6 +114,11 @@ describe('THE CONSUMER’S CHECK — a stand-in may only say what the real door 
     expect(why).toContain('shop-plus POST /checkout/dispatch/:orderId/refusal never answers 409');
   });
 
+  it('a door listed with no form yet refuses every answer', () => {
+    const vide: Porte[] = [{ producteur: 'sera', methode: 'GET', chemin: '/ops/riders', formes: [] }];
+    expect(refusDuSubstitut(vide, 'GET', '/ops/riders', 200, { ok: true, riders: [] })).not.toBeNull();
+  });
+
   it('a door nobody recorded is not this check’s business, nor is a 5xx (the network’s, not the door’s)', () => {
     expect(refusDuSubstitut(PORTES, 'GET', '/ailleurs', 200, { any: 1 })).toBeNull();
     expect(refusDuSubstitut(PORTES, 'GET', '/ops/board', 503, 'down')).toBeNull();
@@ -95,6 +127,11 @@ describe('THE CONSUMER’S CHECK — a stand-in may only say what the real door 
 });
 
 describe('THE PRODUCER’S CHECK — the recording is the door, both ways', () => {
+  it('merges both sides first: rows seen apart match a recording that holds them together', () => {
+    const porte: Porte = { producteur: 'sera', methode: 'GET', chemin: '/b', formes: fusionner([formeDe(200, { rows: [{ k: 'a' }] }), formeDe(200, { rows: [{ k: 'b' }] })]) };
+    expect(comparer(porte, [formeDe(200, { rows: [{ k: 'b' }] }), formeDe(200, { rows: [{ k: 'a' }] })])).toEqual({ manquantes: [], inconnues: [] });
+  });
+
   it('names forms recorded but never produced, and forms produced but never recorded', () => {
     const porte = PORTES[0]!;
     expect(comparer(porte, [formeDe(200, { ok: true }), formeDe(404, refus)])).toEqual({ manquantes: [], inconnues: [] });
@@ -105,15 +142,15 @@ describe('THE PRODUCER’S CHECK — the recording is the door, both ways', () =
 });
 
 describe('ENREGISTREMENTS — the data itself', () => {
-  it('no door twice, every door has at least one form, no form twice on a door, every path absolute', () => {
+  it('no door twice, no form twice on a door, every path absolute, every form stored merged', () => {
     const cles = ENREGISTREMENTS.map((p) => `${p.producteur} ${p.methode} ${p.chemin}`);
     expect(new Set(cles).size).toBe(cles.length);
     for (const p of ENREGISTREMENTS) {
       expect(p.chemin.startsWith('/'), p.chemin).toBe(true);
       expect(p.methode).toBe(p.methode.toUpperCase());
-      expect(p.formes.length, `${p.chemin} has no form`).toBeGreaterThan(0);
       const t = p.formes.map(texteDeForme);
       expect(new Set(t).size, `${p.chemin} records a form twice`).toBe(t.length);
+      expect(fusionner(p.formes).map(texteDeForme), `${p.chemin} is stored merged`).toEqual(t);
     }
   });
 });

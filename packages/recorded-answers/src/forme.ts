@@ -13,6 +13,8 @@
  *
  * A form is the status code, the body's keys and value types, and the literal
  * words of its vocabulary fields — never ids, amounts, names or times.
+ * A list is judged row by row: each row must be a row form the real door was
+ * seen to give (`fusionner`).
  *
  * ITS BOUND, stated so a green run is never read as more: it proves a stand-in
  * never says something the real door never says (a status, a field, a reason
@@ -35,7 +37,11 @@ export interface Forme {
 }
 
 /** The fields whose WORDS are part of the form: what a screen decides on. */
-export const VOCABULAIRE: ReadonlySet<string> = new Set(['ok', 'reason', 'error', 'status', 'state', 'etat', 'verdict', 'kind']);
+export const VOCABULAIRE: ReadonlySet<string> = new Set([
+  'ok', 'reason', 'error', 'status', 'state', 'etat', 'verdict', 'kind',
+  // the words a refund, a refusal ladder and a field refusal are named by
+  'raison', 'rung', 'recorded', 'field',
+]);
 
 /** A canonical, stable text for a skeleton: sorted keys, sorted alternatives. */
 export function texteDe(s: Squelette): string {
@@ -101,6 +107,50 @@ export function correspond(s: Squelette, v: unknown, cle?: string): boolean {
         attendues.every((k) => k in (v as object) && correspond(s.cles[k]!, (v as Record<string, unknown>)[k], k));
     }
   }
+}
+
+/** The shape with every list's contents set aside: what two forms must share to be one. */
+function cleDeFusion(s: Squelette): string {
+  if (s.t === 'liste') return '[]';
+  if (s.t === 'objet') return `{${Object.keys(s.cles).sort().map((k) => `${JSON.stringify(k)}:${cleDeFusion(s.cles[k]!)}`).join(',')}}`;
+  return texteDe(s);
+}
+
+function alternatives(de: readonly Squelette[]): Squelette[] {
+  const groupes = new Map<string, Squelette>();
+  for (const s of de) {
+    const k = cleDeFusion(s);
+    const deja = groupes.get(k);
+    groupes.set(k, deja === undefined ? s : unir(deja, s));
+  }
+  return [...groupes.keys()].sort().map((k) => groupes.get(k)!);
+}
+
+/** Two skeletons sharing a `cleDeFusion`, as one: the element forms of their lists united. */
+function unir(a: Squelette, b: Squelette): Squelette {
+  if (a.t === 'liste' && b.t === 'liste') return { t: 'liste', de: alternatives([...a.de, ...b.de]) };
+  if (a.t === 'objet' && b.t === 'objet') {
+    const cles: Record<string, Squelette> = {};
+    for (const k of Object.keys(a.cles).sort()) cles[k] = unir(a.cles[k]!, b.cles[k]!);
+    return { t: 'objet', cles };
+  }
+  return a;
+}
+
+/**
+ * The forms of one door, merged so a LIST is judged row by row: a row form the
+ * real door gave in one answer may stand beside a row form it gave in another
+ * (a board with a queued task AND a rider, when the producer's flows showed
+ * each apart). Everything outside lists stays exact.
+ */
+export function fusionner(formes: readonly Forme[]): Forme[] {
+  const groupes = new Map<string, Forme>();
+  for (const f of formes) {
+    const k = `${f.statut} ${cleDeFusion(f.corps)}`;
+    const deja = groupes.get(k);
+    groupes.set(k, deja === undefined ? { statut: f.statut, corps: unir(f.corps, f.corps) } : { statut: f.statut, corps: unir(deja.corps, f.corps) });
+  }
+  return [...groupes.keys()].sort().map((k) => groupes.get(k)!);
 }
 
 /** Is this answer one of the recorded forms? */
