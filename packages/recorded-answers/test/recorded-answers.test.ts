@@ -144,9 +144,11 @@ describe('THE CONSUMER’S CHECK — a stand-in may only say what the real door 
     expect(refusDuSubstitut(vide, 'GET', '/ops/riders', 200, { ok: true, riders: [] })).not.toBeNull();
   });
 
-  it('a door nobody recorded is not this check’s business, nor is a 5xx (the network’s, not the door’s)', () => {
-    expect(refusDuSubstitut(PORTES, 'GET', '/ailleurs', 200, { any: 1 })).toBeNull();
+  it('a door nobody recorded is refused at the producer’s address; a 5xx is the network’s — unless it names a reason a screen can read', () => {
+    expect(refusDuSubstitut(PORTES, 'GET', '/ailleurs', 200, { any: 1 })).toContain('has no recording');
     expect(refusDuSubstitut(PORTES, 'GET', '/ops/board', 503, 'down')).toBeNull();
+    expect(refusDuSubstitut(PORTES, 'GET', '/ops/board', 503, { ok: false })).toBeNull();
+    expect(refusDuSubstitut(PORTES, 'GET', '/ops/board', 503, { ok: false, reason: 'jamais_dit' })).not.toBeNull();
     expect(refusDuSubstitut(PORTES, 'GET', '/ops/board', 499, 'x')).not.toBeNull();
   });
 });
@@ -155,6 +157,15 @@ describe('THE PRODUCER’S CHECK — the recording is the door, both ways', () =
   it('merges both sides first: rows seen apart match a recording that holds them together', () => {
     const porte: Porte = { producteur: 'sera', methode: 'GET', chemin: '/b', formes: fusionner([formeDe(200, { rows: [{ kind: 'a' }] }), formeDe(200, { rows: [{ kind: 'b' }] })]) };
     expect(comparer(porte, [formeDe(200, { rows: [{ kind: 'b' }] }), formeDe(200, { rows: [{ kind: 'a' }] })])).toEqual({ manquantes: [], inconnues: [] });
+  });
+
+  it('a new row the real door starts giving is listed as unknown — every recorded form still counts as given', () => {
+    const porte: Porte = { producteur: 'shop-plus', methode: 'GET', chemin: '/d', formes: fusionner([formeDe(200, { orders: [{ state: 'confirmed' }] })]) };
+    const r = comparer(porte, [formeDe(200, { orders: [{ state: 'confirmed' }, { state: 'cancelled' }] })]);
+    expect(r.manquantes).toEqual([]);
+    expect(r.inconnues).toHaveLength(1);
+    // and a row the door stopped giving is missing
+    expect(comparer(porte, [formeDe(200, { orders: [{ state: 'cancelled' }] })]).manquantes).toHaveLength(1);
   });
 
   it('names forms recorded but never produced, and forms produced but never recorded', () => {

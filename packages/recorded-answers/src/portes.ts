@@ -23,13 +23,18 @@ export function porteDe(portes: readonly Porte[], methode: string, path: string)
 }
 
 /**
- * THE CONSUMER'S CHECK — a stand-in's answer on a recorded door must be one of
- * its recorded forms. Answers of 500 and more are the network's, not the
- * door's, and are left out. Returns why it is refused, or null.
+ * THE CONSUMER'S CHECK — call it for every answer a stand-in gives at one
+ * producer's address, with that producer's doors: the door must be recorded
+ * (a door nobody recorded is a door nobody proved), and the answer must be one
+ * of its recorded forms. An answer of 500 and more is the network's, not the
+ * door's, and is left out — unless its body names a `reason`, which a screen
+ * can read as the door's word. Returns why it is refused, or null.
  */
 export function refusDuSubstitut(portes: readonly Porte[], methode: string, path: string, statut: number, corps: unknown): string | null {
+  const nommeUneRaison = corps !== null && typeof corps === 'object' && !Array.isArray(corps) && 'reason' in corps;
+  if (statut >= 500 && !nommeUneRaison) return null;
   const porte = porteDe(portes, methode, path);
-  if (porte === undefined || statut >= 500) return null;
+  if (porte === undefined) return `${methode.toUpperCase()} ${path} has no recording — record it from the producer before a stand-in answers it`;
   if (formeConnue(porte.formes, statut, corps)) return null;
   return `${porte.producteur} ${porte.methode} ${porte.chemin} never answers ${statut} ${JSON.stringify(corps).slice(0, 300)}`;
 }
@@ -38,14 +43,18 @@ export function refusDuSubstitut(portes: readonly Porte[], methode: string, path
  * THE PRODUCER'S CHECK — the forms its real door gave in its own suite,
  * against the recording: `manquantes` were recorded but not produced (a form
  * nobody proved), `inconnues` were produced but not recorded (a stand-in may
- * not use them yet). Both sides are merged first (`fusionner`). Both empty =
- * the recording is the door.
+ * not use them yet). Because rows are pooled (`fusionner`), a form is judged by
+ * whether it ADDS anything to the other side: a new row the real door starts
+ * giving is listed as unknown and leaves every recorded form given.
  */
 export function comparer(porte: Porte, observees: readonly Forme[]): { manquantes: string[]; inconnues: string[] } {
-  const vus = new Set(fusionner(observees).map(texteDeForme));
-  const enregistres = new Set(fusionner(porte.formes).map(texteDeForme));
+  const texte = (formes: readonly Forme[]): string => fusionner(formes).map(texteDeForme).join('\n');
+  const vus = fusionner(observees);
+  const enregistres = fusionner(porte.formes);
+  const avecVus = texte(vus);
+  const avecEnregistres = texte(enregistres);
   return {
-    manquantes: [...enregistres].filter((f) => !vus.has(f)).sort(),
-    inconnues: [...vus].filter((f) => !enregistres.has(f)).sort(),
+    manquantes: enregistres.filter((f) => texte([...vus, f]) !== avecVus).map(texteDeForme).sort(),
+    inconnues: vus.filter((f) => texte([...enregistres, f]) !== avecEnregistres).map(texteDeForme).sort(),
   };
 }
