@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-27 · `@platform/recorded-answers` (REPONSES-ENREGISTREES-1, Boutik+ AUDIT-B+2 F-82) — the answers Shop+ and Séra really give, as test data · a new test-only package, NO canon version change · ON THE BRANCH, awaiting the founder's word (not merged)
+## 2026-09-27 · `@platform/recorded-answers` (REPONSES-ENREGISTREES-1, Boutik+ AUDIT-B+2 F-82) — the answers Shop+ and Séra really give, as test data · a new test-only package, NO canon version change · MERGED 2026-09-28 on the founder's « go » (nothing to deploy)
+
+**Merged (founder: « go, sign 500 KB for the console », 2026-09-28 — the « go » on items 10–12 and the clock removal, reported from Boutik+).** `main` fast-forwarded `6f446a4 → c07cdfc` (ancestry verified first). ci 153 green on `c07cdfc`. Nothing here deploys: the package is test data, pinned by Boutik+, Shop+ and Séra as a devDependency at `8c02203`, and never in any app's runtime graph.
 
 **Founder order (2026-09-27).** « all three » — item 12: « Recorded stand-ins …: yes, the lighter way. Shop+ takes the shared test package, so there is no rules-version jump. That proves our copies behave like the real ones. » Built as its own package rather than inside `@platform/certification`: certification moves with the canon version, and he asked for no version jump. Its version field reads 3.25.0 only because every package here is versioned in lockstep (the export-map gate requires it); nothing in `@platform/contracts` moved.
 
