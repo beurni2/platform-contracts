@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-29 · canon 3.26.0 (`4f5c188`) — CODE-COLIS-1: the readiness challenge is never displayed, and a package carries one · docs only · on the branch, awaiting the founder's word
+
+**Founder ruling (2026-09-29).** « go, option b, one code per parcel » — his answer to Boutik+ AUDIT-B+2 F-11 (« the readiness challenge is never shown; the photo is picked before it exists »). Option (b): the challenge stays in the supplier's app as the server's single-use proof of one fresh act, and the canon sentence that said it was « displayed beside the product » changes. « One code per parcel »: a package of several orders carries ONE challenge, not one per order.
+
+**What moved.** `Boutik-Plus-Build-Spec.md` B+6 (the challenge is minted at « Produit prêt », travels in the app, consumed with the confirmation, never displayed or copied; the photo is the evidence; one challenge per package) · `Boutik-Plus-Building-Plan.md` B6.2 (one photo and ONE challenge for the package, one confirmation per order under it — was « each with its own challenge ») · `ECOSYSTEM-MASTER-REFERENCE.md`, the secrets table's readiness row (what the challenge proves now). The four secrets stay distinct.
+
+**No shape, event or money-waterfall change.** Lockstep 3.25.0 → 3.26.0, both docs manifests regenerated, lockfile labels, snapshot packageVersion re-stamped. Boutik+ repins to `4f5c188` in its CODE-COLIS-1 build; Shop+ and Séra keep their pins (no text of theirs changed).
+
+**Evidence.** Canon board on `4f5c188`: `pnpm gates` → **ALL GATES GREEN**, exit 0.
+
 ## 2026-09-27 · `@platform/recorded-answers` (REPONSES-ENREGISTREES-1, Boutik+ AUDIT-B+2 F-82) — the answers Shop+ and Séra really give, as test data · a new test-only package, NO canon version change · MERGED 2026-09-28 on the founder's « go » (nothing to deploy)
 
 **Merged (founder: « go, sign 500 KB for the console », 2026-09-28 — the « go » on items 10–12 and the clock removal, reported from Boutik+).** `main` fast-forwarded `6f446a4 → c07cdfc` (ancestry verified first). ci 153 green on `c07cdfc`. Nothing here deploys: the package is test data, pinned by Boutik+, Shop+ and Séra as a devDependency at `8c02203`, and never in any app's runtime graph.
