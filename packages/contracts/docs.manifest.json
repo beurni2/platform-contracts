@@ -1,11 +1,11 @@
 {
-  "packageVersion": "3.25.0",
+  "packageVersion": "3.26.0",
   "files": {
-    "Boutik-Plus-Build-Spec.md": "7d061bf639bc0daf13b1d548735a43c7c32fc23e1af5043b66e237f5f902d053",
-    "Boutik-Plus-Building-Plan.md": "6400129a5df3246bf8ebe2baf3ebe3fc86a32ff287ef37120613d2709c4b9224",
+    "Boutik-Plus-Build-Spec.md": "f1ed769272ce47c209812e30a865c463c9a8220d2e8527ed47502a667ffe19bf",
+    "Boutik-Plus-Building-Plan.md": "307bdfd97d798ba45a9fad9c35ffe7654085d1c187e1b67f879df62f2a5a99c3",
     "Boutik-Plus-Web-North-Star.md": "2b6427c0fabbe7d81d1ab67c73f49dc05034a331b36f8099761bdd6d5b4b19ae",
     "DESIGN-LANGUAGE.md": "ffc33937ca10c3c04cb675fdc9bde26c958432f98e32f7898787bcb9dcbd1bb0",
-    "ECOSYSTEM-MASTER-REFERENCE.md": "408d196ceed45a6ac9cfef53d2fc26914b94c0c7d867a7e895e70acdebeee54d",
+    "ECOSYSTEM-MASTER-REFERENCE.md": "8feb0bfb1fa1dc4c479c836da84a06b620b8a3ab37c55e1e15c5001e9c7db875",
     "Ecosystem-Engineering-Execution-Contract.md": "ed2bb1127f802a508f438c6db456eababe902ff5d37d9ad5514f7f102519099e",
     "GRAND-TEINT.md": "9e22a111276db6b7eaf7fcb181fa529c08adf12bdc3db028ec2b2e2f78a01369",
     "PERF-BUDGETS.md": "6a7858385ce41783ff0b413310ec36230468f929306030ec7ed2a5b182bdba19",
