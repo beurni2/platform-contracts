@@ -3,7 +3,7 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-29 · canon 3.26.0 (`4f5c188`) — CODE-COLIS-1: the readiness challenge is never displayed, and a package carries one · docs only · on the branch, awaiting the founder's word
+## 2026-09-29 · canon 3.26.0 (`c43c236`, first cut `4f5c188`) — CODE-COLIS-1: the readiness challenge is never displayed, and a package carries one · docs only · on the branch, awaiting the founder's word
 
 **Founder ruling (2026-09-29).** « go, option b, one code per parcel » — his answer to Boutik+ AUDIT-B+2 F-11 (« the readiness challenge is never shown; the photo is picked before it exists »). Option (b): the challenge stays in the supplier's app as the server's single-use proof of one fresh act, and the canon sentence that said it was « displayed beside the product » changes. « One code per parcel »: a package of several orders carries ONE challenge, not one per order.
 
@@ -12,6 +12,8 @@ Format per entry:
 **No shape, event or money-waterfall change.** Lockstep 3.25.0 → 3.26.0, both docs manifests regenerated, lockfile labels, snapshot packageVersion re-stamped. Boutik+ repins to `4f5c188` in its CODE-COLIS-1 build; Shop+ and Séra keep their pins (no text of theirs changed).
 
 **Evidence.** Canon board on `4f5c188`: `pnpm gates` → **ALL GATES GREEN**, exit 0.
+
+**Refined once, still 3.26.0 (`c43c236`), on the review of the Boutik+ build.** The master reference's B+6 flow line still said « readiness evidence (photo + challenge response) », which reads as something the supplier types; it now says the photo is sent with the server's single-use readiness challenge, never displayed or typed, one per package. Manifests regenerated; canon board **ALL GATES GREEN** again. Boutik+ pins `c43c236`. ⚠ Boutik+ pins a canon commit that is on this branch only: canon `main` must be fast-forwarded with (or before) the Boutik+ merge.
 
 ## 2026-09-27 · `@platform/recorded-answers` (REPONSES-ENREGISTREES-1, Boutik+ AUDIT-B+2 F-82) — the answers Shop+ and Séra really give, as test data · a new test-only package, NO canon version change · MERGED 2026-09-28 on the founder's « go » (nothing to deploy)
 
