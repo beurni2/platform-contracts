@@ -3,7 +3,9 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-29 · canon 3.26.0 (`c43c236`, first cut `4f5c188`) — CODE-COLIS-1: the readiness challenge is never displayed, and a package carries one · docs only · on the branch, awaiting the founder's word
+## 2026-09-29 · canon 3.26.0 (`c43c236`, first cut `4f5c188`) — CODE-COLIS-1: the readiness challenge is never displayed, and a package carries one · docs only · MERGED 2026-09-29 on the founder's « go »
+
+**MERGED (founder: « go », 2026-09-29).** `main` fast-forwarded `9b78ecb → ac03562` (ancestry verified; ci 155 green), BEFORE Boutik+'s merge, which pins `c43c236`. The Boutik+ offer Worker now speaks 3.26.0 (offer-deploy 49, « PROVENANCE OK … speaking canon 3.26.0 ») — see its journal. Shop+ and Séra keep their pins.
 
 **Founder ruling (2026-09-29).** « go, option b, one code per parcel » — his answer to Boutik+ AUDIT-B+2 F-11 (« the readiness challenge is never shown; the photo is picked before it exists »). Option (b): the challenge stays in the supplier's app as the server's single-use proof of one fresh act, and the canon sentence that said it was « displayed beside the product » changes. « One code per parcel »: a package of several orders carries ONE challenge, not one per order.
 
