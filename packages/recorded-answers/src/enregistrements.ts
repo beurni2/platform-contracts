@@ -1890,13 +1890,7 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                     "incomplet": {
                       "t": "boolean"
                     },
-                    "name": {
-                      "t": "string"
-                    },
-                    "netFcfa": {
-                      "t": "number"
-                    },
-                    "retenues": {
+                    "misesDeCote": {
                       "t": "objet",
                       "cles": {
                         "n": {
@@ -1906,6 +1900,12 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                           "t": "number"
                         }
                       }
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "netFcfa": {
+                      "t": "number"
                     },
                     "state": {
                       "t": "mot",
@@ -2047,13 +2047,7 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                     "incomplet": {
                       "t": "boolean"
                     },
-                    "name": {
-                      "t": "string"
-                    },
-                    "netFcfa": {
-                      "t": "number"
-                    },
-                    "retenues": {
+                    "misesDeCote": {
                       "t": "objet",
                       "cles": {
                         "n": {
@@ -2063,6 +2057,12 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                           "t": "number"
                         }
                       }
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "netFcfa": {
+                      "t": "number"
                     },
                     "state": {
                       "t": "mot",
@@ -2201,13 +2201,7 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                     "incomplet": {
                       "t": "boolean"
                     },
-                    "name": {
-                      "t": "string"
-                    },
-                    "netFcfa": {
-                      "t": "number"
-                    },
-                    "retenues": {
+                    "misesDeCote": {
                       "t": "objet",
                       "cles": {
                         "n": {
@@ -2217,6 +2211,12 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                           "t": "number"
                         }
                       }
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "netFcfa": {
+                      "t": "number"
                     },
                     "state": {
                       "t": "mot",
