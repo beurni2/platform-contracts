@@ -3,6 +3,13 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-30 · recorded-answers MERGED on the founder's « go » (Boutik+ CODES-RETIRES-1)
+
+**Founder order (2026-09-30).** « go » — on the CODES-RETIRES-1 + PROFIL-PUBLIÉ report (entry below).
+- `main` fast-forwarded `ed1962b → 9354413` (the two retired Shop+ doors out of the recorded answers + journal), **ci 160 green**. Nothing here deploys; Boutik+ and Shop+ pin `e2e1584`.
+
+---
+
 ## 2026-09-30 · recorded-answers — Shop+'s two retired feed-code doors removed (Boutik+ CODES-RETIRES-1, AUDIT-B+2 F-73, founder ruling « Retire them ») · data only, no version bump · on the branch, NOT merged
 
 - `e2e1584`: `GET /reseller/codes` and `POST /reseller/code` removed from `packages/recorded-answers/src/enregistrements.ts` (16 → 14 doors). Shop+ no longer serves them, so no Boutik+ stand-in may answer for them either. Package typecheck + **19/19** tests green. Boutik+ and Shop+ repinned `d66b6bf → e2e1584`. Canon board on the final tree: **ALL GATES GREEN**.
