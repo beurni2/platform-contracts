@@ -1896,6 +1896,41 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                     "netFcfa": {
                       "t": "number"
                     },
+                    "retenues": {
+                      "t": "objet",
+                      "cles": {
+                        "n": {
+                          "t": "number"
+                        },
+                        "netFcfa": {
+                          "t": "number"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "active"
+                    },
+                    "ventes": {
+                      "t": "number"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "accountId": {
+                      "t": "string"
+                    },
+                    "incomplet": {
+                      "t": "boolean"
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "netFcfa": {
+                      "t": "number"
+                    },
                     "state": {
                       "t": "mot",
                       "v": "active"
@@ -2018,6 +2053,41 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                     "netFcfa": {
                       "t": "number"
                     },
+                    "retenues": {
+                      "t": "objet",
+                      "cles": {
+                        "n": {
+                          "t": "number"
+                        },
+                        "netFcfa": {
+                          "t": "number"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "active"
+                    },
+                    "ventes": {
+                      "t": "number"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "accountId": {
+                      "t": "string"
+                    },
+                    "incomplet": {
+                      "t": "boolean"
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "netFcfa": {
+                      "t": "number"
+                    },
                     "state": {
                       "t": "mot",
                       "v": "active"
@@ -2122,6 +2192,41 @@ export const ENREGISTREMENTS: readonly Porte[] = [
             "lignes": {
               "t": "liste",
               "de": [
+                {
+                  "t": "objet",
+                  "cles": {
+                    "accountId": {
+                      "t": "string"
+                    },
+                    "incomplet": {
+                      "t": "boolean"
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "netFcfa": {
+                      "t": "number"
+                    },
+                    "retenues": {
+                      "t": "objet",
+                      "cles": {
+                        "n": {
+                          "t": "number"
+                        },
+                        "netFcfa": {
+                          "t": "number"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "active"
+                    },
+                    "ventes": {
+                      "t": "number"
+                    }
+                  }
+                },
                 {
                   "t": "objet",
                   "cles": {
@@ -2589,19 +2694,184 @@ export const ENREGISTREMENTS: readonly Porte[] = [
     "producteur": "shop-plus",
     "methode": "POST",
     "chemin": "/reseller/accounts/access-code",
-    "formes": []
+    "formes": [
+      {
+        "statut": 200,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "accountId": {
+              "t": "string"
+            },
+            "code": {
+              "t": "string"
+            },
+            "ok": {
+              "t": "mot",
+              "v": true
+            }
+          }
+        }
+      },
+      {
+        "statut": 401,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "error": {
+              "t": "mot",
+              "v": "unauthorized"
+            }
+          }
+        }
+      },
+      {
+        "statut": 404,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "ok": {
+              "t": "mot",
+              "v": false
+            },
+            "reason": {
+              "t": "mot",
+              "v": "not_found"
+            }
+          }
+        }
+      },
+      {
+        "statut": 409,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "ok": {
+              "t": "mot",
+              "v": false
+            },
+            "reason": {
+              "t": "mot",
+              "v": "not_pending"
+            }
+          }
+        }
+      }
+    ]
   },
   {
     "producteur": "shop-plus",
     "methode": "POST",
     "chemin": "/reseller/accounts/pause",
-    "formes": []
+    "formes": [
+      {
+        "statut": 200,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "accountId": {
+              "t": "string"
+            },
+            "ok": {
+              "t": "mot",
+              "v": true
+            },
+            "state": {
+              "t": "mot",
+              "v": "paused"
+            }
+          }
+        }
+      },
+      {
+        "statut": 401,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "error": {
+              "t": "mot",
+              "v": "unauthorized"
+            }
+          }
+        }
+      },
+      {
+        "statut": 409,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "ok": {
+              "t": "mot",
+              "v": false
+            },
+            "reason": {
+              "t": "mot",
+              "v": "wrong_state"
+            },
+            "state": {
+              "t": "mot",
+              "v": "pending_access"
+            }
+          }
+        }
+      }
+    ]
   },
   {
     "producteur": "shop-plus",
     "methode": "POST",
     "chemin": "/reseller/code",
-    "formes": []
+    "formes": [
+      {
+        "statut": 200,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "code": {
+              "t": "string"
+            },
+            "mintedAt": {
+              "t": "string"
+            },
+            "ok": {
+              "t": "mot",
+              "v": true
+            },
+            "resellerId": {
+              "t": "string"
+            }
+          }
+        }
+      },
+      {
+        "statut": 400,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "ok": {
+              "t": "mot",
+              "v": false
+            },
+            "reason": {
+              "t": "mot",
+              "v": "malformed"
+            }
+          }
+        }
+      },
+      {
+        "statut": 401,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "error": {
+              "t": "mot",
+              "v": "unauthorized"
+            }
+          }
+        }
+      }
+    ]
   },
   {
     "producteur": "sera",
