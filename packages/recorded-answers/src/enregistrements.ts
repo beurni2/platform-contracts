@@ -2368,56 +2368,6 @@ export const ENREGISTREMENTS: readonly Porte[] = [
   {
     "producteur": "shop-plus",
     "methode": "GET",
-    "chemin": "/reseller/codes",
-    "formes": [
-      {
-        "statut": 200,
-        "corps": {
-          "t": "objet",
-          "cles": {
-            "codes": {
-              "t": "liste",
-              "de": [
-                {
-                  "t": "objet",
-                  "cles": {
-                    "mintedAt": {
-                      "t": "string"
-                    },
-                    "resellerId": {
-                      "t": "string"
-                    },
-                    "revelable": {
-                      "t": "boolean"
-                    }
-                  }
-                }
-              ]
-            },
-            "ok": {
-              "t": "mot",
-              "v": true
-            }
-          }
-        }
-      },
-      {
-        "statut": 401,
-        "corps": {
-          "t": "objet",
-          "cles": {
-            "error": {
-              "t": "mot",
-              "v": "unauthorized"
-            }
-          }
-        }
-      }
-    ]
-  },
-  {
-    "producteur": "shop-plus",
-    "methode": "GET",
     "chemin": "/reseller/accounts",
     "formes": [
       {
@@ -2811,62 +2761,6 @@ export const ENREGISTREMENTS: readonly Porte[] = [
             "state": {
               "t": "mot",
               "v": "pending_access"
-            }
-          }
-        }
-      }
-    ]
-  },
-  {
-    "producteur": "shop-plus",
-    "methode": "POST",
-    "chemin": "/reseller/code",
-    "formes": [
-      {
-        "statut": 200,
-        "corps": {
-          "t": "objet",
-          "cles": {
-            "code": {
-              "t": "string"
-            },
-            "mintedAt": {
-              "t": "string"
-            },
-            "ok": {
-              "t": "mot",
-              "v": true
-            },
-            "resellerId": {
-              "t": "string"
-            }
-          }
-        }
-      },
-      {
-        "statut": 400,
-        "corps": {
-          "t": "objet",
-          "cles": {
-            "ok": {
-              "t": "mot",
-              "v": false
-            },
-            "reason": {
-              "t": "mot",
-              "v": "malformed"
-            }
-          }
-        }
-      },
-      {
-        "statut": 401,
-        "corps": {
-          "t": "objet",
-          "cles": {
-            "error": {
-              "t": "mot",
-              "v": "unauthorized"
             }
           }
         }
