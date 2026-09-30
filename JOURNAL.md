@@ -3,6 +3,12 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-30 · recorded-answers — Shop+'s reseller board and three reseller acts, recorded by Shop+ (Boutik+ CONSOLE-VRAIE-1, AUDIT-B+2 F-71 · F-74 · F-75 · F-73) · data only, no version bump · on the branch, NOT merged
+
+`029ebf2` listed three Shop+ doors Boutik+'s walks now copy (`/reseller/accounts/access-code`, `/reseller/accounts/pause`, `/reseller/code`), empty until recorded; `ef6e41b` Shop+'s own record run filled them and the board's held-commission field; `d66b6bf` the same field renamed `misesDeCote` (Boutik+ bans « retenue » as money-word vocabulary). Every earlier recorded form unchanged; 16 doors round-trip; package tests 19 green. Boutik+ and Shop+ pin `d66b6bf`.
+
+---
+
 ## 2026-09-30 · i18n F-90 MERGED on the founder's « go » (Boutik+ LISTER-VRAI-1)
 
 `main` fast-forwarded `ac03562 → cfff2c5` (ancestry verified) BEFORE the three apps' merges, which pin `cfff2c5`; **ci 156 green** on `cfff2c5`. Nothing here deploys. Boutik+ console and supplier page deployed on it (their journal).
