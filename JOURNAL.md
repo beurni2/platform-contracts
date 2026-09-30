@@ -3,6 +3,12 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-30 · recorded-answers — Shop+'s two retired feed-code doors removed (Boutik+ CODES-RETIRES-1, AUDIT-B+2 F-73, founder ruling « Retire them ») · data only, no version bump · on the branch, NOT merged
+
+- `e2e1584`: `GET /reseller/codes` and `POST /reseller/code` removed from `packages/recorded-answers/src/enregistrements.ts` (16 → 14 doors). Shop+ no longer serves them, so no Boutik+ stand-in may answer for them either. Package typecheck + **19/19** tests green. Boutik+ and Shop+ repinned `d66b6bf → e2e1584`. Canon board on the final tree: **ALL GATES GREEN**.
+
+---
+
 ## 2026-09-30 · recorded-answers MERGED on the founder's « go » (Boutik+ CONSOLE-VRAIE-1)
 
 `main` fast-forwarded `958d89c → bae6d88` (ancestry verified) BEFORE the two apps' merges, which pin `d66b6bf`; **ci 158 green** on `bae6d88`. Nothing here deploys. Shop+ Worker and Boutik+ console deployed on it (their journals).
