@@ -2586,6 +2586,24 @@ export const ENREGISTREMENTS: readonly Porte[] = [
     ]
   },
   {
+    "producteur": "shop-plus",
+    "methode": "POST",
+    "chemin": "/reseller/accounts/access-code",
+    "formes": []
+  },
+  {
+    "producteur": "shop-plus",
+    "methode": "POST",
+    "chemin": "/reseller/accounts/pause",
+    "formes": []
+  },
+  {
+    "producteur": "shop-plus",
+    "methode": "POST",
+    "chemin": "/reseller/code",
+    "formes": []
+  },
+  {
     "producteur": "sera",
     "methode": "GET",
     "chemin": "/ops/board",
