@@ -286,6 +286,11 @@ describe('copy-lint — the banned words in every form (AUDIT-B+2 F-90)', () => 
     ['bad.f90.conforme_au', 'Conformément au règlement.'],
     ['bad.f90.conforme_aux', 'Conformément aux règles.'],
     ['bad.f90.majuscules', 'SÉQUESTRÉE'],
+    ['bad.f90.sequestration', 'La séquestration des fonds.'],
+    ['bad.f90.sequestrations', 'Plusieurs séquestrations ouvertes.'],
+    ['bad.f90.sequestrent', 'Ils séquestrent la somme.'],
+    ['bad.f90.sequestrant', 'En séquestrant la somme.'],
+    ['bad.f90.sequestrait', 'Le partenaire séquestrait tout.'],
   ])('%s is refused', async (key, fr) => {
     const data = await loadLintData();
     const report = lintCatalog([entry(key, fr)], data);

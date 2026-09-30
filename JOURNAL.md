@@ -9,7 +9,9 @@ Format per entry:
 
 **What moved — `packages/i18n/data/banned-register-tokens.json` only.** Eleven inflections joined the list: séquestres · séquestrer · séquestré(e)(s) · escrows · escrowed · escrowing · conformément au · conformément aux. Measured FIRST against all 2 946 strings of the seven catalogs of the three apps (Boutik+ supplier app; Shop+ buyer PWA, reseller app, reseller kit; Séra rider app and dispatch console; the canon seed): **zero hits** — no honest copy is refused. The F12 precedent is followed: an i18n-only data wave, pinned by sha, no lockstep bump (i18n has no intra-family deps).
 
-**Evidence.** `packages/i18n` 47/47 (twelve refusals + four near-word controls new: « conforme à », « conformes », « séquence »). Against the OLD list the twelve refusals go red (12 failed / 35 passed), data restored byte-identical. build 7/7 · typecheck 10/10 · test 14/14 · `run-gates.sh` ALL GATES GREEN. Consumers repin on their branches (Boutik+, Shop+, Séra), each with a negative fixture whose ONLY violation is an F-90 inflection, so a pin regression turns their board red.
+**Widened once, on the one verifier pass (same day).** « séquestration(s) » and the common verb forms (séquestrent · séquestrant · séquestrez · séquestrons · séquestrait · séquestraient · séquestrera · séquestreront) still passed — ten more forms, measured first against the same 2 946 strings (zero hits).
+
+**Evidence.** `packages/i18n` 52/52 (seventeen refusals + four near-word controls: « conforme à », « conformes », « séquence »); against the previous list the five new refusals go red, data restored byte-identical. Against the pre-F-90 list the twelve first refusals went red (12 failed / 35 passed). build 7/7 · typecheck 10/10 · test 14/14 · `run-gates.sh` ALL GATES GREEN. Consumers repin on their branches (Boutik+, Shop+, Séra), each with a negative fixture whose ONLY violation is an F-90 inflection, so a pin regression turns their board red.
 
 ---
 
