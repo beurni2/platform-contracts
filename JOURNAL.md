@@ -3,7 +3,13 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
-## 2026-09-30 · i18n — the banned words in every form (Boutik+ AUDIT-B+2 F-90, slice LISTER-VRAI-1) · data only, no version bump · ON THE BRANCH
+## 2026-09-30 · i18n F-90 MERGED on the founder's « go » (Boutik+ LISTER-VRAI-1)
+
+`main` fast-forwarded `ac03562 → cfff2c5` (ancestry verified) BEFORE the three apps' merges, which pin `cfff2c5`; **ci 156 green** on `cfff2c5`. Nothing here deploys. Boutik+ console and supplier page deployed on it (their journal).
+
+---
+
+## 2026-09-30 · i18n — the banned words in every form (Boutik+ AUDIT-B+2 F-90, slice LISTER-VRAI-1) · data only, no version bump · MERGED 2026-09-30 (entry above)
 
 **What was wrong.** §10.5 hard rule 2 bans « séquestre » / "escrow" from every customer string, but the copy-lint matches whole words, so « séquestres », « escrowed » and « conformément aux » all passed while their base forms were refused (the audit's probe: only the controls failed).
 
