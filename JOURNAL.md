@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-09-30 · i18n — the banned words in every form (Boutik+ AUDIT-B+2 F-90, slice LISTER-VRAI-1) · data only, no version bump · ON THE BRANCH
+
+**What was wrong.** §10.5 hard rule 2 bans « séquestre » / "escrow" from every customer string, but the copy-lint matches whole words, so « séquestres », « escrowed » and « conformément aux » all passed while their base forms were refused (the audit's probe: only the controls failed).
+
+**What moved — `packages/i18n/data/banned-register-tokens.json` only.** Eleven inflections joined the list: séquestres · séquestrer · séquestré(e)(s) · escrows · escrowed · escrowing · conformément au · conformément aux. Measured FIRST against all 2 946 strings of the seven catalogs of the three apps (Boutik+ supplier app; Shop+ buyer PWA, reseller app, reseller kit; Séra rider app and dispatch console; the canon seed): **zero hits** — no honest copy is refused. The F12 precedent is followed: an i18n-only data wave, pinned by sha, no lockstep bump (i18n has no intra-family deps).
+
+**Evidence.** `packages/i18n` 47/47 (twelve refusals + four near-word controls new: « conforme à », « conformes », « séquence »). Against the OLD list the twelve refusals go red (12 failed / 35 passed), data restored byte-identical. build 7/7 · typecheck 10/10 · test 14/14 · `run-gates.sh` ALL GATES GREEN. Consumers repin on their branches (Boutik+, Shop+, Séra), each with a negative fixture whose ONLY violation is an F-90 inflection, so a pin regression turns their board red.
+
+---
+
 ## 2026-09-29 · canon 3.26.0 (`c43c236`, first cut `4f5c188`) — CODE-COLIS-1: the readiness challenge is never displayed, and a package carries one · docs only · MERGED 2026-09-29 on the founder's « go »
 
 **MERGED (founder: « go », 2026-09-29).** `main` fast-forwarded `9b78ecb → ac03562` (ancestry verified; ci 155 green), BEFORE Boutik+'s merge, which pins `c43c236`. The Boutik+ offer Worker now speaks 3.26.0 (offer-deploy 49, « PROVENANCE OK … speaking canon 3.26.0 ») — see its journal. Shop+ and Séra keep their pins.

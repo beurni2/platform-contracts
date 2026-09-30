@@ -255,3 +255,54 @@ describe('copy-lint — administrative register (AUDIT-B+1 F12)', () => {
     ).toEqual([]);
   });
 });
+
+/**
+ * AUDIT-B+2 F-90 — THE BAN WAS ONE SPELLING OF THE WORD.
+ *
+ * §10.5 hard rule 2: « séquestre » / "escrow" MUST NOT appear in any
+ * customer-facing string. The match is whole-word (`tokenPattern`), so the
+ * plural « séquestres », the English « escrowed » and the plural contraction
+ * « conformément aux » all PASSED while their base forms were refused —
+ * measured by the audit, only the controls failed.
+ *
+ * The fix is DATA again: the inflections joined the list, each measured first
+ * against all 2 946 strings of the seven catalogs of the three apps (zero
+ * hits). The controls below are the other half: words that merely LOOK close
+ * stay legal.
+ */
+describe('copy-lint — the banned words in every form (AUDIT-B+2 F-90)', () => {
+  const entry = (key: string, fr: string) => ({ key, fr, register: 'neutral', screenClass: 'status' }) as never;
+
+  it.each([
+    ['bad.f90.sequestres', 'Les colis restent séquestres.'],
+    ['bad.f90.sequestrer', 'On va séquestrer la somme.'],
+    ['bad.f90.sequestre_participe', 'Votre argent est séquestré.'],
+    ['bad.f90.sequestree', 'La somme est séquestrée.'],
+    ['bad.f90.sequestres_participe', 'Les paiements sont séquestrés.'],
+    ['bad.f90.sequestrees', 'Les sommes sont séquestrées.'],
+    ['bad.f90.escrows', 'Two escrows are open.'],
+    ['bad.f90.escrowed', 'Payment escrowed.'],
+    ['bad.f90.escrowing', 'We are escrowing it.'],
+    ['bad.f90.conforme_au', 'Conformément au règlement.'],
+    ['bad.f90.conforme_aux', 'Conformément aux règles.'],
+    ['bad.f90.majuscules', 'SÉQUESTRÉE'],
+  ])('%s is refused', async (key, fr) => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry(key, fr)], data);
+    expect(
+      report.violations.some((v) => v.condition === 'banned_register_token'),
+      `« ${fr} » still passes — the ban is one spelling of the word again`,
+    ).toBe(true);
+  });
+
+  it.each([
+    ['ok.f90.conforme', 'Le produit est conforme à la photo.'],
+    ['ok.f90.conformes', 'Les articles sont conformes.'],
+    ['ok.f90.sequence', 'Une séquence de trois photos.'],
+    ['ok.f90.warm', 'Votre argent arrive sous 24 h.'],
+  ])('%s stays LEGAL — a near word is not the banned word', async (key, fr) => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry(key, fr)], data);
+    expect(report.violations.filter((v) => v.condition === 'banned_register_token'), fr).toEqual([]);
+  });
+});
