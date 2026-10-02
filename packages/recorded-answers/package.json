@@ -1,6 +1,6 @@
 {
   "name": "@platform/recorded-answers",
-  "version": "3.26.0",
+  "version": "3.27.0",
   "description": "The answers Shop+ and Séra really give on the doors another app stands in for in its tests — recorded by each producer's own workerd suite, checked on both sides (Execution Contract §3). Test tooling only: pure data and pure functions, no dependency, never part of any app's runtime graph.",
   "license": "UNLICENSED",
   "type": "module",

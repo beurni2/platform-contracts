@@ -1,5 +1,5 @@
 {
-  "packageVersion": "3.26.0",
+  "packageVersion": "3.27.0",
   "files": {
     "Boutik-Plus-Build-Spec.md": "f1ed769272ce47c209812e30a865c463c9a8220d2e8527ed47502a667ffe19bf",
     "Boutik-Plus-Building-Plan.md": "307bdfd97d798ba45a9fad9c35ffe7654085d1c187e1b67f879df62f2a5a99c3",
@@ -11,7 +11,7 @@
     "PERF-BUDGETS.md": "6a7858385ce41783ff0b413310ec36230468f929306030ec7ed2a5b182bdba19",
     "Sera-Build-Spec.md": "db8d23bc09e2cce836b7386ff9599eed01c630ffb2d66e3781315716083152db",
     "Sera-Building-Plan.md": "97c5ad6579f61892b5cae5be674d30a631e7a4aa7f809e6bd7b42979ede22c4a",
-    "Shop-Plus-Build-Spec.md": "02bd8d3711494b4c679a9d85dde9c9cbad9f90e6dba824fb520fdd506472fbff",
-    "Shop-Plus-Building-Plan.md": "e20252727736b5235e60de5c9e0628b36124cefac37c79991c3a97b046fb86b3"
+    "Shop-Plus-Build-Spec.md": "3fffdbe110bb84fdb7db123f57f1516944e49cb389c41cd051fa1f4f4cb88a52",
+    "Shop-Plus-Building-Plan.md": "ad370b49393e680c97e04d409a4f6aed56a311a874c359926e8a63d353cd7583"
   }
 }
