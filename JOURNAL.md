@@ -3,6 +3,13 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-10-02 · canon 3.27.0 MERGED on the founder's « go » (Shop+ EN-LIGNE-1 · VERIFIEE-MERITEE-1 · PORTE-AUTRE-TELEPHONE-1)
+
+**Founder order (2026-10-02).** « go » — on the combined report of the three Shop+ fixes (Shop+ JOURNAL).
+- `main` fast-forwarded `f5380c8 → d6f3882` (Shop-Plus-Build-Spec §4.1: a vitrine not en ligne is closed to buyers; « Vendeuse vérifiée » is earned by one delivered sale; SP6 fourth ruling: a signed-in door order's key kept beside it in « Mes commandes »), **ci 162 green**. Docs and lockstep version only: no shape, event or money-waterfall change. Shop+ pins `d6f3882`; its live Worker reads back canon 3.27.0.
+
+---
+
 ## 2026-09-30 · recorded-answers MERGED on the founder's « go » (Boutik+ CODES-RETIRES-1)
 
 **Founder order (2026-09-30).** « go » — on the CODES-RETIRES-1 + PROFIL-PUBLIÉ report (entry below).
