@@ -3,6 +3,23 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-26 · A-VERIFIER-1 — the recorded answers carry what the founder must check on each order, and the dead-letter door's counts · coordinator · on the branch, NOT merged
+
+**What changed.** One file changed: `packages/recorded-answers/src/enregistrements.ts`, at `b5fec57`.
+- Two of the four recorded forms of Shop+'s `GET /checkout/dispatch` were replaced. Each row now carries `aVerifier`.
+- `GET /checkout/dlq` is recorded for the first time, after `/checkout/dispatch/:orderId/refusal`, with three forms: the full book, the counts `{dropped, held, ok, oversize}`, and 401.
+- The other seven Shop+ doors are unchanged.
+
+**How it was made.** It was not written by hand. It came from Shop+'s own record run, `node scripts/certifier-reponses.mjs --enregistrer`, at the lane's interim head `a8691a3`, with `--portes` set to today's Shop+ doors plus `GET /checkout/dlq`.
+- The run had the Boutik+ console's port from its clone at `9223740` and passed 584/584.
+- Under the CI condition, with no Boutik+ clone, 583 passed and 1 was skipped, and every recorded form was still given.
+
+**Evidence.** The package tests passed 19/19. The platform-contracts board was green, and the canon snapshot is unchanged.
+
+**Pins.** Shop+ storefront `3455cf0` and Boutik+ supplier-app `5737774` each changed `package.json` and the lock entry only. One unrelated pnpm re-serialisation in the Boutik+ lock was restored, and `pnpm install --frozen-lockfile` passed.
+
+**Release.** This merges FIRST. The two pins point at this commit.
+
 ## 2026-11-26 · Wave 0 MERGED on the founder's « go » (RÈGLES-UNIFIÉES-1)
 
 **Founder order (2026-11-26, 03:00 UTC).** « you can go » — on the Wave 0 report (RÈGLES-UNIFIÉES-1 in all five repositories; LOCK-LABELS-1 in Shop+, which also carried the 2026-10-02 journal commit `90e3653`).
