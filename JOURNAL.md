@@ -3,6 +3,14 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-26 · A-VERIFIER-1 MERGED on the founder's « go »
+
+**Founder.** « Deploy and merge both » (2026-11-26 18:41 UTC, decision card). It named this merge as the first step of the « À vérifier » release.
+
+**Merge.** main re-checked unchanged at `17c2357`; merged as the merge commit `f61b704`, never squashed, so `b5fec57`, which the Shop+ and Boutik+ pins point at, is on main (checked with `merge-base --is-ancestor`). ci 166 green on `f61b704`.
+
+**Then.** Shop+ deployed its storefront Worker from its branch and merged; Boutik+ merged and published its console from main. Each repository's journal records its own step.
+
 ## 2026-11-26 · A-VERIFIER-1 — the recorded answers carry what the founder must check on each order, and the dead-letter door's counts · coordinator · on the branch, NOT merged
 
 **What changed.** One file changed: `packages/recorded-answers/src/enregistrements.ts`, at `b5fec57`.
