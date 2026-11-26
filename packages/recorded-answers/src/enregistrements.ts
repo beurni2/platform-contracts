@@ -31,6 +31,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "null"
                     },
@@ -65,6 +68,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "null"
                     },
@@ -99,6 +105,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -147,6 +156,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -195,6 +207,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -254,6 +269,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -310,6 +328,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -355,6 +376,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -400,6 +424,391 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
+                    "contact": {
+                      "t": "objet",
+                      "cles": {
+                        "phone": {
+                          "t": "string"
+                        },
+                        "quartier": {
+                          "t": "string"
+                        },
+                        "repere": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "objet",
+                      "cles": {
+                        "etat": {
+                          "t": "mot",
+                          "v": "en_cours"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
+                    "contact": {
+                      "t": "objet",
+                      "cles": {
+                        "phone": {
+                          "t": "string"
+                        },
+                        "quartier": {
+                          "t": "string"
+                        },
+                        "repere": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "objet",
+                      "cles": {
+                        "etat": {
+                          "t": "mot",
+                          "v": "rien"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "null"
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "null"
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "payment_failed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "null"
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "null"
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "payment_pending"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "null"
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "objet",
+                      "cles": {
+                        "etat": {
+                          "t": "mot",
+                          "v": "bloque"
+                        },
+                        "raison": {
+                          "t": "mot",
+                          "v": "refus_illisible"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "objet",
+                      "cles": {
+                        "phone": {
+                          "t": "string"
+                        },
+                        "quartier": {
+                          "t": "string"
+                        },
+                        "repere": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "null"
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -455,6 +864,30 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -510,57 +943,30 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
-                    "contact": {
+                    "aVerifier": {
                       "t": "objet",
                       "cles": {
-                        "phone": {
-                          "t": "string"
+                        "coupees": {
+                          "t": "number"
                         },
-                        "quartier": {
-                          "t": "string"
-                        },
-                        "repere": {
-                          "t": "string"
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
                         }
                       }
                     },
-                    "createdAt": {
-                      "t": "string"
-                    },
-                    "exists": {
-                      "t": "boolean"
-                    },
-                    "ok": {
-                      "t": "mot",
-                      "v": true
-                    },
-                    "orderId": {
-                      "t": "string"
-                    },
-                    "productVersionId": {
-                      "t": "string"
-                    },
-                    "remboursement": {
-                      "t": "objet",
-                      "cles": {
-                        "etat": {
-                          "t": "mot",
-                          "v": "en_cours"
-                        }
-                      }
-                    },
-                    "state": {
-                      "t": "mot",
-                      "v": "confirmed"
-                    },
-                    "zoneTo": {
-                      "t": "string"
-                    }
-                  }
-                },
-                {
-                  "t": "objet",
-                  "cles": {
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -603,57 +1009,6 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                     "state": {
                       "t": "mot",
                       "v": "refunded"
-                    },
-                    "zoneTo": {
-                      "t": "string"
-                    }
-                  }
-                },
-                {
-                  "t": "objet",
-                  "cles": {
-                    "contact": {
-                      "t": "objet",
-                      "cles": {
-                        "phone": {
-                          "t": "string"
-                        },
-                        "quartier": {
-                          "t": "string"
-                        },
-                        "repere": {
-                          "t": "string"
-                        }
-                      }
-                    },
-                    "createdAt": {
-                      "t": "string"
-                    },
-                    "exists": {
-                      "t": "boolean"
-                    },
-                    "ok": {
-                      "t": "mot",
-                      "v": true
-                    },
-                    "orderId": {
-                      "t": "string"
-                    },
-                    "productVersionId": {
-                      "t": "string"
-                    },
-                    "remboursement": {
-                      "t": "objet",
-                      "cles": {
-                        "etat": {
-                          "t": "mot",
-                          "v": "rien"
-                        }
-                      }
-                    },
-                    "state": {
-                      "t": "mot",
-                      "v": "confirmed"
                     },
                     "zoneTo": {
                       "t": "string"
@@ -680,6 +1035,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "null"
                     },
@@ -714,6 +1072,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "null"
                     },
@@ -748,6 +1109,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -796,6 +1160,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -844,6 +1211,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -903,6 +1273,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -959,6 +1332,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -1004,6 +1380,9 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -1049,6 +1428,391 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
+                    "contact": {
+                      "t": "objet",
+                      "cles": {
+                        "phone": {
+                          "t": "string"
+                        },
+                        "quartier": {
+                          "t": "string"
+                        },
+                        "repere": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "objet",
+                      "cles": {
+                        "etat": {
+                          "t": "mot",
+                          "v": "en_cours"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "null"
+                    },
+                    "contact": {
+                      "t": "objet",
+                      "cles": {
+                        "phone": {
+                          "t": "string"
+                        },
+                        "quartier": {
+                          "t": "string"
+                        },
+                        "repere": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "objet",
+                      "cles": {
+                        "etat": {
+                          "t": "mot",
+                          "v": "rien"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "null"
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "null"
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "payment_failed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "null"
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "null"
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "payment_pending"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "null"
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "objet",
+                      "cles": {
+                        "etat": {
+                          "t": "mot",
+                          "v": "bloque"
+                        },
+                        "raison": {
+                          "t": "mot",
+                          "v": "refus_illisible"
+                        }
+                      }
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "contact": {
+                      "t": "objet",
+                      "cles": {
+                        "phone": {
+                          "t": "string"
+                        },
+                        "quartier": {
+                          "t": "string"
+                        },
+                        "repere": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "t": "string"
+                    },
+                    "exists": {
+                      "t": "boolean"
+                    },
+                    "ok": {
+                      "t": "mot",
+                      "v": true
+                    },
+                    "orderId": {
+                      "t": "string"
+                    },
+                    "productVersionId": {
+                      "t": "string"
+                    },
+                    "remboursement": {
+                      "t": "null"
+                    },
+                    "state": {
+                      "t": "mot",
+                      "v": "confirmed"
+                    },
+                    "zoneTo": {
+                      "t": "string"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -1104,6 +1868,30 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
+                    "aVerifier": {
+                      "t": "objet",
+                      "cles": {
+                        "coupees": {
+                          "t": "number"
+                        },
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -1159,57 +1947,30 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                 {
                   "t": "objet",
                   "cles": {
-                    "contact": {
+                    "aVerifier": {
                       "t": "objet",
                       "cles": {
-                        "phone": {
-                          "t": "string"
+                        "coupees": {
+                          "t": "number"
                         },
-                        "quartier": {
-                          "t": "string"
-                        },
-                        "repere": {
-                          "t": "string"
+                        "elements": {
+                          "t": "liste",
+                          "de": [
+                            {
+                              "t": "objet",
+                              "cles": {
+                                "classe": {
+                                  "t": "string"
+                                },
+                                "le": {
+                                  "t": "string"
+                                }
+                              }
+                            }
+                          ]
                         }
                       }
                     },
-                    "createdAt": {
-                      "t": "string"
-                    },
-                    "exists": {
-                      "t": "boolean"
-                    },
-                    "ok": {
-                      "t": "mot",
-                      "v": true
-                    },
-                    "orderId": {
-                      "t": "string"
-                    },
-                    "productVersionId": {
-                      "t": "string"
-                    },
-                    "remboursement": {
-                      "t": "objet",
-                      "cles": {
-                        "etat": {
-                          "t": "mot",
-                          "v": "en_cours"
-                        }
-                      }
-                    },
-                    "state": {
-                      "t": "mot",
-                      "v": "confirmed"
-                    },
-                    "zoneTo": {
-                      "t": "string"
-                    }
-                  }
-                },
-                {
-                  "t": "objet",
-                  "cles": {
                     "contact": {
                       "t": "objet",
                       "cles": {
@@ -1252,57 +2013,6 @@ export const ENREGISTREMENTS: readonly Porte[] = [
                     "state": {
                       "t": "mot",
                       "v": "refunded"
-                    },
-                    "zoneTo": {
-                      "t": "string"
-                    }
-                  }
-                },
-                {
-                  "t": "objet",
-                  "cles": {
-                    "contact": {
-                      "t": "objet",
-                      "cles": {
-                        "phone": {
-                          "t": "string"
-                        },
-                        "quartier": {
-                          "t": "string"
-                        },
-                        "repere": {
-                          "t": "string"
-                        }
-                      }
-                    },
-                    "createdAt": {
-                      "t": "string"
-                    },
-                    "exists": {
-                      "t": "boolean"
-                    },
-                    "ok": {
-                      "t": "mot",
-                      "v": true
-                    },
-                    "orderId": {
-                      "t": "string"
-                    },
-                    "productVersionId": {
-                      "t": "string"
-                    },
-                    "remboursement": {
-                      "t": "objet",
-                      "cles": {
-                        "etat": {
-                          "t": "mot",
-                          "v": "rien"
-                        }
-                      }
-                    },
-                    "state": {
-                      "t": "mot",
-                      "v": "confirmed"
                     },
                     "zoneTo": {
                       "t": "string"
@@ -1634,6 +2344,342 @@ export const ENREGISTREMENTS: readonly Porte[] = [
             "reason": {
               "t": "mot",
               "v": "no_contact_on_order"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "producteur": "shop-plus",
+    "methode": "GET",
+    "chemin": "/checkout/dlq",
+    "formes": [
+      {
+        "statut": 200,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "acknowledged": {
+              "t": "liste",
+              "de": [
+                {
+                  "t": "objet",
+                  "cles": {
+                    "at": {
+                      "t": "string"
+                    },
+                    "parkId": {
+                      "t": "string"
+                    },
+                    "reason": {
+                      "t": "mot",
+                      "v": "not_json"
+                    },
+                    "sha256Hex": {
+                      "t": "string"
+                    }
+                  }
+                }
+              ]
+            },
+            "acknowledgedClipped": {
+              "t": "number"
+            },
+            "dropped": {
+              "t": "number"
+            },
+            "entries": {
+              "t": "liste",
+              "de": [
+                {
+                  "t": "objet",
+                  "cles": {
+                    "bytes": {
+                      "t": "number"
+                    },
+                    "original": {
+                      "t": "string"
+                    },
+                    "originalSha256": {
+                      "t": "string"
+                    },
+                    "parkId": {
+                      "t": "string"
+                    },
+                    "parkedAt": {
+                      "t": "string"
+                    },
+                    "reason": {
+                      "t": "mot",
+                      "v": "malformed_payload"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "bytes": {
+                      "t": "number"
+                    },
+                    "original": {
+                      "t": "string"
+                    },
+                    "originalSha256": {
+                      "t": "string"
+                    },
+                    "parkId": {
+                      "t": "string"
+                    },
+                    "parkedAt": {
+                      "t": "string"
+                    },
+                    "reason": {
+                      "t": "mot",
+                      "v": "not_a_canonical_platform_event"
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "bytes": {
+                      "t": "number"
+                    },
+                    "original": {
+                      "t": "string"
+                    },
+                    "originalSha256": {
+                      "t": "string"
+                    },
+                    "parkId": {
+                      "t": "string"
+                    },
+                    "parkedAt": {
+                      "t": "string"
+                    },
+                    "reason": {
+                      "t": "mot",
+                      "v": "not_json"
+                    }
+                  }
+                }
+              ]
+            },
+            "events": {
+              "t": "liste",
+              "de": [
+                {
+                  "t": "objet",
+                  "cles": {
+                    "envelope": {
+                      "t": "objet",
+                      "cles": {
+                        "actor": {
+                          "t": "string"
+                        },
+                        "aggregateVersion": {
+                          "t": "number"
+                        },
+                        "command_id": {
+                          "t": "string"
+                        },
+                        "correlation_id": {
+                          "t": "string"
+                        },
+                        "serverTime": {
+                          "t": "string"
+                        },
+                        "version": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "payload": {
+                      "t": "objet",
+                      "cles": {
+                        "original_bytes": {
+                          "t": "number"
+                        },
+                        "original_sha256": {
+                          "t": "string"
+                        },
+                        "park_id": {
+                          "t": "string"
+                        },
+                        "reason": {
+                          "t": "mot",
+                          "v": "malformed_payload"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "envelope": {
+                      "t": "objet",
+                      "cles": {
+                        "actor": {
+                          "t": "string"
+                        },
+                        "aggregateVersion": {
+                          "t": "number"
+                        },
+                        "command_id": {
+                          "t": "string"
+                        },
+                        "correlation_id": {
+                          "t": "string"
+                        },
+                        "serverTime": {
+                          "t": "string"
+                        },
+                        "version": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "payload": {
+                      "t": "objet",
+                      "cles": {
+                        "original_bytes": {
+                          "t": "number"
+                        },
+                        "original_sha256": {
+                          "t": "string"
+                        },
+                        "park_id": {
+                          "t": "string"
+                        },
+                        "reason": {
+                          "t": "mot",
+                          "v": "not_a_canonical_platform_event"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "t": "objet",
+                  "cles": {
+                    "envelope": {
+                      "t": "objet",
+                      "cles": {
+                        "actor": {
+                          "t": "string"
+                        },
+                        "aggregateVersion": {
+                          "t": "number"
+                        },
+                        "command_id": {
+                          "t": "string"
+                        },
+                        "correlation_id": {
+                          "t": "string"
+                        },
+                        "serverTime": {
+                          "t": "string"
+                        },
+                        "version": {
+                          "t": "string"
+                        }
+                      }
+                    },
+                    "name": {
+                      "t": "string"
+                    },
+                    "payload": {
+                      "t": "objet",
+                      "cles": {
+                        "original_bytes": {
+                          "t": "number"
+                        },
+                        "original_sha256": {
+                          "t": "string"
+                        },
+                        "park_id": {
+                          "t": "string"
+                        },
+                        "reason": {
+                          "t": "mot",
+                          "v": "not_json"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "held": {
+              "t": "number"
+            },
+            "ok": {
+              "t": "mot",
+              "v": true
+            },
+            "oversize": {
+              "t": "liste",
+              "de": [
+                {
+                  "t": "objet",
+                  "cles": {
+                    "at": {
+                      "t": "string"
+                    },
+                    "bytes": {
+                      "t": "number"
+                    },
+                    "reason": {
+                      "t": "mot",
+                      "v": "not_json"
+                    },
+                    "sha256Hex": {
+                      "t": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "statut": 200,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "dropped": {
+              "t": "number"
+            },
+            "held": {
+              "t": "number"
+            },
+            "ok": {
+              "t": "mot",
+              "v": true
+            },
+            "oversize": {
+              "t": "number"
+            }
+          }
+        }
+      },
+      {
+        "statut": 401,
+        "corps": {
+          "t": "objet",
+          "cles": {
+            "error": {
+              "t": "mot",
+              "v": "unauthorized"
             }
           }
         }
