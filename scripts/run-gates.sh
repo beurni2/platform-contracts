@@ -147,6 +147,59 @@ capture shape-freeze-negative fail node scripts/show-shape-freeze-negative.mjs
 log "gate: secret-separation — NEGATIVE FIXTURE (substitution must not compile)"
 capture secret-separation-negative fail node scripts/show-secret-separation-negative.mjs
 
+# ── THE RETIRED NAMES (Ten Laws #10) ────────────────────────────────────────
+# The same gate file, byte for byte, in every repository: the first step pins
+# this copy to that file's sha256. The log lines here never spell the names:
+# this script is one of the files the gate reads.
+# This repository has no pattern-coverage gate. Each pattern of this file is
+# proven load-bearing by the coverage gate of the four repositories that pin
+# the same sha256, over the same fixtures.
+log "gate: retired-names — this copy is the shared file, byte for byte (sha256 pinned, must pass)"
+RETIRED_NAMES_SHA256=cdfd920894e658fe040de5e3338349cd2a82ff2229917b0d524ec4df3f4102dd
+capture retired-names-sha256 pass bash -c 'printf "%s  scripts/gates/retired-names.mjs\n" "$1" | sha256sum -c -' _ "$RETIRED_NAMES_SHA256"
+
+log "gate: retired-names — every tracked file, the left-out paths printed (must pass)"
+capture retired-names-positive pass node scripts/gates/retired-names.mjs
+
+log "gate: retired-names — NEGATIVE FIXTURE (the retired names as words, a catalog line, identifiers, must fail)"
+capture retired-names-negative fail node scripts/gates/retired-names.mjs gates/fixtures/negative/retired-names
+
+# Each file alone. The escaped spaces, the escape before the first word, the
+# HTML entity and the lowercase form each have a file of their own, so each
+# one is refused on its own merits.
+for fx in retired-words.ts catalog.retired-line.json catalog.escaped-spaces.json catalog.escaped-lead.json retired-markup.html retired-lowercase.ts retired-identifier.ts; do
+  log "gate: retired-names — NEGATIVE FIXTURE ALONE ($fx, must fail)"
+  capture "retired-names-negative-$fx" fail node scripts/gates/retired-names.mjs "gates/fixtures/negative/retired-names/$fx"
+done
+
+log "gate: retired-names — POSITIVE FIXTURE (ordinary French, the canon name with a possessive, must pass)"
+capture retired-names-legal pass node scripts/gates/retired-names.mjs gates/fixtures/retired-names-legal
+
+# The no-argument run reads every tracked file except the left-out paths, and
+# no fixture run reads that list. This builds a throwaway git repository with
+# the gate and one clean tracked file, plants the retired name in ONE tracked
+# file at a time, and requires a refusal outside the list and a pass inside
+# it, so both edges of the list are pinned.
+SCOPE_TMP="$(mktemp -d)"
+cleanup_scope() { rm -rf "$SCOPE_TMP"; }
+trap cleanup_scope EXIT
+SCOPE_LINE="$(printf 'Ouvrir Mo%s Shop' n)"
+probe_scope() {
+  # probe_scope <pass|fail> <the one tracked path that carries the name>
+  local expected="$1" rel="$2" repo="$SCOPE_TMP/repo"
+  rm -rf "$repo"; mkdir -p "$repo/scripts/gates" "$repo/$(dirname "$rel")"
+  cp scripts/gates/retired-names.mjs "$repo/scripts/gates/retired-names.mjs"
+  printf 'clean\n' > "$repo/clean.txt"
+  printf '%s\n' "$SCOPE_LINE" > "$repo/$rel"
+  git -C "$repo" init -q && git -C "$repo" add -A
+  log "gate: retired-names — the name planted in $rel only, in a throwaway repository (must $expected)"
+  capture "retired-names-scope-$(printf '%s' "$rel" | tr '/.' '__')" "$expected" bash -c 'cd "$1" && node scripts/gates/retired-names.mjs' _ "$repo"
+}
+for rel in apps/x.ts services/x.ts packages/x.ts scripts/x.sh README.md docs/runbooks/x.md; do probe_scope fail "$rel"; done
+for rel in design-reference/x.jsx docs/Sera-Build-Spec.md; do probe_scope pass "$rel"; done
+cleanup_scope
+trap - EXIT
+
 if [ $FAILED -ne 0 ]; then
   echo ""
   echo "ONE OR MORE GATES DID NOT BEHAVE AS REQUIRED"
