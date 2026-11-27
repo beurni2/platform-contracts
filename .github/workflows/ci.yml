@@ -6,6 +6,11 @@ on:
   pull_request:
   # WO-VITRINE: manual dispatch so review branches (canon/**) can prove GREEN pre-merge.
   workflow_dispatch:
+  # Every morning at 05:00 UTC the board runs again on main's newest commit,
+  # so a check that turns red without a push (an expired date, a moved
+  # dependency) is seen.
+  schedule:
+    - cron: '0 5 * * *'
 
 jobs:
   gates:
