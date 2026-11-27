@@ -379,3 +379,63 @@ export const ResellerAccessChangedEventSchema = z
   })
   .strict();
 export type ResellerAccessChangedEvent = z.infer<typeof ResellerAccessChangedEventSchema>;
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * COLIS-PERDU-1 (canon v3.28.0) — the payload of `package.lost.v1`: a parcel
+ * lost on the road, travelling Séra → Shop+.
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Founder-approved 2026-11-27 (« Yes, on my Boutik+ console »). The name was
+ * already in §5.7's union with no payload; this binds it. Séra §6.5: « no
+ * generic failed terminal; package never unowned … Séra-caused product
+ * loss/damage → CustodyLiabilityClaim ». Master reference: « Buyer made whole
+ * regardless. »
+ *
+ * WHAT IT MEANS, exactly: the founder declared, from his console, that a
+ * parcel a rider held is lost. A parcel may carry several orders (SE3: each
+ * keeps its own custody file), so Séra sends ONE event per order it carried,
+ * and Shop+ refunds each of them. Only he may declare it, only while a courier is
+ * the current custodian, and the declaration is final. Séra owns everything
+ * else that follows on its side (the named custody terminal, the liability
+ * claim at the amount he types, the course closed, the rider freed); none of
+ * it rides this wire. Shop+ consumes it and refunds the buyer in full: every
+ * paid leg, delivery included.
+ *
+ * ITS OWN SCHEMA, though the shape equals `FulfillmentProgressPayloadSchema`:
+ * that one's `at` is Boutik+'s clock on a preparation fact, this one's is
+ * Séra's clock on a custody fact. Same fields, different producer and meaning.
+ *
+ * ═══ WHAT IS DELIBERATELY ABSENT — made UNREPRESENTABLE by `.strict()` ═══
+ *   · NO MONEY. Not the claim amount, not the refund. Shop+ refunds from its
+ *     own paid legs (Law #2: no app computes or restates another's amounts),
+ *     and the liability claim is Séra's own instrument.
+ *   · NO NAMES OR IDS OF PEOPLE: no rider, courier, custodian, supplier or
+ *     buyer. The order id is the only identifier.
+ *   · NO CODES: none of the four secrets of §5.6 (readiness challenge, pickup
+ *     code, `buyerDropCode`, handoff authorization), and no custody-seal id.
+ *   · NO REASON TEXT OR EVIDENCE. A lost parcel has one meaning; the founder's
+ *     notes stay in Séra's book.
+ *   · Damage stays out: `package.damaged.v1` keeps no payload, and damage
+ *     shown at the door keeps its existing road (`delivery.refused.v1`).
+ */
+export const PackageLostPayloadSchema = z
+  .object({
+    /** Shop+'s order id, as Séra carries it — the consumer's idempotency key.
+     *  One event per order: a parcel of several orders sends several. */
+    orderId: IdSchema,
+    /** Server time Séra recorded the founder's declaration. Séra's clock. */
+    at: IsoTimestampSchema,
+  })
+  .strict();
+export type PackageLostPayload = z.infer<typeof PackageLostPayloadSchema>;
+
+/** The wire artifact, NAME bound to PAYLOAD: Séra parses before send, Shop+ on receipt. */
+export const PackageLostEventSchema = z
+  .object({
+    name: z.literal('package.lost.v1'),
+    envelope: EventEnvelopeSchema,
+    payload: PackageLostPayloadSchema,
+  })
+  .strict();
+export type PackageLostEvent = z.infer<typeof PackageLostEventSchema>;
