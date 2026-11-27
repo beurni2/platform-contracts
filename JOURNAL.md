@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · COLIS-PERDU-1 and LOIS-PARTOUT-1 — MERGED
+
+**Founder.** « Release all four » (2026-11-27 10:54 UTC, decision card, on the lost-parcel batch report).
+
+**No deploy.** The rulebook is a pinned package; nothing here runs live.
+
+**Merge.** PR #2 merged first in the batch, as `1d350ea` (merge commit, the branch shas kept, so `9c0c8d8`, which the Shop+ and Séra pins point at, stays on main). On main: ci 168 green.
+
+---
+
 ## 2026-11-27 · COLIS-PERDU-1 — canon 3.28.0: a parcel lost on the road carries the order and the instant, and nothing else · coordinator · on the branch, NOT merged
 
 **Founder.** « Yes, on my Boutik+ console » (2026-11-27 08:35 UTC, decision card « Approve the "declared lost" rule, and where should its button go? »). The shape he approved: only he declares it, only while a rider holds the parcel, and it is final; Séra ends custody on a named terminal, opens a `CustodyLiabilityClaim` (`sera_loss`) at the amount he types, closes the course and frees the rider; Shop+ refunds every paid leg, the delivery fee included, and tells the buyer calmly; damage shown at the door keeps its road; the supplier's screen is not told.
