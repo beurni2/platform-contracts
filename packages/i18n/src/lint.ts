@@ -47,9 +47,19 @@ function tokenPattern(token: string): RegExp {
   return new RegExp(`(?<!\\p{L})${escaped}(?!\\p{L})`, 'iu');
 }
 
+/**
+ * Both sides are compared FOLDED: invisible format characters (soft hyphen,
+ * zero-width space and joiners) removed, then accents removed. A phone
+ * keyboard's « sequestre », or « séquestre » with a soft hyphen hidden inside,
+ * is still the banned word, and one list entry covers every way of typing it.
+ */
+function plier(s: string): string {
+  return s.replace(/\p{Cf}/gu, '').normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC');
+}
+
 export function findToken(text: string, tokens: readonly string[]): string | undefined {
-  const normalized = text.normalize('NFC');
-  return tokens.find((token) => tokenPattern(token.normalize('NFC')).test(normalized));
+  const folded = plier(text);
+  return tokens.find((token) => tokenPattern(plier(token)).test(folded));
 }
 
 /** Sentence split for the reading heuristic: ., !, ?, … end a sentence. */

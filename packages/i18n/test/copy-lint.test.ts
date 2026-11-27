@@ -311,3 +311,66 @@ describe('copy-lint — the banned words in every form (AUDIT-B+2 F-90)', () => 
     expect(report.violations.filter((v) => v.condition === 'banned_register_token'), fr).toEqual([]);
   });
 });
+
+/**
+ * ACCENTS-INVISIBLES-1 — THE BAN WAS STILL ONE SPELLING: THE ACCENTED ONE.
+ *
+ * §10.5 hard rule 2 bans the WORD « séquestre », and §10.5's opening names
+ * « Confirmation de la transaction en cours » as the administrative French an
+ * agent left alone writes. The match compared accented text to accented
+ * tokens, so a phone keyboard's « sequestre », a soft hyphen or a zero-width
+ * space inside the word, and the canon's own bad example all PASSED.
+ *
+ * The fix: both sides are compared FOLDED — accents and invisible format
+ * characters removed — so one list entry covers every way of typing it. The
+ * four administrative phrases joined the list after being measured against
+ * all 3 114 strings of the eight shipped catalogs (zero hits), as were the
+ * folded forms of every existing token (zero new refusals).
+ */
+describe('copy-lint — the banned words without their accents or with invisible characters', () => {
+  const entry = (key: string, fr: string, register = 'neutral') =>
+    ({ key, fr, register, screenClass: 'status' }) as never;
+
+  it.each([
+    ['bad.plie.sans_accent', 'Votre argent est en sequestre chez le partenaire.'],
+    ['bad.plie.majuscules', 'ARGENT EN SEQUESTRE'],
+    ['bad.plie.participe', 'Les sommes sont sequestrees.'],
+    ['bad.plie.trait_conditionnel', 'Argent en sé\u00ADquestre'],
+    ['bad.plie.espace_zero', 'Argent en séq\u200Buestre'],
+    ['bad.plie.liant_zero', 'Argent en seq\u200Duestre'],
+    ['bad.plie.escrow_zero', 'Payment in es\u200Bcrow.'],
+    ['bad.plie.prealablement', 'Payez prealablement la livraison.'],
+    ['bad.plie.ulterieurement', 'Reessayez ulterieurement.'],
+    ['bad.admin.canon', 'Confirmation de la transaction en cours'],
+    ['bad.admin.traitement', 'Votre dossier est en cours de traitement.'],
+    ['bad.admin.bien_vouloir', 'Merci de bien vouloir patienter.'],
+    ['bad.admin.prions', 'Nous vous prions de patienter.'],
+  ])('%s is refused', async (key, fr) => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry(key, fr)], data);
+    expect(
+      report.violations.some((v) => v.condition === 'banned_register_token'),
+      `« ${JSON.stringify(fr)} » still passes — the ban is one spelling of the word again`,
+    ).toBe(true);
+  });
+
+  it('a marketing token without its accent is still refused in a money string', async () => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry('bad.plie.marketing', 'Derniere chance pour payer.', 'money')], data);
+    expect(report.violations.map((v) => v.condition)).toContain('register_mismatch');
+  });
+
+  it.each([
+    ['ok.plie.consigne', 'Suivez la consigne du livreur.'],
+    ['ok.plie.sequence', 'Une sequence de trois photos.'],
+    ['ok.plie.en_cours', 'Votre commande est en cours de préparation.'],
+    ['ok.plie.merci', 'Merci de patienter un instant.'],
+    ['ok.plie.nous_vous', 'Nous vous appelons dès que le colis arrive.'],
+    ['ok.plie.transaction_seule', 'Votre paiement est bien arrivé.'],
+    ['ok.plie.invisible_ailleurs', 'Votre\u00AD argent arrive sous 24 h.'],
+  ])('%s stays LEGAL — folding does not invent a banned word', async (key, fr) => {
+    const data = await loadLintData();
+    const report = lintCatalog([entry(key, fr)], data);
+    expect(report.violations.filter((v) => v.condition === 'banned_register_token'), fr).toEqual([]);
+  });
+});

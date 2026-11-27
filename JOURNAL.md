@@ -3,6 +3,28 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · ACCENTS-INVISIBLES-1 — the copy-lint compares words without their accents and without invisible characters · coordinator · on the branch, NOT merged
+
+**Founder.** Batch 5 of the plan he approved (« Now you start working on the next batch », 2026-11-27 15:13 UTC): « The French wording check catches « sequestre » without its accent. »
+
+**What changed — `packages/i18n` only.** `findToken` (`src/lint.ts`) now compares both the text and each token FOLDED: invisible format characters removed (`\p{Cf}`: soft hyphen, zero-width space, joiners), then accents removed (NFD, combining marks dropped, NFC). One list entry now covers « séquestre », « sequestre », « SEQUESTRE » and the word with a hidden soft hyphen or zero-width character inside. The fold applies to all four conditions' lists, so « Derniere chance » is still marketing in a money string. Four administrative phrases joined `data/banned-register-tokens.json`: « confirmation de la transaction » (the §10.5 bad example « Confirmation de la transaction en cours »), « en cours de traitement », « merci de bien vouloir », « nous vous prions »; the file's description records why.
+
+**Measured first.** All 3 114 strings of the eight catalogs on their mains (Boutik+ supplier app 969; Shop+ buyer site 711, reseller app 599, reseller kit 22; Séra rider app 348, dispatch console 332; platform ops console 125; the canon seed 8), linted with the old lint and with the new lint and list: 0 violations both ways, so no honest copy is refused. A folded search for the four phrases, « transaction », « sequestr », « escrow » and « consign » found nothing; no catalog carries a format character.
+
+**Evidence.** `packages/i18n` red first: 14 of 73 failed before the change (the nine folded or hidden spellings, the four phrases, the folded marketing token), 59 passed (the 52 earlier tests and the seven new controls: « consigne », « sequence », « en cours de préparation », « Merci de patienter », « Nous vous appelons », « paiement », a soft hyphen outside any banned word). After: 73/73. Mutation: the fold replaced by plain NFC (anchor matched once) → 10 red (the nine spellings and the marketing case), restored byte-identical. Board: turbo build, typecheck and test green; `run-gates.sh` ALL GATES GREEN.
+
+**Version.** No bump: an i18n-only wave pinned by sha, the F12 and F-90 precedent (i18n has no intra-family deps; no shape changed). Consumers repin on their branches (Shop+, Séra, Boutik+, platform), each with a negative fixture whose ONLY violations are folded or hidden spellings, so a pin regression turns their board red.
+
+## 2026-11-27 · VIE-PRIVEE-ACHETEUSE — MERGED
+
+**Founder.** « Release all four » (2026-11-27 14:34 UTC, decision card, on the buyer-privacy batch report).
+
+**No deploy.** The recorded answers are a pinned package; nothing here runs live.
+
+**Merge.** PR #3 merged first in the batch, as `ef108b7` (merge commit, the branch shas kept, so `8d0e7a8`, which the Shop+ and Boutik+ pins point at, stays on main). On main: ci 170 green.
+
+---
+
 ## 2026-11-27 · VIE-PRIVEE-ACHETEUSE — the recorded answers carry a finished order's held-back contact · coordinator · on the branch, NOT merged
 
 **Founder.** « Now you can start the next batch » (2026-11-27 11:31 UTC), the buyer-privacy batch of the approved plan.
