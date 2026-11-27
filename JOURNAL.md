@@ -3,6 +3,18 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · SORTIES-SURES-1 — the board runs every morning, not only when someone pushes · coordinator, lane O5 · on the branch, NOT merged
+
+**Founder.** « Go on for batch 6 » (2026-11-27 19:38 UTC), batch 6 of the plan he approved: « The boards run every day, not only when someone pushes. »
+
+**What changed — `.github/workflows/ci.yml` only.** A `schedule:` at 05:00 UTC every day, beside the push, pull-request and dispatch triggers. Nothing else in the file moved. The four app repositories get the same schedule in the same batch, and there a red newest run on a commit also stops a service release of that commit.
+
+**Evidence.** Lane O5, commit `11f57e4` on `dcf9740`, integrated on `claude/project-thread-jqj97g` as `536e344` (byte-identical). Coordinator board on `536e344` after install and `pnpm build`: ALL GATES GREEN. The YAML parses. The first scheduled run is the morning after the merge.
+
+**Verifier.** The batch's one fresh-context pass on the release work read this file too; nothing raised here.
+
+---
+
 ## 2026-11-27 · ACCENTS-INVISIBLES-1 — MERGED
 
 **Founder.** « Release all five » (2026-11-27 17:59 UTC, decision card, on the batch 5 report).
