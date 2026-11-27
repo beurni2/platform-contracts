@@ -3,6 +3,34 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · VIE-PRIVEE-ACHETEUSE — the recorded answers carry a finished order's held-back contact · coordinator · on the branch, NOT merged
+
+**Founder.** « Now you can start the next batch » (2026-11-27 11:31 UTC), the buyer-privacy batch of the approved plan.
+
+**What changed.** One file changed: `packages/recorded-answers/src/enregistrements.ts`, at `8d0e7a8`.
+- The two 200 forms of Shop+'s `GET /checkout/dispatch` were replaced. A finished order's row carries `contact: null` and `contactMasque`; a row that can still need the founder keeps its contact.
+- The other eight Shop+ doors and every Séra door are unchanged. No canon shape, event or money rule moved; the package version stays 3.28.0.
+
+**How it was made.** It was not written by hand. It came from Shop+'s own record run, `node scripts/certifier-reponses.mjs --enregistrer`, over the integrated Shop+ head `69908ef`.
+- The run had the Boutik+ console's port from its clone and passed 621/621.
+- Under the CI condition, with no Boutik+ clone, 620 passed and 1 was skipped, and every recorded form was still given.
+
+**Evidence.** The package tests passed 19/19. The platform-contracts board was green (ALL GATES GREEN).
+
+**Pins.** Shop+ storefront `72efef5` and Boutik+ supplier-app `cacdc1d` each changed `package.json` and the lock entry only. One unrelated pnpm re-serialisation in the Boutik+ lock was restored, and `pnpm install --frozen-lockfile` passed in both.
+
+**Release.** This merges FIRST, as a merge commit, so `8d0e7a8`, which both pins point at, stays on main.
+
+## 2026-11-27 · COLIS-PERDU-1 and LOIS-PARTOUT-1 — MERGED
+
+**Founder.** « Release all four » (2026-11-27 10:54 UTC, decision card, on the lost-parcel batch report).
+
+**No deploy.** The rulebook is a pinned package; nothing here runs live.
+
+**Merge.** PR #2 merged first in the batch, as `1d350ea` (merge commit, the branch shas kept, so `9c0c8d8`, which the Shop+ and Séra pins point at, stays on main). On main: ci 168 green.
+
+---
+
 ## 2026-11-27 · COLIS-PERDU-1 — canon 3.28.0: a parcel lost on the road carries the order and the instant, and nothing else · coordinator · on the branch, NOT merged
 
 **Founder.** « Yes, on my Boutik+ console » (2026-11-27 08:35 UTC, decision card « Approve the "declared lost" rule, and where should its button go? »). The shape he approved: only he declares it, only while a rider holds the parcel, and it is final; Séra ends custody on a named terminal, opens a `CustodyLiabilityClaim` (`sera_loss`) at the amount he types, closes the course and frees the rider; Shop+ refunds every paid leg, the delivery fee included, and tells the buyer calmly; damage shown at the door keeps its road; the supplier's screen is not told.
