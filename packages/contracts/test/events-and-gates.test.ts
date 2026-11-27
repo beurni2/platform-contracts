@@ -338,3 +338,93 @@ describe('Fulfillment progress events — the return wire carries the fact and n
     }
   });
 });
+
+/**
+ * COLIS-PERDU-1 (canon v3.28.0) — `package.lost.v1` carries the order and the
+ * instant, and nothing else: no money, no names, no codes.
+ */
+describe('package.lost.v1 — a parcel lost on the road carries the fact and nothing else', () => {
+  const ENVELOPE = {
+    command_id: 'colis-perdu-order-quote-abc123',
+    correlation_id: 'corr-order-quote-abc123',
+    aggregateVersion: 4,
+    actor: 'custody-service:founder',
+    serverTime: '2026-11-27T10:00:00.000Z',
+    version: 'v1',
+  };
+  const PAYLOAD = { orderId: 'order-quote-abc123', at: '2026-11-27T10:00:00.000Z' };
+
+  it('parses the canonical composition, and the name was already canon', () => {
+    expect(
+      publicApi.PackageLostEventSchema.safeParse({ name: 'package.lost.v1', envelope: ENVELOPE, payload: PAYLOAD })
+        .success,
+    ).toBe(true);
+    expect(EVENT_NAMES).toContain('package.lost.v1');
+  });
+
+  it('is bound to package.lost.v1 alone — damage and other custody names cannot ride it', () => {
+    for (const other of ['package.damaged.v1', 'delivery.refused.v1', 'custody_liability.claim_opened.v1']) {
+      expect(
+        publicApi.PackageLostEventSchema.safeParse({ name: other, envelope: ENVELOPE, payload: PAYLOAD }).success,
+        other,
+      ).toBe(false);
+    }
+  });
+
+  it('EVERY banned field is refused BY CONSTRUCTION — money, people, codes, evidence', () => {
+    const banned: Record<string, unknown>[] = [
+      { amount: 12_000 },
+      { claimAmount: 12_000 },
+      { refundAmount: 12_000 },
+      { buyerTotal: 12_500 },
+      { deliveryFee: 500 },
+      { riderId: 'rider-0001' },
+      { courierId: 'courier-0001' },
+      { currentCustodian: 'courier-0001' },
+      { supplierId: 'sup-0001' },
+      { buyerPhone: '+226 70 00 00 00' },
+      { buyerDropCode: '4821' },
+      { pickupVerificationCode: '9911' },
+      { sellerReadinessChallenge: 'srch-abc' },
+      { custodySealId: 'seal-0001' },
+      { handoffAuthorization: 'ha-0001' },
+      { reason: 'perdu en route' },
+      { evidenceBundleId: 'ev-0001' },
+      { cause: 'sera_loss' },
+    ];
+    for (const extra of banned) {
+      const field = Object.keys(extra)[0]!;
+      const leaky = { name: 'package.lost.v1', envelope: ENVELOPE, payload: { ...PAYLOAD, ...extra } };
+      // the generic schema would wave it through — that is why this one exists
+      expect(publicApi.PlatformEventSchema.safeParse(leaky).success, field).toBe(true);
+      expect(publicApi.PackageLostEventSchema.safeParse(leaky).success, `accepted a banned field: ${field}`).toBe(false);
+    }
+  });
+
+  it('refuses a key beside the payload, not only inside it', () => {
+    expect(
+      publicApi.PackageLostEventSchema.safeParse({
+        name: 'package.lost.v1', envelope: ENVELOPE, payload: PAYLOAD, riderId: 'rider-0001',
+      }).success,
+    ).toBe(false);
+  });
+
+  it('refuses a payload missing either field, or an empty one', () => {
+    for (const bad of [
+      { orderId: 'order-quote-abc123' },
+      { at: '2026-11-27T10:00:00.000Z' },
+      { orderId: '', at: '2026-11-27T10:00:00.000Z' },
+      { orderId: 'order-quote-abc123', at: '' },
+      { order_id: 'order-quote-abc123', at: '2026-11-27T10:00:00.000Z' },
+    ]) {
+      expect(
+        publicApi.PackageLostEventSchema.safeParse({ name: 'package.lost.v1', envelope: ENVELOPE, payload: bad }).success,
+        JSON.stringify(bad),
+      ).toBe(false);
+    }
+  });
+
+  it('damage keeps no payload: no typed artifact for package.damaged.v1 exists', () => {
+    expect(Object.keys(publicApi).filter((k) => /damaged/i.test(k))).toEqual([]);
+  });
+});

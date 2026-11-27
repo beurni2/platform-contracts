@@ -3,6 +3,69 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · COLIS-PERDU-1 — canon 3.28.0: a parcel lost on the road carries the order and the instant, and nothing else · coordinator · on the branch, NOT merged
+
+**Founder.** « Yes, on my Boutik+ console » (2026-11-27 08:35 UTC, decision card « Approve the "declared lost" rule, and where should its button go? »). The shape he approved: only he declares it, only while a rider holds the parcel, and it is final; Séra ends custody on a named terminal, opens a `CustodyLiabilityClaim` (`sera_loss`) at the amount he types, closes the course and frees the rider; Shop+ refunds every paid leg, the delivery fee included, and tells the buyer calmly; damage shown at the door keeps its road; the supplier's screen is not told.
+
+**Spec.**
+- Sera-Build-Spec §6.5: « no generic failed terminal; package never unowned … Séra-caused product loss/damage → `CustodyLiabilityClaim`, not a Protection-Fund payout ».
+- ECOSYSTEM-MASTER-REFERENCE l.615: « Goods lost/damaged in custody → `CustodyLiabilityClaim` … Buyer made whole regardless. »
+- CLAUDE.md §7: an event schema is canon, changed only by a deliberate version bump the founder approved.
+
+**What changed** (`9c0c8d8`).
+- `PackageLostPayloadSchema` `{ orderId, at }`, strict, and `PackageLostEventSchema` binding the name `package.lost.v1` (already in §5.7's union, until now with no payload) to it. No money, no names of people, no codes, no reason, no evidence. `package.damaged.v1` keeps no payload.
+- Séra §6.5 and Shop+ SP6 state the ruling.
+- Safest default applied where the ruling is silent, to be confirmed by the founder: a parcel may carry several orders (SE3), so the declaration covers the whole parcel, and Séra opens one claim and sends one event for EACH order, with an amount typed for each; Shop+ refunds each order in full. Nothing is split or computed.
+- Lockstep 3.28.0 across the root and the seven packages (the same 14 package files as 3.27.0), both docs manifests regenerated and identical, the API snapshot gains only the two exports and the version.
+
+**Evidence.**
+- Contracts suite 211/211. The shape-freeze test was red before the snapshot update on exactly five lines (the version and the two exports, twice), and green after.
+- `pnpm build`, then `bash scripts/run-gates.sh` on `9c0c8d8`: « ALL GATES GREEN », exit 0.
+- Mutations, each anchor matched once, each restored byte-identical: the payload's strictness dropped → the banned-field test red; the name bound to `package.damaged.v1` → two tests red; the event's own strictness dropped → the « key beside the payload » test red.
+
+**Independent review.** One fresh-context pass, handled once: 0 blocker, 1 major, 3 minor, 5 notes.
+- Fixed: the major (a parcel of several orders: one event and one claim per order, now in both sentences and the doc comment); the doc comment's section and list of the four secrets; the outer-strictness test it found missing; the console tab taken out of canon (« from his Boutik+ console »; where the button sits is the console's work order); « never waits on the outcome of Séra's liability claim ».
+- Kept as written, by the review's own reading: the lost terminal is the parcel's one current custodian; the event's name is its reason and the evidence stays in Séra's book (the claim names it); Shop+'s own event list does not repeat a name it consumes, as for `fulfillment.rejected.v1`. An older comment in the same file names §5.4 for the four secrets; left as it is, outside this slice.
+- Open, for the founder, not decided here: what the supplier is owed for a lost order; the reseller earns nothing on it (her commission is earned only on a delivered sale); only the founder types the claim amount (Séra §2: the dispatcher never edits a ledger).
+
+**Where it stands.** On the branch, not merged. Release order: canon, then Shop+ (the receiver), then Séra (the sender), then the founder's console button.
+
+---
+
+## 2026-11-27 · LOIS-PARTOUT-1 — this repository refuses the retired names too · coordinator · on the branch, NOT merged
+
+**Founder.** « after everything is released, you can start the next batch 3 » (2026-11-27 04:21 UTC, project chat). The plan he approved says « every repository checks for the retired names ».
+
+**Spec.**
+- CLAUDE.md §3 Law 10: « "Ma Boutique" and "Mon Shop" are retired names — they may appear only inside the legacy prototype file ».
+- CLAUDE.md §4: every gate lives in every repository.
+
+**What changed.** Gate files only. No canon, contract shape or package changed, so there is no version bump.
+- `scripts/gates/retired-names.mjs` is copied byte for byte from platform, boutik-plus, shop-plus and sera. It comes with its seven negative fixtures under `gates/fixtures/negative/retired-names/` and its legal fixture under `gates/fixtures/retired-names-legal/`.
+- The board gains the same steps as the four other boards:
+  - the sha256 pin (`cdfd9208…02dd`);
+  - the gate over every tracked file;
+  - the negative directory, and each negative fixture alone;
+  - the legal fixture;
+  - the throwaway-repository probe of the left-out list.
+- This repository has no pattern-coverage gate. Each pattern is proven load-bearing by the coverage gates of the four repositories that pin the same hash over the same fixtures.
+
+**Evidence.**
+- The retired-names steps alone on `ba61373`: all green. The no-argument run reads 251 text files, every negative exits 1, the legal fixture exits 0, and the probe exits 1 outside the list and 0 inside it.
+- The full board on `9c0c8d8`, which carries this gate and canon 3.28.0 together: « ALL GATES GREEN », exit 0.
+
+**Where it stands.** On the branch, not merged. It rides in one pull request with canon 3.28.0 (COLIS-PERDU-1, above). For this gate, merging is the whole release.
+
+---
+
+## 2026-11-26 · A-VERIFIER-1 MERGED on the founder's « go »
+
+**Founder.** « Deploy and merge both » (2026-11-26 18:41 UTC, decision card). It named this merge as the first step of the « À vérifier » release.
+
+**Merge.** main re-checked unchanged at `17c2357`; merged as the merge commit `f61b704`, never squashed, so `b5fec57`, which the Shop+ and Boutik+ pins point at, is on main (checked with `merge-base --is-ancestor`). ci 166 green on `f61b704`.
+
+**Then.** Shop+ deployed its storefront Worker from its branch and merged; Boutik+ merged and published its console from main. Each repository's journal records its own step.
+
 ## 2026-11-26 · A-VERIFIER-1 — the recorded answers carry what the founder must check on each order, and the dead-letter door's counts · coordinator · on the branch, NOT merged
 
 **What changed.** One file changed: `packages/recorded-answers/src/enregistrements.ts`, at `b5fec57`.
