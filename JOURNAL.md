@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · ACCENTS-INVISIBLES-1 — MERGED
+
+**Founder.** « Release all five » (2026-11-27 17:59 UTC, decision card, on the batch 5 report).
+
+**No deploy.** The copy-lint is a pinned package; nothing here runs live.
+
+**Merge.** PR #4 merged first in the batch, as `dcf9740` (merge commit, the branch shas kept, so `34c1569`, which the four app pins point at, stays on main). On main: ci 172 green.
+
+---
+
 ## 2026-11-27 · ACCENTS-INVISIBLES-1 — the copy-lint compares words without their accents and without invisible characters · coordinator · on the branch, NOT merged
 
 **Founder.** Batch 5 of the plan he approved (« Now you start working on the next batch », 2026-11-27 15:13 UTC): « The French wording check catches « sequestre » without its accent. »
