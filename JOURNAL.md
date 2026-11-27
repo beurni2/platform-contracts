@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · VIE-PRIVEE-ACHETEUSE — MERGED
+
+**Founder.** « Release all four » (2026-11-27 14:34 UTC, decision card, on the buyer-privacy batch report).
+
+**No deploy.** The recorded answers are a pinned package; nothing here runs live.
+
+**Merge.** PR #3 merged first in the batch, as `ef108b7` (merge commit, the branch shas kept, so `8d0e7a8`, which the Shop+ and Boutik+ pins point at, stays on main). On main: ci 170 green.
+
+---
+
 ## 2026-11-27 · VIE-PRIVEE-ACHETEUSE — the recorded answers carry a finished order's held-back contact · coordinator · on the branch, NOT merged
 
 **Founder.** « Now you can start the next batch » (2026-11-27 11:31 UTC), the buyer-privacy batch of the approved plan.
