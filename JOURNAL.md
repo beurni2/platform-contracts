@@ -3,6 +3,16 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-27 · SORTIES-SURES-1 — MERGED
+
+**Founder.** « Release all five » (2026-11-27 22:43 UTC, decision card, on the batch 6 report), which named for the shared rules: the merge first.
+
+**Merge.** PR #5 merged as `b36e360` (merge commit, the branch shas kept). On main: ci 174 green on its first attempt. Nothing here deploys.
+
+**Not checked.** The first scheduled board runs at 05:00 UTC on 2026-11-28; that run is the check.
+
+---
+
 ## 2026-11-27 · SORTIES-SURES-1 — the board runs every morning, not only when someone pushes · coordinator, lane O5 · on the branch, NOT merged
 
 **Founder.** « Go on for batch 6 » (2026-11-27 19:38 UTC), batch 6 of the plan he approved: « The boards run every day, not only when someone pushes. »
