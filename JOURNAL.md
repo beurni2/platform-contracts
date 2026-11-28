@@ -3,6 +3,31 @@ Continuity ledger per CTO charter §6/§6bis. Every entry is evidence-grounded.
 
 Format per entry:
 
+## 2026-11-28 · CANON 3.29.0 — money that arrives for an order whose payment had already failed is refunded in full; the sandbox tool must be gone before real money · coordinator · on the branch, NOT merged
+
+**Founder.** Batch 8 « go » (2026-11-28 06:17 UTC, « you can start the next batch »), the plan he approved: « Money taken for a « failed » order gets its way back, using the option you choose » and « The test button that says « money received » gets its own key, and a check makes sure it is gone before real money ». His choice, 2026-11-28 06:28 UTC, decision card: « Refund it automatically ».
+
+**What changed — docs only, no shape.**
+- `Shop-Plus-Build-Spec.md` §7 SP6, in the refund paragraph: when the provider confirms a checkout charge for an order that reads `payment_failed` (or `cancelled` after such a failure), that money never pays the order; it is refunded under its own refund key for exactly the amount the order asked the provider for (a grouped collection, each order its share); a confirmation naming another amount stays on the founder's console; once the refund is asked no retry charges again; the order reads `refunded` only when the provider confirms. One line added to the decisions register.
+- `Ecosystem-Engineering-Execution-Contract.md` §8: item 12, « No sandbox stand-in remains on the money route ».
+- Every package moves to 3.29.0 together; both docs manifests regenerated; the API snapshot's version line only (no export or schema changed).
+
+**Evidence.** `pnpm build` green; the full board ALL GATES GREEN (shape-freeze, drift-check positive and tampered, every negative fixture fails).
+
+**Next.** Shop+ builds the refund against this text; each app repository moves its pin and its `/docs` copy in the same batch. This merges first, as a merge commit, so the pins stay on main.
+
+---
+
+## 2026-11-27 · SORTIES-SURES-1 — MERGED
+
+**Founder.** « Release all five » (2026-11-27 22:43 UTC, decision card, on the batch 6 report), which named for the shared rules: the merge first.
+
+**Merge.** PR #5 merged as `b36e360` (merge commit, the branch shas kept). On main: ci 174 green on its first attempt. Nothing here deploys.
+
+**Not checked.** The first scheduled board runs at 05:00 UTC on 2026-11-28; that run is the check.
+
+---
+
 ## 2026-11-27 · SORTIES-SURES-1 — the board runs every morning, not only when someone pushes · coordinator, lane O5 · on the branch, NOT merged
 
 **Founder.** « Go on for batch 6 » (2026-11-27 19:38 UTC), batch 6 of the plan he approved: « The boards run every day, not only when someone pushes. »
